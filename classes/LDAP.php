@@ -3,7 +3,7 @@
 
 class LDAP {
 	
-    public static function authenticate($user, $password, $host = "ldap01.cnptia.embrapa.br ldap02.cnptia.embrapa.br") {	
+    public static function authenticate($user, $password, $host = "ldaps://ldap.cnptia.embrapa.br") {	
 	 $conn = @ldap_connect($host);
         
 	if(false === $conn)
