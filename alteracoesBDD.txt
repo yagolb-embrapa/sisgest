@@ -1,0 +1,14 @@
+Criação da tabela "categorias"
+	id_categoria: integer, NOT NULL, PK
+		1
+		2
+		3
+		4
+	descricao: character varying(30)
+		Bolsista
+		Bolsista PIBIC
+		Estagiário
+		Estudante de Pós-Graduação
+
+Tabela "users"
+	Criação da coluna "id_supervisor": integer, FK

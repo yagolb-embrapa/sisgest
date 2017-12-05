@@ -21,12 +21,12 @@ function show_menu ( $id,  $permissoes, $funcao )
 		<ul id='nav'> 
 			<li ><span>&nbsp;&nbsp;Estágio</span>		
 				<ul>";
-					echo "<li><span onclick=\"top.location.href='../estagiario/estagiario.inclusao.php';\">
-								Solicitação</span></li>";																
-    				if($_SESSION['USERNIVEL'] != 'c'){
+					if($_SESSION['USERNIVEL'] != 'c'){
 						echo "<li><span onclick=\"top.location.href='../estagiario/estagiario.gerenciamento.php';\">
 							Meus estagiários/bolsistas</span></li>";
-    				}						
+    				}
+					echo "<li><span onclick=\"top.location.href='../estagiario/estagiario.inclusao.php';\">
+								Solicitação</span></li>";																						
 				echo "
 				</ul>
 			</li> 
@@ -154,12 +154,12 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 		<ul id='nav'> 
 			<li ><span>&nbsp;&nbsp;Estágio</span>		
 				<ul>";
-					echo "<li><span onclick=\"top.location.href='estagiario/estagiario.inclusao.php';\">
-						Solicitação</span></li>";															
-			    	if($_SESSION['USERNIVEL'] != 'c'){
+					if($_SESSION['USERNIVEL'] != 'c'){
 						echo "<li><span onclick=\"top.location.href='estagiario/estagiario.gerenciamento.php';\">
 							Meus estagiários/bolsistas</span></li>";
-    				}						
+    				}	
+					echo "<li><span onclick=\"top.location.href='estagiario/estagiario.inclusao.php';\">
+						Solicitação</span></li>";																				
 				echo "
 				</ul>
 			</li> 

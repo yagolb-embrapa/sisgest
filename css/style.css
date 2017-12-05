@@ -197,6 +197,14 @@ input[type=text]:focus{
 	width:720px;
 }
 
+.lista_registros2{
+	background-color:#B0C4DE;
+	padding: 3px 5px 3px 5px;
+	color:#333333;
+	margin: 0 0 1px 0;
+	width:720px;
+}
+
 .lista_registros_content{
 	font-size:10pt;
 	font-family:Verdana;

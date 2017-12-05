@@ -8,7 +8,9 @@
     $pagina = isset($_GET['pag']) ? $_GET['pag'] : 'a';
     $tipo = isset($_GET['tipo']) ? $_GET['tipo'] : 'estagiario';
 	$offset = 10; //resultados por pagina.		
-	
+	session_start();
+    /*
+    Desabilitado
     if($tipo == 'estagiario') {
 	//selecao de estagiarios	
     $qryStr = "SELECT id,nome,email,email_embrapa,id_supervisor
@@ -23,29 +25,38 @@
         LEFT JOIN supervisores su ON es.id_supervisor=su.id
         WHERE LOWER(su.nome) LIKE LOWER('{$pagina}%')
         AND es.status = 1
-        ORDER BY su.nome ASC, es.nome ASC ";
+        ORDER BY su.nome ASC, es.nome ASC ";	
     }
+    */
 	
 		
 	//botao de inclusao
-	echo "<div align='center' style='padding: 0 0 10px 0;'>
-		<input type='button' value='Incluir Novo Estagiário' style='padding: 2px 15px 2px 15px; height:24px;' onClick=\"document.location.href='estagiario.inclusao.php';\"></div>";
+	/*
+	Desabilitado
+	 echo "<div align='center' style='padding: 0 0 10px 0;'>
+	 	<input type='button' value='Incluir Novo Estagiário' style='padding: 2px 15px 2px 15px; height:24px;' onClick=\"document.location.href='estagiario.inclusao.php';\"></div>";
+	 */
 ?>
 
+
 <script>
+	/*
+	Desabilitado
     function trocarTipoListagem(pagina, tipo) {
 
         var site = "estagiario.lista.php?pag=";
         ajax.loadDiv('divManip', site.concat(pagina, '&tipo=', tipo));
 
     }
-
+	*/
 </script>
 
     <!-- Botao para escolher como será a listagem -->
+    <!-- Desabilitado
     <div align='left'>Listar por: <br>
-    <input name="listagem" id="listagem" type="radio" value="estagiario" onClick="trocarTipoListagem('<?= $pagina?>', 'estagiario')"<?php if($_GET['tipo'] != 'supervisor') echo 'checked';?>>Estagiário
-    <input name="listagem" id="listagem2" type="radio" value="supervisor" onClick="trocarTipoListagem('<?= $pagina?>', 'supervisor')" <?php  if($_GET['tipo'] == 'supervisor') echo 'checked';?>>Supervisor<br>
+    <input name="listagem" id="listagem" type="radio" value="estagiario" onClick="trocarTipoListagem('<?= $pagina?>', 'estagiario')"<?php //if($_GET['tipo'] != 'supervisor') echo 'checked';?>>Estagiário
+    <input name="listagem" id="listagem2" type="radio" value="supervisor" onClick="trocarTipoListagem('<?= $pagina?>', 'supervisor')" <?php //if($_GET['tipo'] == 'supervisor') echo 'checked';?>>Supervisor<br>
+    -->
 			
 <style>
 .limiter{
@@ -57,18 +68,75 @@
 
 </style>
 <?php
+$qryStr = "SELECT id_supervisor FROM users WHERE id = '".$_SESSION["USERID"]."'";
+$qry = sql_executa($qryStr);
+$row = sql_fetch_array($qry);
+$id_supervisor = $row[0];
+$qryStr = "SELECT nome, id_categoria, vigencia_inicio, vigencia_fim FROM estagiarios WHERE id_supervisor = '".$id_supervisor."' ORDER BY vigencia_inicio DESC";
+$qry = sql_executa($qryStr);
+if($qry) {
+	$qtd = sql_num_rows($qry);
+	if($qtd>0) { ?>
+		<table width="100%" border="0" cellpadding="1" cellspacing="1" class="lista_registros2">
+			<tr>
+	  			<th width="10%"><strong>Nome do aluno</strong></th>
+	  			<th width="10%"><strong>Categoria</strong></th>
+	  			<th width="10%"><strong>Vigência</strong></th>
+			</tr>
+			</table>
+		
+<?php 
+		while ($row = sql_fetch_array($qry)) {	
+			$cor = !$cor;
+			if($cor) {
+				?><table width="100%" border="0" cellpadding="0" cellspacing="0" class="lista_registros0"><?php
+			} else {
+				?><table width="100%" border="0" cellpadding="0" cellspacing="0" class="lista_registros1"><?php
+			}
+			?>
+			<tr>
+				<td align="left" width="10%"><?php echo $row["nome"]; ?></td>
+				<?php
+					$qryStrCat = "SELECT descricao FROM categorias WHERE id_categoria = '".$row["id_categoria"]."'";
+					$qryCat = sql_executa($qryStrCat);
+					$rowCat = sql_fetch_array($qryCat); 
+				?>
+				<td align="center" width="10%"><?php echo $rowCat[0]; ?></td>
+				<?php
+					$dataInicio = new DateTime($row["vigencia_inicio"]);
+					$dataFim = new DateTime($row["vigencia_fim"]);
+					$dataInicio = $dataInicio->format('d/m/Y');
+					$dataFim = $dataFim->format('d/m/Y'); 
+				?>
+				<td align="center" width="10%"><?php echo $dataInicio; ?> até <?php echo $dataFim; ?></td>
+			</tr>
+			</table>
+			<?php
+		}
+		?><?php
+	} else {
+		//Nenhum estagiario
+	}
+} else {
+	//Erro ao fazer consulta ao BDD
+}
+
+
+
+/*
+Desabilitado
 $rowLim = sql_fetch_array(sql_executa("SELECT COUNT(*) AS ct FROM estagiarios;"));		
 if (ceil($rowLim[0]/$offset)==$pagina) $numreg = $rowLim[0];
 else $numreg = $pagina*$offset;
-
 $qry = sql_executa($qryStr);
 if(sql_num_rows($qry)>0){
 	//Imprime uma linha com cada estagiario daquela letra
 	while ($row = sql_fetch_array($qry)){
 		$cor = !$cor;
 	
-		echo "
-		<div class='lista_registros";echo ($cor)?"1":"0"; echo "'>	
+		echo "<div class='lista_registros";
+		echo ($cor)?"1":"0"; 
+		echo "'>	
 	  	<table width='100%' height='36' border='0' cellpadding='0' cellspacing='0' class='lista_registros_content'>
         <tr>
           <td height='18%'>";          
@@ -106,6 +174,7 @@ if(sql_num_rows($qry)>0){
 				</tr>
 			</table>";
 }	
+
 	
 echo "<br/><div id='paginacao' align='center'>";
 			$letras = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
@@ -118,7 +187,7 @@ echo "<br/><div id='paginacao' align='center'>";
 				
 			}
 			echo "</div>";	
+*/
 	
 	
-	
-	?>
+?>
