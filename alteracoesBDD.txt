@@ -10,5 +10,17 @@ Criação da tabela "categorias"
 		Estagiário
 		Estudante de Pós-Graduação
 
+Criação da tabela "status_estagiario"
+	id_status: integer, NOT NULL, PK
+		1
+		2
+	descricao: character varying(30)
+		Vigente
+		Encerrado
+
 Tabela "users"
 	Criação da coluna "id_supervisor": integer, FK
+
+Tabela "estagiarios"
+	Criação da caluna "id_categoria": integer, FK
+	Criação da caluna "id_status": integer, FK
