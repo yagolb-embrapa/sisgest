@@ -13,29 +13,29 @@ function valida($valor,$tipo){
 	switch($tipo){
 
 		case 'data':// Formato DD/MM/AAAA						 
-			if (!eregi("^[0-9]{2}/[0-9]{2}/[0-9]{4}$", $valor)) 
+			if (!preg_match("/^\d{1,2}\/\d{1,2}\/\d{4}$/", $valor)) 
 				return false;								
 			if(!valida_data($valor))								
 				return false;			
 			break;
 				
 		case 'cep':// Formato XXXXX-XXX			
-			if (!eregi("^[0-9]{5}-[0-9]{3}$", $valor))
+			if (!preg_match("/^[0-9]{5,5}([- ]?[0-9]{3,3})?$/", $valor))
 				return false;					
 			break;
 		
 		case 'email':// Formato xxx@xxx.xxx
-			if (!eregi("^[a-z0-9_\.\-]+@[a-z0-9_\.\-]*[a-z0-9_\-]+\.[a-z]{2,4}$", $valor))
+			if (!preg_match("/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/", $valor))
 				return false;			
 			break;
 				
 		case 'cpf':// Formato xxx.xxx.xxx-xx 			
-			if (!eregi("^([0-9]){3}.([0-9]){3}.([0-9]){3}-([0-9]){2}$", $valor)) 
+			if (!preg_match("/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/", $valor)) 
 				return false;			
 			break;
 			
 		case 'cnpj':
-			if (!ereg("^([0-9]){2}.([0-9]){3}.([0-9]){3}/[0-9]{4}-[0-9]{2}$", $valor))
+			if (!preg_match("/^([0-9]){2}.([0-9]){3}.([0-9]){3}/[0-9]{4}-[0-9]{2}$/", $valor))
 				return false;
 			break;
 		

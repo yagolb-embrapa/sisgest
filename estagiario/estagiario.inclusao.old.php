@@ -1,12 +1,11 @@
 <?php 
 
-$qtd_abas = 5;
+$qtd_abas = 4;
 require_once("../inc/header.php");
 require_once("../classes/DB.php");
 
 include("../functions/functions.database.php");//temporario 
 include("../functions/functions.forms.php");
-include("../functions/functions.uploud.php");
 ?>
 
 
@@ -34,19 +33,7 @@ include("../functions/functions.uploud.php");
 			//pega o ano de termino do curso			
 			var a = document.getElementById(ano).value;						
 			ajax.loadDiv(result,'../functions/ajax.calcula.vigencia.php?ini='+i+'&fim='+f+'&sem='+s+'&ano='+a);
-		}
-
-    /*function exibir_declaracao() {
-      var valor = $("#categoria").val();
-
-      if(valor == '2') {
-        $("#texto_declaracao").show();
-        $("#arq_declaracao").show();
-      } else {
-        $("#texto_declaracao").hide();
-        $("#arq_declaracao").hide();
-      }
-    }	*/				
+		}					
 	</script>
 		<?php
 		
@@ -58,7 +45,7 @@ if($submit){
 	$municipio = $_POST['municipio'];//pega manualmente pq como esta em outra pagina, nao ta pegando com a linha acima
 	
 	//colocar aqui os campos que podem ser vazios no formulario
-	$excecoes_vazio = array("telres","telcel","emaile","complemento","ra","ramal","numero_projeto","nome_projeto","observacao","cargaoutra","agencia","conta","banco","cracha","beneficiario0","beneficiario1","beneficiario2","beneficiario3","beneficiario4","parentesco0","parentesco1","parentesco2","parentesco3","parentesco4","fumante");
+	$excecoes_vazio = array("telres","telcel","emaile","complemento","ra","ramal","numero_projeto","nome_projeto","observacao","cargaoutra","agencia","conta","banco","cracha","beneficiario0","beneficiario1","beneficiario2","beneficiario3","beneficiario4","parentesco0","parentesco1","parentesco2","parentesco3","parentesco4", "remuneracao","fumante");
 
     if($tipo_vinculo != 'b'){
         $excecoes_vazio[] = "id_bolsista";
@@ -104,13 +91,6 @@ if($submit){
     //verificando se o sexo foi definido
     if($sexo != 'f' && $sexo != 'm')
         $erros[] = 'sexo';
-
-  //validando entrada de arquivos
-  if($_FILES["arq_cpf"]["error"] == 0) $cpf_arq = $_FILES["arq_rg"]; else $erros[] = 'arq_cpf';
-  if($_FILES["arq_rg"]["error"] == 0) $rg_arq = $_FILES["arq_rg"]; else $erros[] = 'arq_rg';
-  if($_FILES["arq_foto"]["error"] == 0) $foto_arq = $_FILES["arq_foto"]; else $erros[] = 'arq_foto';
-  if($_FILES["arq_atestado_matricula"]["error"] == 0) $atestado_matricula_arq = $_FILES["arq_atestado_matricula"]; else $erros[] = 'arq_atestado_matricula';
-  if($_FILES["arq_plano_trabalho"]["error"] == 0) $plano_trabalho_arq = $_FILES["arq_plano_trabalho"]; else $erros[] = 'arq_plano_trabalho';
 
 	//validando formato das datas  
 	if(!valida($datanasc,'data')) $erros[] = 'datanasc';
@@ -166,8 +146,8 @@ if($submit){
 			</table>		
 		<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
 	}else{
-        $query = "INSERT INTO estagiarios (nome, data_nascimento, nacionalidade, id_estado_civil, cpf, rg, data_expedicao, orgao_expedidor, endereco, complemento, bairro, cep, id_municipio, uf, tel_residencial, tel_celular, email, email_embrapa, agencia, conta_corrente, id_banco, id_instituicao_ensino, curso, inicio_curso, termino_curso, id_nivel, ra, estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, status, sexo, tipo_vinculo, id_bolsista, termo_aceite, fumante, id_categoria, id_status, id_chefia_associada) 
-                  VALUES('$nome', '".formata($datanasc,'data')."', '$nacionalidade', $estadocivil, '$cpf', '$rg', '".formata($dataexpedicao,'data')."', '$orgaoexpedidor', '$endereco', '$complemento', '$bairro', '$cep', $municipio, '$uf', '$telres', '$telcel', '$email', '$emaile', '$agencia', '$conta', $banco, $instituicao, '$curso','$inicio_curso', '$termino_curso', $nivel, '$ra', '$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $status, '$sexo', '$tipo_vinculo', $id_bolsista, '$termo_aceite', '$fumante', '$categoria', '2', $chefia_associada);";
+        $query = "INSERT INTO estagiarios (nome, data_nascimento, nacionalidade, id_estado_civil, cpf, rg, data_expedicao, orgao_expedidor, endereco, complemento, bairro, cep, id_municipio, uf, tel_residencial, tel_celular, email, email_embrapa, agencia, conta_corrente, id_banco, id_instituicao_ensino, curso, inicio_curso, termino_curso, id_nivel, ra, estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, status, sexo, tipo_vinculo, id_bolsista, termo_aceite, fumante) 
+                  VALUES('$nome', '".formata($datanasc,'data')."', '$nacionalidade', $estadocivil, '$cpf', '$rg', '".formata($dataexpedicao,'data')."', '$orgaoexpedidor', '$endereco', '$complemento', '$bairro', '$cep', $municipio, '$uf', '$telres', '$telcel', '$email', '$emaile', '$agencia', '$conta', $banco, $instituicao, '$curso','$inicio_curso', '$termino_curso', $nivel, '$ra', '$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $status, '$sexo', '$tipo_vinculo', $id_bolsista, '$termo_aceite', '$fumante');";
 
 		$result = sql_executa($query);
 
@@ -237,12 +217,11 @@ if($submit){
        <li><a href="javascript: mostrarAba('aba1','a1');" id='a1' class='active'>Identificação</a></li>
        <li><a href="javascript: mostrarAba('aba2','a2');" id='a2'>Curso</a></li>
        <li><a href="javascript: mostrarAba('aba3','a3');" id='a3'>Banco</a></li>
-       <li><a href="javascript: mostrarAba('aba4','a4');" id='a4'>Estágio</a></li>     
-       <li><a href="javascript: mostrarAba('aba5','a5');" id='a5'>Arquivos</a></li>
+       <li><a href="javascript: mostrarAba('aba4','a4');" id='a4'>Estágio</a></li>       
    </ul>
    </div>
    
-	<form enctype="multipart/form-data" id="frmUsr" name="frmUsr" method="post">
+	<form id="frmUsr" name="frmUsr" method="post">
 	
 	<!-- ============ Conteudo da Primeira ABA ============ --> 	
 	<div id="aba1" class='conteudoAba' style='display:block;'>
@@ -251,8 +230,7 @@ if($submit){
   	  	<tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td></tr>		  
       <tr class='specalt'>
         <td width="25%"><span>Nome(*)</span></td>
-        <td width="75%"><input name="nome" id="nome" type="text" size='40' maxlength='50' value="<?php echo $nome; ?>">
-        <span id='snome' class="sErro">&nbsp;*</span></td>        
+        <td width="75%"><input name="nome" id="nome" type="text" size='40' maxlength='50' value="<?php echo $nome; ?>"><span id='snome' class="sErro">&nbsp;*</span></td>        
       </tr>           
       <tr class='specalt'>
         <td><span>Sexo(*)</span></td>
@@ -377,8 +355,8 @@ if($submit){
                 <?php
                     for($i = 0; $i < 5; $i++) {
                         echo "                <tr align='center'>\n";
-                        echo "                  <td><input id='beneficiario{$i}' name='beneficiario{$i}' value='{$beneficiario[$i]}' size='30' maxlength='40' /></td>\n";
-                        echo "                  <td><input id='parentesco{$i}' name='parentesco{$i}' value='{$parentesco[$i]}' size='30' maxlength='40' /></td>\n";
+                        echo "                  <td><input id='beneficiario{$i}' name='beneficiario{$i}' value='{$beneficiario[$i]}' size='40' maxlength='40' /></td>\n";
+                        echo "                  <td><input id='parentesco{$i}' name='parentesco{$i}' value='{$parentesco[$i]}' size='40' maxlength='40' /></td>\n";
                         echo "                </tr>\n";
                     }
                 ?>
@@ -530,40 +508,6 @@ if($submit){
         			<label for="bolsista"><span>Bolsista</span></label>
         	<span id='stipo_vinculo' class="sErro">&nbsp;*</span>        			
       </tr>
-      <tr class='specalt' >
-        <td><span>Categoria(*)</span></td>
-        <td><select id="categoria" name="categoria" onchange="" class="select">
-                <option value="">-- Categoria --</option>
-                <?php
-                  $qryStrCat = "SELECT * FROM categorias";
-                  $qryCat = sql_executa($qryStrCat);
-                  while($rowCat = sql_fetch_array($qryCat)){ 
-                    echo "<option value='{$rowCat['id_categoria']}' ";
-                    if($categoria == $rowCat['id_categoria']) echo "selected='selected'";
-                    echo ">{$rowCat['descricao']}</option>"; 
-                  } 
-                ?>        
-        </select>
-          <span id='scategoria' class="sErro">&nbsp;*</span>
-        </td>
-       </tr>
-       <tr class='specalt' >
-        <td><span>Chefia associada(*)</span></td>
-        <td><select id="chefia_associada" name="chefia_associada" class="select">
-                <option value="">-- Chefia --</option>
-                <?php
-                  $qryStrChef = "SELECT * FROM chefias";
-                  $qryChef = sql_executa($qryStrChef);
-                  while($rowChef = sql_fetch_array($qryChef)){ 
-                    echo "<option value='{$rowChef['id_chefia']}' ";
-                    if($chefia_associada == $rowChef['id_chefia']) echo "selected='selected'";
-                    echo ">{$rowChef['nome']}</option>"; 
-                  } 
-                ?>        
-        </select>
-          <span id='schefia_associada' class="sErro">&nbsp;*</span>
-        </td>
-       </tr>
       <tr class='specalt'  id="tipo_bolsa">
         <td><span>Tipo de Modalidade</span></td>
         <td><select id="id_bolsista" name="id_bolsista" class="select">
@@ -695,42 +639,6 @@ if($submit){
 
        </table>
        </div> 
-
-       <!-- ============ Conteudo da quinta ABA  ============ -->  
-       <div id="aba5" class='conteudoAba'>
-        <table width="100%" class='formulario'>
-         <tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;">As extensões suportados para os arquivos são: .pdf, .png, .jpg e .jpeg</div></td></tr> 
-        <tr class='specalt'>
-          <td width="25%"><span>CPF(*)</span></td>
-          <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input name="arq_cpf" id="arq_cpf" type="file">
-          <span id='sarq_cpf' class="sErro">&nbsp;*</span></td>
-        </tr>
-        <tr class="specalt">
-          <td width="25%"><span>RG(*)</span></td>
-          <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input name="arq_rg" id="arq_rg" type="file">
-          <span id='sarq_rg' class="sErro">&nbsp;*</span></td>
-        </tr>
-        <tr class="specalt">
-          <td width="25%"><span>Foto(*)</span></td>
-          <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input name="arq_foto" id="arq_foto" type="file">
-          <span id='sarq_foto' class="sErro">&nbsp;*</span></td>
-        </tr>
-        <tr class="specalt">
-          <td width="25%"><span>Atestado de matrícula(*)</span></td>
-          <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input name="arq_atestado_matricula" id="arq_atestado_matricula" type="file">
-          <span id='sarq_atestado_matricula' class="sErro">&nbsp;*</span></td>
-        </tr>
-        <tr class="specalt">
-          <td width="25%"><span>Plano de trabalho(*)</span></td>
-          <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input name="arq_plano_trabalho" id="arq_plano_trabalho" type="file">
-          <span id='sarq_plano_trabalho' class="sErro">&nbsp;*</span></td>
-        </tr>
-        <!--<tr class="specalt">
-          <td width="25%"><span id="texto_declaracao">Declaração PIBIC</span></td>
-          <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input name="arq_declaracao" id="arq_declaracao" type="file">
-        </tr>-->
-        </table>
-       </div>
             
                   
     </table> 
@@ -753,9 +661,6 @@ if($submit){
 </tr>
 </table>
 <script language="javascript">
-
-    //$("#texto_declaracao").hide();
-    //$("#arq_declaracao").hide();
 
     $(document).ready(function() {
         $('input#vigenciai').mask('39/19/2999');

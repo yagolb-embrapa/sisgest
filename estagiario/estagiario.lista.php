@@ -36,10 +36,10 @@ if($qry) {
 	if($qtd>0) { ?>
 		<table width="100%" border="0" cellpadding="1" cellspacing="1" class="lista_registros2">
 			<tr>
-	  			<th width="50%"><strong>Nome do aluno</strong></th>
+	  			<th width="40%" align="left"><strong>Nome do aluno</strong></th>
 	  			<th width="17%"><strong>Categoria</strong></th>
 	  			<th width="13%"><strong>Status</strong></th>
-	  			<th width="20%"><strong>Vigência</strong></th>
+	  			<th width="30%"><strong>Vigência</strong></th>
 			</tr>
 			</table>
 		
@@ -53,7 +53,7 @@ if($qry) {
 			}
 			?>
 			<tr>
-				<td align="left" width="50%"><?php echo $row["nome"]; ?></td>
+				<td align="left" width="40%"><?php echo $row["nome"]; ?></td>
 				<?php
 					$qryStrCat = "SELECT descricao FROM categorias WHERE id_categoria = '".$row["id_categoria"]."'";
 					$qryCat = sql_executa($qryStrCat);
@@ -72,7 +72,7 @@ if($qry) {
 					$dataInicio = $dataInicio->format('d/m/Y');
 					$dataFim = $dataFim->format('d/m/Y'); 
 				?>
-				<td align="center" width="20%"><?php echo $dataInicio; ?> até <?php echo $dataFim; ?></td>
+				<td align="center" width="30%"><?php echo $dataInicio; ?> - <?php echo $dataFim; ?></td>
 			</tr>
 			</table>
 			<?php
