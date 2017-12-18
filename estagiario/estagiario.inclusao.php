@@ -36,7 +36,7 @@ include("../functions/functions.uploud.php");
 			ajax.loadDiv(result,'../functions/ajax.calcula.vigencia.php?ini='+i+'&fim='+f+'&sem='+s+'&ano='+a);
 		}
 
-    /*function exibir_declaracao() {
+    function exibir_declaracao() {
       var valor = $("#categoria").val();
 
       if(valor == '2') {
@@ -46,7 +46,7 @@ include("../functions/functions.uploud.php");
         $("#texto_declaracao").hide();
         $("#arq_declaracao").hide();
       }
-    }	*/				
+    }					
 	</script>
 		<?php
 		
@@ -58,7 +58,7 @@ if($submit){
 	$municipio = $_POST['municipio'];//pega manualmente pq como esta em outra pagina, nao ta pegando com a linha acima
 	
 	//colocar aqui os campos que podem ser vazios no formulario
-	$excecoes_vazio = array("telres","telcel","emaile","complemento","ra","ramal","numero_projeto","nome_projeto","observacao","cargaoutra","agencia","conta","banco","cracha","beneficiario0","beneficiario1","beneficiario2","beneficiario3","beneficiario4","parentesco0","parentesco1","parentesco2","parentesco3","parentesco4","fumante");
+	$excecoes_vazio = array("telres","telcel","emaile","complemento","ra","ramal","numero_projeto","nome_projeto","observacao","cargaoutra","agencia","conta","banco","cracha","beneficiario0","beneficiario1","beneficiario2","beneficiario3","beneficiario4","parentesco0","parentesco1","parentesco2","parentesco3","parentesco4","fumante", "arq_declaracao");
 
     if($tipo_vinculo != 'b'){
         $excecoes_vazio[] = "id_bolsista";
@@ -104,13 +104,55 @@ if($submit){
     //verificando se o sexo foi definido
     if($sexo != 'f' && $sexo != 'm')
         $erros[] = 'sexo';
-
+  
   //validando entrada de arquivos
-  if($_FILES["arq_cpf"]["error"] == 0) $cpf_arq = $_FILES["arq_rg"]; else $erros[] = 'arq_cpf';
-  if($_FILES["arq_rg"]["error"] == 0) $rg_arq = $_FILES["arq_rg"]; else $erros[] = 'arq_rg';
-  if($_FILES["arq_foto"]["error"] == 0) $foto_arq = $_FILES["arq_foto"]; else $erros[] = 'arq_foto';
-  if($_FILES["arq_atestado_matricula"]["error"] == 0) $atestado_matricula_arq = $_FILES["arq_atestado_matricula"]; else $erros[] = 'arq_atestado_matricula';
-  if($_FILES["arq_plano_trabalho"]["error"] == 0) $plano_trabalho_arq = $_FILES["arq_plano_trabalho"]; else $erros[] = 'arq_plano_trabalho';
+  $qtdErros = count($erros);
+  //verifica se os arquivos foram enviados com sucesso
+  $cpf_arq = $_FILES["arq_cpf"];
+  $rg_arq = $_FILES["arq_rg"];
+  $foto_arq = $_FILES["arq_foto"];
+  $atestado_matricula_arq = $_FILES["arq_atestado_matricula"];
+  $plano_trabalho_arq = $_FILES["arq_plano_trabalho"];
+  $declaracao_arq = $_FILES["arq_declaracao"];
+  if(!($cpf_arq["error"] == 0)) $erros[] = 'arq_cpf';
+  if(!($rg_arq["error"] == 0)) $erros[] = 'arq_rg';
+  if(!($foto_arq["error"] == 0)) $erros[] = 'arq_foto';
+  if(!($atestado_matricula_arq["error"] == 0)) $erros[] = 'arq_atestado_matricula';
+  if(!($plano_trabalho_arq["error"] == 0)) $erros[] = 'arq_plano_trabalho';
+  if($categoria == 2) if(!($declaracao_arq["error"] == 0)) $erros[] = 'arq_declaracao';
+
+  //verifica se os arquivos possuem extensoes validas
+  if(count($erros) == $qtdErros) {
+    if(!(validExtension(".pdf", $cpf_arq) || validExtension(".jpg", $cpf_arq) || validExtension(".jpeg", $cpf_arq) || validExtension(".png", $cpf_arq)))
+      $erros[] = 'arq_cpf';
+    if(!(validExtension(".pdf", $rg_arq) || validExtension(".jpg", $rg_arq) || validExtension(".jpeg", $rg_arq) || validExtension(".png", $rg_arq)))
+      $erros[] = 'arq_rg';
+    if(!(validExtension(".pdf", $foto_arq) || validExtension(".jpg", $foto_arq) || validExtension(".jpeg", $foto_arq) || validExtension(".png", $foto_arq)))
+      $erros[] = 'arq_foto';
+    if(!(validExtension(".pdf", $atestado_matricula_arq) || validExtension(".jpg", $atestado_matricula_arq) || validExtension(".jpeg", $atestado_matricula_arq) || validExtension(".png", $atestado_matricula_arq)))
+      $erros[] = 'arq_atestado_matricula';
+    if(!(validExtension(".pdf", $plano_trabalho_arq) || validExtension(".jpg", $plano_trabalho_arq) || validExtension(".jpeg", $plano_trabalho_arq) || validExtension(".png", $plano_trabalho_arq)))
+      $erros[] = 'arq_plano_trabalho';
+    if($categoria == 2) {
+      if(!(validExtension(".pdf", $declaracao_arq) || validExtension(".jpg", $declaracao_arq) || validExtension(".jpeg", $declaracao_arq) || validExtension(".png", $declaracao_arq)))
+      $erros[] = 'arq_declaracao';
+    }
+ 
+    //faz o uploud pra pasta arquivos
+    if(count($erros) == $qtdErros) {
+      if(!($cpf_ext = uploadFile($cpf_arq, $cpf."-cpf"))) $erros[] = 'arq_cpf';
+      if(!($rg_ext = uploadFile($rg_arq, $cpf."-rg"))) $erros[] = 'arq_rg';
+      if(!($foto_ext = uploadFile($foto_arq, $cpf."-foto"))) $erros[] = 'arq_foto';
+      if(!($atestado_matricula_ext = uploadFile($atestado_matricula_arq, $cpf."-atestado_matricula"))) $erros[] = 'arq_atestado_matricula';
+      if(!($plano_trabalho_ext = uploadFile($plano_trabalho_arq, $cpf."-plano_trabalho"))) $erros[] = 'arq_plano_trabalho';
+      if($categoria == 2) {
+        if(!($declaracao_ext = uploadFile($declaracao_arq, $cpf."-declaracao"))) 
+          $erros[] = 'arq_declaracao';
+      } else {
+        $declaracao_ext = "";
+      }
+    }
+  }
 
 	//validando formato das datas  
 	if(!valida($datanasc,'data')) $erros[] = 'datanasc';
@@ -157,7 +199,7 @@ if($submit){
 		}else{
 			$msg_erro = "Alguns campos não foram preenchidos corretamente e foram marcados com um asterisco vermelho. Por favor, verifique-os e tente novamente.";		
 		}
-        if(count($erros) < 4)
+        if(count($erros) < 20)
             $msg_erro .= "\nErro em : " .  $string_erros;
 		echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
 				<tr bgcolor='#FFEFEF'>
@@ -166,8 +208,8 @@ if($submit){
 			</table>		
 		<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
 	}else{
-        $query = "INSERT INTO estagiarios (nome, data_nascimento, nacionalidade, id_estado_civil, cpf, rg, data_expedicao, orgao_expedidor, endereco, complemento, bairro, cep, id_municipio, uf, tel_residencial, tel_celular, email, email_embrapa, agencia, conta_corrente, id_banco, id_instituicao_ensino, curso, inicio_curso, termino_curso, id_nivel, ra, estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, status, sexo, tipo_vinculo, id_bolsista, termo_aceite, fumante, id_categoria, id_status, id_chefia_associada) 
-                  VALUES('$nome', '".formata($datanasc,'data')."', '$nacionalidade', $estadocivil, '$cpf', '$rg', '".formata($dataexpedicao,'data')."', '$orgaoexpedidor', '$endereco', '$complemento', '$bairro', '$cep', $municipio, '$uf', '$telres', '$telcel', '$email', '$emaile', '$agencia', '$conta', $banco, $instituicao, '$curso','$inicio_curso', '$termino_curso', $nivel, '$ra', '$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $status, '$sexo', '$tipo_vinculo', $id_bolsista, '$termo_aceite', '$fumante', '$categoria', '2', $chefia_associada);";
+        $query = "INSERT INTO estagiarios (nome, data_nascimento, nacionalidade, id_estado_civil, cpf, rg, data_expedicao, orgao_expedidor, endereco, complemento, bairro, cep, id_municipio, uf, tel_residencial, tel_celular, email, email_embrapa, agencia, conta_corrente, id_banco, id_instituicao_ensino, curso, inicio_curso, termino_curso, id_nivel, ra, estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, status, sexo, tipo_vinculo, id_bolsista, termo_aceite, fumante, id_categoria, id_status, id_chefia_associada, ext_cpf, ext_rg, ext_foto, ext_plano_trabalho, ext_atestado_matricula, ext_declaracao) 
+                  VALUES('$nome', '".formata($datanasc,'data')."', '$nacionalidade', $estadocivil, '$cpf', '$rg', '".formata($dataexpedicao,'data')."', '$orgaoexpedidor', '$endereco', '$complemento', '$bairro', '$cep', $municipio, '$uf', '$telres', '$telcel', '$email', '$emaile', '$agencia', '$conta', $banco, $instituicao, '$curso','$inicio_curso', '$termino_curso', $nivel, '$ra', '$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $status, '$sexo', '$tipo_vinculo', $id_bolsista, '$termo_aceite', '$fumante', '$categoria', '2', $chefia_associada, '$cpf_ext', '$rg_ext', '$foto_ext', '$plano_trabalho_ext', '$atestado_matricula_ext', '$declaracao_ext');";
 
 		$result = sql_executa($query);
 
@@ -532,7 +574,7 @@ if($submit){
       </tr>
       <tr class='specalt' >
         <td><span>Categoria(*)</span></td>
-        <td><select id="categoria" name="categoria" onchange="" class="select">
+        <td><select id="categoria" name="categoria" onchange="exibir_declaracao()" class="select">
                 <option value="">-- Categoria --</option>
                 <?php
                   $qryStrCat = "SELECT * FROM categorias";
@@ -725,10 +767,11 @@ if($submit){
           <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input name="arq_plano_trabalho" id="arq_plano_trabalho" type="file">
           <span id='sarq_plano_trabalho' class="sErro">&nbsp;*</span></td>
         </tr>
-        <!--<tr class="specalt">
-          <td width="25%"><span id="texto_declaracao">Declaração PIBIC</span></td>
+        <tr class="specalt">
+          <td width="25%"><span id="texto_declaracao">Declaração PIBIC(*)</span></td>
           <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input name="arq_declaracao" id="arq_declaracao" type="file">
-        </tr>-->
+          <span id='sarq_declaracao' class="sErro">&nbsp;*</span></td>
+        </tr>
         </table>
        </div>
             
@@ -754,8 +797,8 @@ if($submit){
 </table>
 <script language="javascript">
 
-    //$("#texto_declaracao").hide();
-    //$("#arq_declaracao").hide();
+    $("#texto_declaracao").hide();
+    $("#arq_declaracao").hide();
 
     $(document).ready(function() {
         $('input#vigenciai').mask('39/19/2999');

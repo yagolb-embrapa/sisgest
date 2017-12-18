@@ -52,3 +52,4 @@ Tabela "estagiarios"
 	Criação da coluna "ext_declaracao": character varying(4)
 	Criação da coluna "id_chefia_associada": integer, FK
 	
+Dado permissao 0777 pra pasta do site.

@@ -18,12 +18,12 @@ function validExtension($extension,$arquivo){
 }
 
 //UPLODAR ARQUIVO PRO SERVIDOR
-function uploadFile($arquivo, $name, $dest="../estagiario/arquivos/"){
-
-	$name = $name.".".getExtension($arquivo);
- 	if($v = move_uploaded_file($arquivo["tmp_name"], $dest.$name)) {
- 		chmod($dest.$name,0777);
- 		return $v;
+function uploadFile($arquivo, $name, $dest="./arquivos/"){
+	$tipo = getExtension($arquivo);
+	$name = $name.".".$tipo;
+ 	if(move_uploaded_file($arquivo["tmp_name"], $dest.$name)) {
+ 		chmod($dest.$name, 0777);
+ 		return $tipo;
  	} else {
  		return false;
  	}
