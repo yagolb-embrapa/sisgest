@@ -58,7 +58,10 @@ if($submit){
 	$municipio = $_POST['municipio'];//pega manualmente pq como esta em outra pagina, nao ta pegando com a linha acima
 	
 	//colocar aqui os campos que podem ser vazios no formulario
-	$excecoes_vazio = array("telres","telcel","emaile","complemento","ra","ramal","numero_projeto","nome_projeto","observacao","cargaoutra","agencia","conta","banco","cracha","beneficiario0","beneficiario1","beneficiario2","beneficiario3","beneficiario4","parentesco0","parentesco1","parentesco2","parentesco3","parentesco4","fumante", "arq_declaracao");
+	$excecoes_vazio = array("telres","telcel","emaile","complemento","ra","ramal","numero_projeto","nome_projeto","observacao","cargaoutra","agencia","conta","banco","cracha","beneficiario0","beneficiario1","beneficiario2","beneficiario3","beneficiario4","parentesco0","parentesco1","parentesco2","parentesco3","parentesco4","fumante");
+  if($categoria == 2) {
+    $excecoes_vazio[] = "arq_declaracao";
+  }
 
     if($tipo_vinculo != 'b'){
         $excecoes_vazio[] = "id_bolsista";
