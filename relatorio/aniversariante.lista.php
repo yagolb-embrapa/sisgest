@@ -6,7 +6,8 @@
 	$cor = true;
 			
 	if (!$_GET["pag"]) $pagina = '1'; else $pagina = $_GET["pag"];
-	$offset = 10; //resultados por pagina.	?>
+	$offset = 10; //resultados por pagina.	
+?>
 <style>
 .limiter{
 	color:#000077;
@@ -23,7 +24,7 @@ $extenso = array('','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho
 <span class='subtitulo'><?php echo $extenso[$pagina]; ?></span>
 <div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div>
 <?php
-	$query_niver = "SELECT * FROM estagiarios  WHERE status = 1";
+	$query_niver = "SELECT * FROM estagiarios AS es INNER JOIN contratos AS ct ON es.id = ct.id_estagiario WHERE ct.status = 1";
 	$result_niver = sql_executa($query_niver);	
 	
   	if(sql_num_rows($result_niver)>0){
@@ -40,7 +41,8 @@ $extenso = array('','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho
 	  else $numreg = $pagina*$offset;*/
 	  	  
 	  if(count($dias)>0){	  
-	  	 array_multisort($dias, $aniversariantes);//ordena o array de dias e mantem o chaveamento com array 2			  
+	  	 array_multisort($dias, $aniversariantes);//ordena o array de dias e mantem o chaveamento com array 2			
+  
 		 //Imprime uma linha com cada estagiario daquela letra
 	  	 for($i=0;$i<count($dias);$i++){
 		    $cor = !$cor;

@@ -50,10 +50,11 @@ $timef = mktime(0,0,0,$dataf[1],$dataf[0],$dataf[2]);
 
 /* Por enquanto pega na tabela de pedidos de finalizacao, mas posteriormente pegar de uma tabela
  que marca a finalizacao propriamente dita, vinda de uma pagina de finalizacao ou mudanca de status do estag*/
-$query = "SELECT su.nome as superv, es.nome as nome, es.vigencia_inicio, es.vigencia_fim, pc.data, es.id_instituicao_ensino, ins.razao_social as inst 
+$query = "SELECT su.nome as superv, es.nome as nome, ct.vigencia_inicio, ct.vigencia_fim, pc.data, es.id_instituicao_ensino, ins.razao_social as inst 
 FROM pedidos_contas pc 
 INNER JOIN estagiarios es ON es.id = pc.id_estagiario 
-INNER JOIN supervisores su ON es.id_supervisor = su.id
+INNER JOIN contratos ct ON es.id = ct.id_estagiario
+INNER JOIN supervisores su ON ct.id_supervisor = su.id
 INNER JOIN instituicoes_ensino ins ON es.id_instituicao_ensino = ins.id 
 WHERE pc.tipo = 'F' AND pc.data > {$timei} AND pc.data < {$timef} ORDER BY nome";
 

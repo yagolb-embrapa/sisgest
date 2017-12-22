@@ -211,8 +211,8 @@ if($submit){
 			</table>		
 		<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
 	}else{
-        $query = "INSERT INTO estagiarios (nome, data_nascimento, nacionalidade, id_estado_civil, cpf, rg, data_expedicao, orgao_expedidor, endereco, complemento, bairro, cep, id_municipio, uf, tel_residencial, tel_celular, email, email_embrapa, agencia, conta_corrente, id_banco, id_instituicao_ensino, curso, inicio_curso, termino_curso, id_nivel, ra, estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, status, sexo, tipo_vinculo, id_bolsista, termo_aceite, fumante, id_categoria, id_status, id_chefia_associada, ext_cpf, ext_rg, ext_foto, ext_plano_trabalho, ext_atestado_matricula, ext_declaracao) 
-                  VALUES('$nome', '".formata($datanasc,'data')."', '$nacionalidade', $estadocivil, '$cpf', '$rg', '".formata($dataexpedicao,'data')."', '$orgaoexpedidor', '$endereco', '$complemento', '$bairro', '$cep', $municipio, '$uf', '$telres', '$telcel', '$email', '$emaile', '$agencia', '$conta', $banco, $instituicao, '$curso','$inicio_curso', '$termino_curso', $nivel, '$ra', '$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $status, '$sexo', '$tipo_vinculo', $id_bolsista, '$termo_aceite', '$fumante', '$categoria', '2', $chefia_associada, '$cpf_ext', '$rg_ext', '$foto_ext', '$plano_trabalho_ext', '$atestado_matricula_ext', '$declaracao_ext');";
+        $query = "INSERT INTO estagiarios (nome, data_nascimento, nacionalidade, id_estado_civil, cpf, rg, data_expedicao, orgao_expedidor, endereco, complemento, bairro, cep, id_municipio, uf, tel_residencial, tel_celular, email, email_embrapa, agencia, conta_corrente, id_banco, id_instituicao_ensino, curso, inicio_curso, termino_curso, id_nivel, ra, sexo, fumante, observacao) 
+                  VALUES('$nome', '".formata($datanasc,'data')."', '$nacionalidade', $estadocivil, '$cpf', '$rg', '".formata($dataexpedicao,'data')."', '$orgaoexpedidor', '$endereco', '$complemento', '$bairro', '$cep', $municipio, '$uf', '$telres', '$telcel', '$email', '$emaile', '$agencia', '$conta', $banco, $instituicao, '$curso','$inicio_curso', '$termino_curso', $nivel, '$ra', '$sexo', '$fumante', '$observacao');";
 
 		$result = sql_executa($query);
 
@@ -222,7 +222,11 @@ if($submit){
 			//pegando id do estagiario inserido
 			$query_estag = "SELECT id FROM estagiarios ORDER BY id DESC LIMIT 1";
 			$result_estag = sql_executa($query_estag);
-			$campo_estag = sql_fetch_array($result_estag);			
+			$campo_estag = sql_fetch_array($result_estag);	
+
+      $query = "INSERT INTO contratos (estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, status, tipo_vinculo, id_bolsista, termo_aceite, id_categoria, id_status, id_chefia_associada, ext_cpf, ext_rg, ext_foto, ext_plano_trabalho, ext_atestado_matricula, ext_declaracao, numero_contrato, id_estagiario) 
+    VALUES ('$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $status, '$tipo_vinculo', $id_bolsista, '$termo_aceite', '$categoria', '2', $chefia_associada, '$cpf_ext', '$rg_ext', '$foto_ext', '$plano_trabalho_ext', '$atestado_matricula_ext', '$declaracao_ext', '1', '$campo_estag['id']');";
+    $result2 = sql_executa($query);		
 			//salvando horarios
 			if(!salva_horarios ($campo_estag['id'], $_POST)){
 				$msg_hor = "No entanto, não foi possível inserir os horários do estagiário. Por favor, tente novamente.";

@@ -25,19 +25,20 @@ if($msg_erro){
     $query = "SELECT es.nome AS est_nome,
                      es.data_nascimento,
                      es.email_embrapa,
-                     es.ramal,
+                     ct.ramal,
                      su.nome AS sup_nome,
-                     es.nome_projeto,
-                     es.carga_horaria,
-                     es.remuneracao,
-                     es.vigencia_inicio,
-                     es.vigencia_fim,
+                     ct.nome_projeto,
+                     ct.carga_horaria,
+                     ct.remuneracao,
+                     ct.vigencia_inicio,
+                     ct.vigencia_fim,
                      es.termino_curso,
                      ie.razao_social AS inst_nome
                      FROM   estagiarios AS es
-                     INNER JOIN supervisores su ON es.id_supervisor = su.id
+                     INNER JOIN contratos ct ON es.id = ct.id_estagiario
+                     INNER JOIN supervisores su ON ct.id_supervisor = su.id
                      INNER JOIN instituicoes_ensino ie ON es.id_instituicao_ensino = ie.id
-                     WHERE status = 1 AND es.tipo_vinculo = 'e'
+                     WHERE ct.status = 1 AND ct.tipo_vinculo = 'e'
                      ORDER BY es.nome ASC;";
 	$result = sql_executa($query);	
 	

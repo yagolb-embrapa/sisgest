@@ -16,12 +16,13 @@ include("../functions/functions.forms.php");
 //mostra mensagem de erro ou mostra os dados
 if($msg_erro){
 	echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
-			<tr bgcolor='#FFEFEF'>					<td align='center'><span align='center' style='color:red;'>{$msg_erro}</span></td>
+			<tr bgcolor='#FFEFEF'>
+					<td align='center'><span align='center' style='color:red;'>{$msg_erro}</span></td>
 			</tr>
 		</table>";	
 	
 }else{
-	$query_piec = "SELECT * FROM estagiarios WHERE participou_piec = 'N' AND status = 1 ORDER BY nome";
+	$query_piec = "SELECT * FROM estagiarios AS es INNER JOIN contratos AS ct ON es.id = ct.id_estagiario WHERE ct.participou_piec = 'N' AND ct.status = 1 ORDER BY es.nome";
 	$result_piec = sql_executa($query_piec);	
 	
 	
@@ -78,7 +79,8 @@ if($msg_erro){
 		}
 	}else{
 	 	echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
-				<tr bgcolor='#FFEFEF'>					<td align='center'><span align='center' style='color:red;'>Todos os estagiários participaram do PIEC.</span></td>
+				<tr bgcolor='#FFEFEF'>
+					<td align='center'><span align='center' style='color:red;'>Todos os estagiários participaram do PIEC.</span></td>
 			</tr>
 		</table>";	
   } 

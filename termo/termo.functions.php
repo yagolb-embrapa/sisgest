@@ -24,16 +24,17 @@ function rtf($arq_entrada, $arq_saida, $tipo_termo, $id, $num_cracha = 0){
 	$punt = fopen($arq_saida,"w");
 	fputs($punt,$cabecalho);
 	
-	$queryEstagiario = "SELECT  es.*, ie.endereco as enderecoie, ie.razao_social as instituicao, ie.cnpj as cnpj, ec.estado_civil as estadocivil, 
+	$queryEstagiario = "SELECT  es.*, ct.*, ie.endereco as enderecoie, ie.razao_social as instituicao, ie.cnpj as cnpj, ec.estado_civil as estadocivil, 
                                 mu.nome as municipio, mumu.nome as municipioie, mumu.uf as ufie, su.nome as nome_supervisor, ie.data_convenio,
                                 ie.numero_saic, su.cpf as cpf_supervisor
                         FROM estagiarios es 
+                        INNER JOIN contratos ct ON es.id = ct.id_estagiario
                         INNER JOIN instituicoes_ensino ie ON ie.id = es.id_instituicao_ensino
                         INNER JOIN estado_civil ec ON es.id_estado_civil = ec.id
                         INNER JOIN municipios mu ON mu.id = es.id_municipio
                         INNER JOIN municipios mumu ON mumu.id = ie.id_municipio
-                        INNER JOIN supervisores su ON es.id_supervisor = su.id
-                        WHERE es.id = {$id}";						  
+                        INNER JOIN supervisores su ON ct.id_supervisor = su.id
+                        WHERE es.id = {$id} AND ct.status = '1'";						  
 	$resultEstagiario = sql_executa($queryEstagiario);
 	if(sql_num_rows($resultEstagiario)>0){
 		$estagiario = sql_fetch_array($resultEstagiario);	

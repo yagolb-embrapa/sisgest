@@ -28,16 +28,18 @@ if($msg_erro){
     $query = "
         SELECT  su.nome as sup_nome,
                 es.nome as est_nome,
-                es.ramal,
+                ct.ramal,
                 es.email_embrapa
         FROM    estagiarios AS es
-                INNER JOIN supervisores su ON es.id_supervisor = su.id
-        WHERE   status = 1 AND es.tipo_vinculo = 'e'
+        		INNER JOIN contratos AS ct ON es.id = ct.id_estagiario
+                INNER JOIN supervisores su ON ct.id_supervisor = su.id
+        WHERE   ct.status = 1 AND ct.tipo_vinculo = 'e'
                 AND es.id NOT IN (
                                     SELECT es.id
                                     FROM   estagiarios AS es
+                                    INNER JOIN contratos AS ct ON es.id = ct.id_estagiario
                                     INNER JOIN frequencias fr ON es.id = fr.id_estagiario
-                                    WHERE status = 1 AND es.tipo_vinculo = 'e' AND fr.periodo='{$periodo[1]}-{$periodo[0]}-01' AND fr.entregou_relatorio='t'
+                                    WHERE ct.status = 1 AND ct.tipo_vinculo = 'e' AND fr.periodo='{$periodo[1]}-{$periodo[0]}-01' AND fr.entregou_relatorio='t'
                                  )
         ORDER BY es.nome, su.nome;";
 	$result = sql_executa($query);	

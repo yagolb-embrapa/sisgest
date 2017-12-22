@@ -15,6 +15,9 @@ $query_setores = "  SELECT  distinct st.setor,
                     ORDER BY st.setor ASC;";
 
 $setores = DB::fetch_all($query_setores);
+
+
+
 ?>
 
 
@@ -77,10 +80,9 @@ if($submit){
         $erros[] = 'setor';
 
 	if(!empty($estagiario)){		 			 
-	
-        $q_est = "  SELECT  es.id, nome, es.id_supervisor, es.tipo_vinculo, es.nome_projeto, es.data_nascimento, es.id_instituicao_ensino, es.curso, es.ramal, es.vigencia_inicio, ni.nivel
-                    FROM    estagiarios es LEFT JOIN niveis ni ON es.id_nivel = ni.id
-                    WHERE   es.id = {$estagiario}";
+        $q_est = "SELECT  es.id, es.nome, ct.id_supervisor, ct.tipo_vinculo, ct.nome_projeto, es.data_nascimento, es.id_instituicao_ensino, es.curso, ct.ramal, ct.vigencia_inicio, ni.nivel
+                    FROM estagiarios AS es, contratos AS ct, niveis AS ni 
+                    WHERE es.id = {$estagiario} AND ct.id_estagiario = {$estagiario} AND es.id_nivel = ni.id"; 
 		$r_est = sql_executa($q_est);
 		if(sql_num_rows($r_est) > 0) $c_est = sql_fetch_array($r_est);
 
@@ -244,7 +246,9 @@ echo "<table width='100%' style='border:1px solid black;' cellspacing='0' cellpa
         				echo "<option value=''>
 	        						-- Selecione --
         						</option>";        				         			
-        				$q_estag = "SELECT * FROM estagiarios WHERE email_embrapa = '' AND status = 1 ORDER BY nome";
+        				$q_estag = "SELECT es.id, es.nome, ct.id_supervisor FROM estagiarios AS es
+                        INNER JOIN contratos AS ct ON es.id = ct.id_estagiario
+                        WHERE es.email_embrapa = '' AND ct.status = 1 ORDER BY es.nome";
         				$r_estag = sql_executa($q_estag);        				       				
         				if(sql_num_rows($r_estag) < 1){
 							echo "<span><i>Não foram encontrados estagiários sem conta.</i></span>";        				

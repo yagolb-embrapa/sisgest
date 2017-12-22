@@ -116,8 +116,9 @@ $meses = array('','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho',
     		</tr>
     		<?php 
     		
-    		$sql = "SELECT e.id, e.nome, e.carga_horaria, s.nome supervisor, e.id_origem_recursos FROM estagiarios e 
-    		inner join supervisores s on (e.id_supervisor=s.id) where e.status = 1 and e.tipo_vinculo='e' ";
+    		$sql = "SELECT e.id, e.nome, ct.carga_horaria, s.nome supervisor, ct.id_origem_recursos FROM estagiarios e 
+            inner join contratos ct on (e.id=ct.id_estagiario)
+    		inner join supervisores s on (ct.id_supervisor=s.id) where ct.status = 1 and ct.tipo_vinculo='e' ";
     		if (isset($_GET["idFonte"])) $sql.="and e.id_origem_recursos = ".$_GET["idFonte"]." ";
     		$sql .= "order by e.nome";
     		DB::execute($sql);

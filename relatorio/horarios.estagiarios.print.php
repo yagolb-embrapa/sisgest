@@ -44,11 +44,12 @@ if($msg_erro){
 		</table>";	
 	
 }else{
-    $query = "select e.id, e.nome, s.nome sup_nome, h.dia, h.entrada, h.saida, e.tipo_vinculo tipo
+    $query = "select e.id, e.nome, s.nome sup_nome, h.dia, h.entrada, h.saida, ct.tipo_vinculo tipo
 				from horarios h 
-				inner join estagiarios e on (e.id=h.id_estagiario) 
-				left join supervisores s on (s.id=e.id_supervisor)
-				where h.tipo = 'e' and e.status = 1
+				inner join estagiarios e on (e.id=h.id_estagiario)
+				inner join contratos ct on (e.id=ct.id_estagiario) 
+				left join supervisores s on (s.id=ct.id_supervisor)
+				where h.tipo = 'e' and ct.status = 1
 				order by tipo, e.nome, h.dia, h.entrada;";
 	$result = sql_executa($query);	
 	

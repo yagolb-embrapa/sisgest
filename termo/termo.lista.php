@@ -55,7 +55,8 @@ if($submit){
 	
 	/*Seleciona o supervisor do estagiario e o nome dele (juntar numa query)*/ 			 
 	if(!empty($estagiario)){
-		$q_est = "SELECT nome, id_supervisor FROM estagiarios WHERE id = {$estagiario}";	
+		$q_est = "SELECT es.nome, ct.id_supervisor FROM estagiarios AS es, contratos AS ct 
+		WHERE es.id = {$estagiario} AND ct.id_estagiario = {$estagiario} AND ct.status = '1'";	
 		$r_est = sql_executa($q_est);
 		if(sql_num_rows($r_est) > 0) $c_est = sql_fetch_array($r_est);
 	
@@ -103,7 +104,7 @@ if($submit){
         				echo "<option value=''>
 	        						-- Selecione --
         						</option>";        				         			
-        				$q_estag = "SELECT * FROM estagiarios WHERE status = 1 ORDER BY nome";
+        				$q_estag = "SELECT * FROM estagiarios AS es INNER JOIN contratos AS ct ON es.id = ct.id_estagiario WHERE ct.status = 1 ORDER BY es.nome";
         				$r_estag = sql_executa($q_estag);        				       				
         				if(sql_num_rows($r_estag) < 1){
 							echo "<span><i>Não foram encontrados estagiários ativos.</i></span>";        				

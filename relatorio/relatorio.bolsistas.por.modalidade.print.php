@@ -53,9 +53,10 @@ if($msg_erro){
                      es.nome AS est_nome,
                      mb.nome AS mb_nome
                      FROM   estagiarios AS es
-                     INNER JOIN supervisores su ON es.id_supervisor = su.id
-                     INNER JOIN modalidades_bolsista mb ON es.id_bolsista = mb.id
-                     WHERE status = 1 AND tipo_vinculo='b'
+                     INNER JOIN contratos ct ON es.id = ct.id_estagiario
+                     INNER JOIN supervisores su ON ct.id_supervisor = su.id
+                     INNER JOIN modalidades_bolsista mb ON ct.id_bolsista = mb.id
+                     WHERE ct.status = 1 AND ct.tipo_vinculo='b'
                      ORDER BY mb.nome, es.nome;";
 	$result = sql_executa($query);	
 

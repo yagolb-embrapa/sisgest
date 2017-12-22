@@ -14,14 +14,14 @@ require_once("../classes/DB.php");
 
 function atualiza_cracha($idEstagiario, $num_cracha) {
     $query = "SELECT  cracha
-              FROM    estagiarios
-              WHERE   id = {$idEstagiario};";
+              FROM    contratos
+              WHERE   id_estagiario = {$idEstagiario} AND status = '1';";
     $cracha = DB::fetch_all($query);
 
     if($cracha[0]['cracha'] != $num_cracha) {
-        $query = "UPDATE  estagiarios
+        $query = "UPDATE  contratos
                   SET     cracha = $num_cracha
-                  WHERE   id = {$idEstagiario};";
+                  WHERE   id_estagiario = {$idEstagiario} AND status = '1';";
         DB::execute($query);
     }
 }

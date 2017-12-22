@@ -15,8 +15,10 @@ if(sql_num_rows($qry)>0){
 
 $q_delete = "DELETE FROM estagiarios WHERE id = {$id};";
 $r_delete = sql_executa($q_delete);
+$q_delete2 = "DELETE FROM contratos WHERE id_estagiario = {$id};";
+$r_delete2 = sql_executa($q_delete2);
 
-if($r_delete){
+if($r_delete && $r_delete2){
 	$msg = "O estagiário {$row['nome']} foi excluído com sucesso!";
 }else{
 	$msg = "Não foi possível excluir o estagiário {$row['nome']}. Por favor, tente novamente.";

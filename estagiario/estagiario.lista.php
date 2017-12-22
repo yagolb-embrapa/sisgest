@@ -13,6 +13,7 @@
 	$qry = sql_executa($qryStr);
 	$row = sql_fetch_array($qry);
 	$id_supervisor = $row[0];
+
 ?>
 			
 <style>
@@ -25,10 +26,10 @@
 
 </style>
 <?php
-$qryStr = "SELECT nome, id_categoria, id_status, vigencia_inicio, vigencia_fim 
-			FROM estagiarios 
-			WHERE id_supervisor = '".$id_supervisor."' 
-			ORDER BY id_status ASC, vigencia_inicio DESC 
+$qryStr = "SELECT es.nome, ct.id_categoria, ct.id_status, ct.vigencia_inicio, ct.vigencia_fim 
+			FROM estagiarios AS es INNER JOIN contratos AS ct ON es.id = ct.id_estagiario 
+			WHERE ct.id_supervisor = '11' 
+			ORDER BY ct.id_status ASC, ct.vigencia_inicio DESC 
 			LIMIT ".$offset." OFFSET ".(($offset*$pagina)-$offset)."";
 $qry = sql_executa($qryStr);
 if($qry) {
@@ -77,7 +78,8 @@ if($qry) {
 			</table>
 			<?php
 		}
-		$qryStr = "SELECT nome FROM estagiarios WHERE id_supervisor = '".$id_supervisor."'";
+		$qryStr = "SELECT es.nome FROM estagiarios AS es INNER JOIN contratos AS ct ON es.id = ct.id_estagiario 
+		WHERE ct.id_supervisor = '11'";
 		$qry = sql_executa($qryStr);
 		$qtdAlunos = sql_num_rows($qry);
 		echo "<table width=\"500\" border=\"0\" cellpadding=\"5\" cellspacing=\"5\" class=\"listaEstagiarios\">

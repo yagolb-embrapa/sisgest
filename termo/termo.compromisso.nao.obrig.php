@@ -12,13 +12,14 @@ include("../functions/functions.forms.php");
 $idEstagiario = $_GET["id"];
 //$idEstagiario = 86;
 
-$queryEstagiario = "SELECT es.*, ie.razao_social as instituicao, ie.cnpj as cnpj, ec.estado_civil as estadocivil, 
-						  mu.nome as municipio, mumu.nome as municipioie, mumu.uf as ufie FROM estagiarios es 
+$queryEstagiario = "SELECT es.*, ct.*, ie.razao_social as instituicao, ie.cnpj as cnpj, ec.estado_civil as estadocivil, 
+						  mu.nome as municipio, mumu.nome as municipioie, mumu.uf as ufie FROM estagiarios es
+						  INNER JOIN contratos ct ON es.id = ct.id_estagiario 
 						  INNER JOIN instituicoes_ensino ie ON ie.id = es.id_instituicao_ensino
 						  INNER JOIN estado_civil ec ON es.id_estado_civil = ec.id
 						  INNER JOIN municipios mu ON mu.id = es.id_municipio
 						  INNER JOIN municipios mumu ON mumu.id = ie.id_municipio
-						  WHERE es.id = {$idEstagiario}";						  
+						  WHERE es.id = {$idEstagiario} AND ct.status = '1'";						  
 $resultEstagiario = sql_executa($queryEstagiario);
 if(sql_num_rows($resultEstagiario)>0){
 	$estagiario = sql_fetch_array($resultEstagiario);	

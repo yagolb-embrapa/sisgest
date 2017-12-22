@@ -65,7 +65,9 @@ if($submit){
 	
 	/*Seleciona o supervisor do estagiario e o nome dele (juntar numa query)*/ 			 
 	if(!empty($estagiario)){
-		$q_est = "SELECT nome, id_supervisor, tipo_vinculo, email_embrapa FROM estagiarios WHERE id = {$estagiario}";	
+		$q_est = "SELECT es.nome, ct.id_supervisor, ct.tipo_vinculo, es.email_embrapa 
+		FROM estagiarios AS es, contratos AS ct
+		WHERE es.id = {$estagiario} AND ct.id_estagiario = {$estagiario}";	
 		$r_est = sql_executa($q_est);
 		if(sql_num_rows($r_est) > 0) $c_est = sql_fetch_array($r_est);
 	
@@ -92,7 +94,7 @@ if($submit){
 		<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
 				
 	}else{
-		$query_update = "UPDATE estagiarios SET status = 0 WHERE id = {$estagiario}";		
+		$query_update = "UPDATE contratos SET status = 0 WHERE id_estagiario = {$estagiario}";		
 		$result_update = sql_executa($query_update);			
 	
 		//Insere o pedido de abertura de contas no bd
@@ -197,7 +199,8 @@ if($submit){
         				echo "<option value=''>
 	        						-- Selecione --
         						</option>";        				         			
-        				$q_estag = "SELECT * FROM estagiarios WHERE email_embrapa <> '' AND status = 1 ORDER BY nome";
+        				$q_estag = "SELECT * FROM estagiarios AS es INNER JOIN contratos AS ct ON es.id = ct.id_estagiario
+        				WHERE es.email_embrapa <> '' AND ct.status = 1 ORDER BY nome";
         				$r_estag = sql_executa($q_estag);        				       				
         				if(sql_num_rows($r_estag) < 1){
 							echo "<span><i>Não foram encontrados estagiários com conta.</i></span>";        				

@@ -63,19 +63,21 @@ for ($i=0; $i<sizeof($_POST["idEstagiario"]); $i++){
 	$sql = "SELECT e.id, 
 	e.nome, 
 	e.cpf, 
-	e.carga_horaria horas, 
+	ct.carga_horaria horas, 
 	s.nome supervisor, 
-	case when e.numero_projeto='' then e.nome_projeto else e.numero_projeto end projeto, 
-	e.remuneracao bolsa,
+	case when ct.numero_projeto='' then ct.nome_projeto else ct.numero_projeto end projeto, 
+	ct.remuneracao bolsa,
 	b.codigo_banco banco,
 	e.agencia, 
 	e.conta_corrente cc,
-	e.vale_transporte vt,
+	ct.vale_transporte vt,
 	o.origem  
-	FROM estagiarios e inner join supervisores s on (s.id=e.id_supervisor) 
+	FROM estagiarios e
+	inner join contratos ct on (e.id=ct.id_estagiario) 
+	inner join supervisores s on (s.id=ct.id_supervisor) 
 	LEFT join bancos b on (e.id_banco=b.id) 
 	inner join origens_recursos o on (o.id={$ido}) 
-	where e.status = 1 and e.id={$id} ORDER BY e.nome";
+	where ct.status = 1 and e.id={$id} ORDER BY e.nome";
 	DB::execute($sql);
 	$estagiario = DB::fetch();
 	

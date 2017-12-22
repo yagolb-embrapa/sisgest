@@ -44,12 +44,13 @@ include("../functions/functions.forms.php");
 //mostra mensagem de erro ou mostra os dados
 if($msg_erro){
 	echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
-			<tr bgcolor='#FFEFEF'>					<td align='center'><span align='center' style='color:red;'>{$msg_erro}</span></td>
+			<tr bgcolor='#FFEFEF'>
+					<td align='center'><span align='center' style='color:red;'>{$msg_erro}</span></td>
 			</tr>
 		</table>";	
 	
 }else{
-	$query_cracha = "SELECT * FROM estagiarios  WHERE status = 1 ORDER BY cracha";
+	$query_cracha = "SELECT * FROM estagiarios AS es INNER JOIN contratos AS ct ON es.id = ct.id_estagiario WHERE ct.status = 1 ORDER BY ct.cracha";
 	$result_cracha = sql_executa($query_cracha);	
 	
 	
@@ -79,7 +80,8 @@ if($msg_erro){
 		}
 	}else{
 	 	echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
-				<tr bgcolor='#FFEFEF'>					<td align='center'><span align='center' style='color:red;'>Não foram encontrados estagiários cadastrados no sistema.</span></td>
+				<tr bgcolor='#FFEFEF'>
+					<td align='center'><span align='center' style='color:red;'>Não foram encontrados estagiários cadastrados no sistema.</span></td>
 			</tr>
 		</table>";	
   } 

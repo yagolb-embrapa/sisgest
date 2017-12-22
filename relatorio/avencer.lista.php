@@ -9,7 +9,8 @@
 		//msg de erro
 		return;			
 	}
-			 	?>
+			 	
+?>
 <style>
 .limiter{
 	color:#000077;
@@ -36,9 +37,9 @@ $query = "SELECT est.id,est.nome,est.vigencia_inicio,est.vigencia_fim,sup.nome a
 			WHERE status = 1";*/
 $query = "SELECT est.id,
 est.nome,
-est.vigencia_inicio,
+ct.vigencia_inicio,
 CASE WHEN (EXISTS(select * from termos_aditivos AS ta where ta.id_estagiario=est.id)) THEN (select data_fim from termos_aditivos as ta where ta.id_estagiario=est.id order by data_fim desc limit 1)
-ELSE est.vigencia_fim
+ELSE ct.vigencia_fim
 END as vigencia_fim,
 case when (EXISTS(select * from termos_aditivos AS ta where ta.id_estagiario=est.id)) THEN 1
 else 0 end as aditivo,
@@ -46,9 +47,10 @@ sup.nome as superv,
 inst.razao_social as instit
 
 FROM estagiarios est  
-			INNER JOIN supervisores sup ON sup.id = est.id_supervisor
+			INNER JOIN contratos ct ON est.id = ct.id_estagiario
+			INNER JOIN supervisores sup ON sup.id = ct.id_supervisor
 			INNER JOIN instituicoes_ensino inst ON inst.id = est.id_instituicao_ensino 
-			WHERE status = 1";
+			WHERE ct.status = 1";
 $result = sql_executa($query);	
 	
 /*Recuperando dados e tratando-os*/	
@@ -74,7 +76,8 @@ if(sql_num_rows($result)>0){
   }	  
   /*Ordena um vetor e rearranja o chaveamento dos outros em função desse*/	  
   array_multisort($ids, $nomes, $inicios, $fins, $insts, $supervs,$tas);		
-    $count_ok = 0;
+  
+  $count_ok = 0;
   
   //Imprime uma linha com cada estagiario dentro do periodo desejado 
   for($i=0;$i<count($ids);$i++){  		

@@ -52,4 +52,79 @@ Tabela "estagiarios"
 	Criação da coluna "ext_declaracao": character varying(4)
 	Criação da coluna "id_chefia_associada": integer, FK
 	
-Dado permissao 0777 pra pasta do site.
+Dado permissao 0777:
+	functions/functions.uploud.php
+	estagiario/estagiario.inclusao.php
+	estagiario/arquivos/
+
+GRANDES ALTERAÇÕES
+Desmembrou-se a tabela "estagiarios" em duas:
+	Tabela "contratos":
+		id_contrato integer DEFAULT nextval('contratos_id_seq'::regclass) NOT NULL, PK
+    	numero_contrato integer NOT NULL,
+    	id_estagiario integer NOT NULL, FK
+    	vigencia_inicio date NOT NULL,
+    	vigencia_fim date NOT NULL,
+    	remuneracao real,
+    	cracha integer,
+    	participou_piec character(1) NOT NULL,
+    	id_origem_recursos integer, FK
+    	carga_horaria integer NOT NULL,
+    	id_supervisor integer NOT NULL, FK
+    	area_atuacao character varying(30),
+    	numero_projeto character varying(60),
+    	ramal character varying(10),
+    	nome_projeto text,
+    	estagio_obrigatorio character(1),
+    	status integer NOT NULL,
+    	id_bolsista integer,
+    	tipo_vinculo character varying(1) NOT NULL,
+    	ferias real,
+    	vale_transporte real,
+    	termo_aceite character varying(250),
+    	taditivo_inicio date,
+    	taditivo_fim date,
+    	tdistrato date
+    	id_categoria integer, FK
+		id_status integer, FK
+		id_chefia_associada integer, FK
+		ext_rg character varying(4)
+		ext_cpf character varying(4)
+		ext_foto character varying(4)
+		ext_atestado_matricula character varying(4)
+		ext_plano_trabalho character varying(4)
+		ext_declaracao character varying(4)
+
+	Tabela "estagiarios":
+		id integer DEFAULT nextval('estagiarios_id_seq'::regclass) NOT NULL, PK
+    	nome character varying(50) NOT NULL,
+    	data_nascimento date NOT NULL,
+    	nacionalidade character varying(25),
+    	id_estado_civil integer NOT NULL, FK
+    	cpf character varying(14) NOT NULL,
+    	rg character varying(20) NOT NULL,
+	    data_expedicao date,
+    	orgao_expedidor character varying(20),
+    	endereco character varying(50) NOT NULL,
+    	complemento character varying(50),
+    	bairro character varying(40) NOT NULL,
+    	cep character varying(9) NOT NULL,
+    	id_municipio integer NOT NULL, FK
+    	uf character varying(2) NOT NULL,
+    	tel_residencial character varying(12),
+    	tel_celular character varying(12),
+    	email character varying(50) NOT NULL,
+    	agencia character varying(10),
+    	conta_corrente character varying(15),
+    	id_banco integer, FK
+    	id_instituicao_ensino integer NOT NULL, FK
+    	curso character varying(50) NOT NULL,
+    	inicio_curso character varying(7),
+    	termino_curso character varying(7),
+    	id_nivel integer NOT NULL, FK
+    	ra character varying(10),
+    	email_embrapa character varying(50),
+    	observacao text,
+    	sexo character varying(1) NOT NULL,
+    	fumante boolean,
+    

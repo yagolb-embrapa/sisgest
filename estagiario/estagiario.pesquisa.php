@@ -23,12 +23,12 @@ if (( empty($nome_pesq) && $supervisor == "") && empty($flag_busca) ){
 	$condicao = "";	
 	$flag_inicio_pg = true;//flag_inicio_pg serve para nao deixar buscar logo que inicia a pagina [tipica gambi]
 }elseif (!empty($nome_pesq) && $supervisor != ""){
-	$condicao = " WHERE (nome ILIKE '%{$nome_pesq}%'				  
-					  AND id_supervisor = '{$supervisor}') ";
+	$condicao = " WHERE (es.nome ILIKE '%{$nome_pesq}%'				  
+					  AND ct.id_supervisor = '{$supervisor}') ";
 }elseif(empty($nome_pesq) && $supervisor != ""){
-	$condicao = " WHERE id_supervisor = '{$supervisor}' ";
+	$condicao = " WHERE ct.id_supervisor = '{$supervisor}' ";
 }elseif(!empty($nome_pesq) && $supervisor == ""){
-	$condicao = " WHERE nome ILIKE '%{$nome_pesq}%'";
+	$condicao = " WHERE es.nome ILIKE '%{$nome_pesq}%'";
 }
 ?>
 
@@ -80,7 +80,8 @@ if (( empty($nome_pesq) && $supervisor == "") && empty($flag_busca) ){
 <?php 
 //Não deixa fazer a busca logo que começa
 if($flag_inicio_pg != true){
-	$query_busca = "SELECT * FROM estagiarios {$condicao} ORDER BY nome";	
+	$query_busca = "SELECT es.*, ct.* FROM estagiarios es INNER JOIN contratos AS ct ON es.id = ct.id_estagiario
+	{$condicao} ORDER BY nome";	
 	$resultado_busca = sql_executa($query_busca);
 	//$campo_busca = sql_fetch_array($resultado_busca);
 	$qtde_busca = sql_num_rows($resultado_busca);

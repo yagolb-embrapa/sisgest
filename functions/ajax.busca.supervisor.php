@@ -9,7 +9,7 @@
 
 	if ($id){
 		/* Pega o id do supervisor daquele estagiario */
-		$q_estag = "SELECT id_supervisor FROM estagiarios WHERE id = {$id};";
+		$q_estag = "SELECT id_supervisor FROM contratos WHERE id_estagiario = {$id};";
 		$r_estag = sql_executa($q_estag);
 		
 		if(sql_num_rows($r_estag)>0){	

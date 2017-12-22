@@ -51,11 +51,12 @@ if($msg_erro){
 }else{
     $query = "SELECT su.nome AS sup_nome,
                      es.nome AS est_nome,
-                     estagio_obrigatorio
+                     ct.estagio_obrigatorio
                      FROM   estagiarios AS es
-                     INNER JOIN supervisores su ON es.id_supervisor = su.id
-                     WHERE status = 1 AND tipo_vinculo='e' 
-                     ORDER BY estagio_obrigatorio,es.nome;";
+                     INNER JOIN contratos ct ON es.id = ct.id_estagiario
+                     INNER JOIN supervisores su ON ct.id_supervisor = su.id
+                     WHERE ct.status = 1 AND ct.tipo_vinculo='e' 
+                     ORDER BY ct.estagio_obrigatorio,es.nome;";
 	$result = sql_executa($query);	
 	
     $nEstag = 0;
