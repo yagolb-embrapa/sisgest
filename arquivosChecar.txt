@@ -3,7 +3,7 @@
 	conta/conta.finalizacao.php
 estagiario/estagiario.edicao.php
 	estagiario/estagiario.exclusao.php
-estagiario/estagiario.inclusao.php
+	estagiario/estagiario.inclusao.php
 	estagiario/estagiario.lista.php
 	estagiario/estagiario.pesquisa.php
 	estagiario/estagiario.visualizacao.php

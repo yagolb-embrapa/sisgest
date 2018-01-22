@@ -225,7 +225,7 @@ if($submit){
 			$campo_estag = sql_fetch_array($result_estag);	
 
       $query = "INSERT INTO contratos (estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, status, tipo_vinculo, id_bolsista, termo_aceite, id_categoria, id_status, id_chefia_associada, ext_cpf, ext_rg, ext_foto, ext_plano_trabalho, ext_atestado_matricula, ext_declaracao, numero_contrato, id_estagiario) 
-    VALUES ('$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $status, '$tipo_vinculo', $id_bolsista, '$termo_aceite', '$categoria', '2', $chefia_associada, '$cpf_ext', '$rg_ext', '$foto_ext', '$plano_trabalho_ext', '$atestado_matricula_ext', '$declaracao_ext', '1', '$campo_estag['id']');";
+    VALUES ('$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $status, '$tipo_vinculo', $id_bolsista, '$termo_aceite', $categoria, 2, $chefia_associada, '$cpf_ext', '$rg_ext', '$foto_ext', '$plano_trabalho_ext', '$atestado_matricula_ext', '$declaracao_ext', 1, {$campo_estag['id']});";
     $result2 = sql_executa($query);		
 			//salvando horarios
 			if(!salva_horarios ($campo_estag['id'], $_POST)){
