@@ -13,7 +13,8 @@ require_once("../sessions.php");
   <div align='left' class='divTitulo'>
 		<span class='titulo'>.: Gerenciamento de Usuários</span>
 		<div align="center" style="width:700px;margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div>
-	</div><?php
+	</div>
+<?php
 if($_SESSION['USERNIVEL'] != 'a'){
 	echo "Você não tem permissão para acessar essa área do sistema.";
 	exit(); 
@@ -27,7 +28,8 @@ $query = "SELECT * FROM users";
 $result = sql_executa($query);
 if(sql_num_rows($result) < 1){
 	echo "<table width='582px' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
-		<tr bgcolor='#FFEFEF'>				<td align='center'><span align='center' style='color:red;'>Nenhum usuário cadastrado</span></td>
+		<tr bgcolor='#FFEFEF'>
+				<td align='center'><span align='center' style='color:red;'>Nenhum usuário cadastrado</span></td>
 		</tr>
 	</table>";
 }else{	
@@ -68,7 +70,17 @@ if(sql_num_rows($result) < 1){
 				case 'a': echo "Administrador";
 				 	break;
 				case 'u': echo "Usuário";
-					break;			
+					break;	
+				case 'g': echo "SGP";
+					break;		
+				case 'f': echo "SOF";
+					break;
+				case 'd': echo "CHADM";
+					break;
+				case 'p': echo "CHPD";
+					break;
+				case 't': echo "CHTT";
+					break;
 			}																		
 			echo "</span>
 		</td>

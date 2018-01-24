@@ -53,7 +53,7 @@
       <?php if ($_GET["login"]){ ?>
       <div align="center" id="errorMsg">
         <?php 	if ($_GET["login"]=="nouser") echo "Usuário inexistente!";
-			else if ($_GET["login"]=="nopass") echo "Senha inválida"; 
+			else if ($_GET["login"]=="nopass") echo "Login ou senha inválidos"; 
 	?>
       </div>
       <?php } ?>

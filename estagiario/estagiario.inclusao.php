@@ -49,8 +49,16 @@ include("../functions/functions.uploud.php");
     }					
 	</script>
 		<?php
-		
-
+	
+session_start();
+$query = "SELECT id_supervisor FROM users WHERE id = '".$_SESSION['USERID']."'";
+$result = sql_executa($query);
+if($result) {
+  if(sql_num_rows($result) == 1){
+    $row = sql_fetch_array($result);
+    $supervisor = $row['id_supervisor'];
+  }
+}
 $submit = $_POST['submit'];
 unset($string_erros);
 if($submit){
@@ -706,12 +714,12 @@ if($submit){
        <tr class='specalt'>
         <td ><span>Supervisor(*)</span></td>
         <td><select id="supervisor" name="supervisor" class="select">
-        			<option value="">-- Supervisor --</option>
+        			<option value="" disabled="disabled">-- Supervisor --</option>
         			<?php
         				$superv = Register::filter('supervisores', array('order' => array('nome' => 'ASC')));       				        					
         				foreach($superv as $supervisores){
 							echo "<option value='{$supervisores->id}'";
-							if($supervisores->id == $supervisor) echo " selected='selected' ";
+							if($supervisores->id == $supervisor) echo " selected='selected' "; else echo " disabled='disabled' ";
 							echo ">".($supervisores->nome)."</option>";
 						}
         			?>					

@@ -87,19 +87,31 @@ if($submit){
 		
 		//Coloca um sinal vermelho ao lado dos campos não-preenchidos ou preenchidos de forma incorreta
 	}else{
-				
-		$query = "INSERT INTO users (nome, login, nivel) VALUES('$nome', '$login', '$nivel');";						
+		$query = "SELECT * FROM supervisores WHERE cpf = '{$cpf}'";
 		$result = sql_executa($query);
-		//mensagem de sucesso		
-		if($result){
-			echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
-				<tr bgcolor='#EFFFF4'>
-					<td align='center'><span align='center' style='color:#296F3E;'>Usuário incluído com sucesso!</span></td>
-				</tr>
-			</table>		
-			<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
+		if(sql_num_rows($result) == 1) {
+			$row = sql_fetch_array($result);
+			$query = "INSERT INTO users (nome, login, nivel, id_supervisor) VALUES('$nome', '$login', '$nivel', {$row['id']});";
+			$result = sql_executa($query);
+			//mensagem de sucesso		
+			if($result){
+				echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>	
+					<tr bgcolor='#EFFFF4'>
+						<td align='center'><span align='center' style='color:#296F3E;'>Usuário incluído com sucesso!</span></td>
+					</tr>
+				</table>		
+				<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
 			
-			unset($_POST, $nome, $login, $nivel);
+				unset($_POST, $nome, $login, $nivel, $cpf);
+			}
+		} else {
+			$_SESSION['nome_superv_temp'] = $nome;
+			$_SESSION['cpf_superv_temp'] = $cpf;
+			$_SESSION['login_superv_temp'] = $login;
+			$_SESSION['nivel_superv_temp'] = $nivel;
+			$_SESSION['dados_temp'] = 1;
+			echo "<script>alert('É necessário, também, cadastrar o funcionário como supervisor!\n\nVocê será redirecionado para a página de cadastro de superisores para completar o cadastro do funcionário.');</script>";
+			echo "<script> location.replace('../supervisor/supervisor.inclusao.php'); </script>";
 		}
 	}
 }
@@ -120,7 +132,11 @@ if($submit){
       <tr class='specalt'>
         <td width="25%"><span>Nome (*)</span></td>
         <td width="75%"><input name="nome" id="nome" type="text" size='50' maxlength='50' value="<?php echo $nome; ?>"><span id='snome' class="sErro">&nbsp;*</span></td>        
-      </tr>           
+      </tr>
+      <tr class='specalt'>
+        <td width="25%"><span>CPF (*)</span></td>
+        <td width="75%"><input name="cpf" id="cpf" type="text" size='15' maxlength='14' onKeyPress="mascara(this, mcpf);" value="<?php echo $cpf; ?>"><span id='scpf' class="sErro">&nbsp;*</span></td>        
+      </tr>             
       <tr class='specalt'>     
         <td ><span>Login (*)</span></td>       
         <td><input name="login" type="text" id="login" size='15' maxlength="20" value="<?php echo $login; ?>"><span id='slogin' class="sErro">&nbsp;*</span></td>
@@ -131,6 +147,11 @@ if($submit){
         		<option value='' <?php if($nivel != 'a' && $nivel != 'u') echo selected; ?> >Selecione</option>
         		<option value='a' <?php if($nivel == 'a') echo selected; ?> >Administrador</option>
         		<option value='u' <?php if($nivel == 'u') echo selected; ?> >Usuário</option>
+        		<option value='g' <?php if($nivel == 'g') echo selected; ?> >SGP</option>
+        		<option value='f' <?php if($nivel == 'f') echo selected; ?> >SOF</option>
+        		<option value='d' <?php if($nivel == 'd') echo selected; ?> >CHADM</option>
+        		<option value='p' <?php if($nivel == 'p') echo selected; ?> >CHPD</option>
+        		<option value='t' <?php if($nivel == 't') echo selected; ?> >CHTT</option>
         </select>
         <span id='snivel' class="sErro">&nbsp;*</span>
         </td>	

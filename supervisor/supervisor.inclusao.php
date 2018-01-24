@@ -20,7 +20,16 @@ include("../functions/functions.forms.php");
 		<div align="center" style="width:700px;margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div>
 		
 		<?php
-		
+
+if(isset($_SESSION['dados_temp'])){
+	if($_SESSION['dados_temp'] == 1) {
+		$cpf = $_SESSION['cpf_superv_temp'];
+		$nome = $_SESSION['nome_superv_temp'];
+		$login = $_SESSION['login_superv_temp'];
+		$nivel = $_SESSION['nivel_superv_temp'];
+	}
+}
+	
 //Se clicou
 $submit = $_POST['submit'];
 unset($string_erros);
@@ -75,20 +84,53 @@ if($submit){
 		$reg->cargo = $cargo;
 		$reg->formacao = $formacao;		
 		$reg->save();*/
-				
+		
 		$query = "INSERT INTO supervisores (nome,formacao,cargo,cpf)VALUES('{$nome}','{$formacao}','{$cargo}','{$cpf}');";		
 		$result = sql_executa($query);
-		//mensagem de sucesso		
-		if($result){
-			echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
-				<tr bgcolor='#EFFFF4'>
-					<td align='center'><span align='center' style='color:#296F3E;'>Supervisor incluído com sucesso!</span></td>
-				</tr>
-			</table>		
-			<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
+
+		if($result) {
+			if(isset($_SESSION['dados_temp'])) {
+				if($_SESSION['dados_temp'] == 1) {
+					$query2 = "SELECT * FROM supervisores WHERE cpf = '{$cpf}'";
+					$result2 = sql_executa($query2);
+					if(sql_num_rows($result2) == 1) { 
+						$row = sql_fetch_array($result2);
+						$query3 = "INSERT INTO users (nome, login, nivel, id_supervisor) VALUES('$nome', '$login', '$nivel', {$row['id']});";
+						$result3 = sql_executa($query3);
+						if($result3) {
+							echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>		
+								<tr bgcolor='#EFFFF4'>
+									<td align='center'><span align='center' style='color:#296F3E;'>Funcionário incluído com sucesso como supervisor e usuário!</span></td>
+								</tr>
+							</table>		
+							<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
 			
-			unset($_POST);
-			unset($nome, $cpf, $formacao, $cargo);
+							$_SESSION['dados_temp'] = 0;
+							unset($_POST, $nome, $login, $nivel, $cpf, $formacao, $cargo, $_SESSION['dados_temp'], $_SESSION['nome_superv_temp'], $_SESSION['cpf_superv_temp'], $_SESSION['login_superv_temp'], $_SESSION['nivel_superv_temp']);
+						}
+					}
+				} else {
+					echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>				
+						<tr bgcolor='#EFFFF4'>
+							<td align='center'><span align='center' style='color:#296F3E;'>Supervisor incluído com sucesso!</span></td>
+						</tr>
+					</table>		
+					<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
+			
+					unset($_POST);
+					unset($nome, $cpf, $formacao, $cargo);
+				}
+			} else {
+				echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>				
+					<tr bgcolor='#EFFFF4'>
+						<td align='center'><span align='center' style='color:#296F3E;'>Supervisor incluído com sucesso!</span></td>
+					</tr>
+				</table>		
+				<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
+			
+				unset($_POST);
+				unset($nome, $cpf, $formacao, $cargo);
+			}
 		}
 	}
 }

@@ -21,6 +21,7 @@ require_once("../classes/DB.php");
 <?php
 
 $id = $_GET['id'];
+$contrato_id = $_GET['contrato'];
 		
 		
 $submit = $_POST['submit'];
@@ -150,6 +151,21 @@ if($submit){
 	}else{	
         if($status == '')
             $status = 1;
+
+        $query = "UPDATE contratos SET  
+			estagio_obrigatorio = '$obrig', vigencia_inicio = '".formata($vigenciai,'data')."', vigencia_fim = '".formata($vigenciaf,'data')."', 
+			remuneracao = $remuneracao, cracha = $cracha, participou_piec ='$piec', id_origem_recursos =$origem, 
+			carga_horaria = $cargahoraria, id_supervisor = $supervisor, area_atuacao = '$area', 
+            numero_projeto = '$numero_projeto', ramal = '$ramal', nome_projeto = '$nome_projeto', status = '$status',
+            tipo_vinculo = '$tipo_vinculo', id_bolsista = {$id_bolsista}, termo_aceite = '{$termo_aceite}', 
+            id_chefia_associada = '$chefia_associada', id_categori = '$categoria', status = '$status'";		
+        if (valida($tdistrato, "data"))
+        	$query .= ", tdistrato='".formata($tdistrato, "data")."'";		
+		$query .= " WHERE id_contrato = {$contrato_id} ;";
+
+		$result = sql_executa($query);
+
+
 		$query = "UPDATE estagiarios SET 
 			nome = '$nome', data_nascimento = '".formata($datanasc,'data')."', nacionalidade = '$nacionalidade', 
 			id_estado_civil = $estadocivil, cpf = '$cpf', rg = '$rg', 
@@ -158,15 +174,9 @@ if($submit){
 			id_municipio=$municipio, uf = '$uf', tel_residencial = '$telres', tel_celular = '$telcel', 
 			email = '$email', email_embrapa = '$emaile', agencia = '$agencia', conta_corrente = '$conta', 
 			id_banco = $banco, id_instituicao_ensino = $instituicao, curso = '$curso', inicio_curso = '$inicio_curso', observacao = '$observacao',
-			termino_curso = '$termino_curso', id_nivel = $nivel, ra = '$ra', estagio_obrigatorio = '$obrig',
-			vigencia_inicio = '".formata($vigenciai,'data')."', vigencia_fim = '".formata($vigenciaf,'data')."', 
-			remuneracao = $remuneracao, cracha = $cracha, participou_piec ='$piec', id_origem_recursos =$origem, 
-			carga_horaria = $cargahoraria, id_supervisor = $supervisor, area_atuacao = '$area', 
-            numero_projeto = '$numero_projeto', ramal = '$ramal', nome_projeto = '$nome_projeto', status = '$status', sexo = '$sexo',
-            tipo_vinculo = '$tipo_vinculo', id_bolsista = {$id_bolsista}, termo_aceite = '{$termo_aceite}', fumante = '{$fumante}'";		
-        if (valida($tdistrato, "data"))
-        	$query .= ", tdistrato='".formata($tdistrato, "data")."'";		
-		$query .= " WHERE id = {$id} ;";
+			termino_curso = '$termino_curso', id_nivel = $nivel, ra = '$ra', 
+			sexo = '$sexo', fumante = '{$fumante}'";		
+        $query .= " WHERE id = {$id} ;";
 		
 		$query_update = $query;
 
@@ -254,6 +264,13 @@ if($submit){
 	if(sql_num_rows($r_estag)>0){
 		$c_estag = sql_fetch_array($r_estag);
 		extract($c_estag);		
+	}
+
+	$q_estag2 = "SELECT * FROM contratos WHERE id_contrato = {$contrato_id}";
+	$r_estag2 = sql_executa($q_estag2);
+	if(sql_num_rows($r_estag2)>0){
+		$c_estag2 = sql_fetch_array($r_estag2);
+		extract($c_estag2);		
 	}
 
     //Recuperando beneficiarios
@@ -656,6 +673,40 @@ if($submit){
         	<span id='stipo_vinculo' class="sErro">&nbsp;*</span>        			
         </td>
       </tr>
+      <tr class='specalt' >
+        <td><span>Categoria(*)</span></td>
+        <td><select id="categoria" name="categoria" onchange="exibir_declaracao()" class="select">
+                <option value="">-- Categoria --</option>
+                <?php
+                  $qryStrCat = "SELECT * FROM categorias";
+                  $qryCat = sql_executa($qryStrCat);
+                  while($rowCat = sql_fetch_array($qryCat)){ 
+                    echo "<option value='{$rowCat['id_categoria']}' ";
+                    if($id_categoria == $rowCat['id_categoria']) echo "selected='selected'";
+                    echo ">{$rowCat['descricao']}</option>"; 
+                  } 
+                ?>        
+        </select>
+          <span id='scategoria' class="sErro">&nbsp;*</span>
+        </td>
+       </tr>
+       <tr class='specalt' >
+        <td><span>Chefia associada(*)</span></td>
+        <td><select id="chefia_associada" name="chefia_associada" class="select">
+                <option value="">-- Chefia --</option>
+                <?php
+                  $qryStrChef = "SELECT * FROM chefias";
+                  $qryChef = sql_executa($qryStrChef);
+                  while($rowChef = sql_fetch_array($qryChef)){ 
+                    echo "<option value='{$rowChef['id_chefia']}' ";
+                    if($id_chefia_associada == $rowChef['id_chefia']) echo "selected='selected'";
+                    echo ">{$rowChef['nome']}</option>"; 
+                  } 
+                ?>        
+        </select>
+          <span id='schefia_associada' class="sErro">&nbsp;*</span>
+        </td>
+       </tr>
       <tr class='specalt'  id="tipo_bolsa">
         <td><span>Tipo de Modalidade</span></td>
         <td><select id="id_bolsista" name="id_bolsista" class="select">
