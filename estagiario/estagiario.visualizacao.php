@@ -1,4 +1,4 @@
-f<?php 
+<?php 
 
 $qtd_abas = 0;
 require_once("../inc/header.php");
@@ -44,12 +44,13 @@ function dia_extenso($d){
 		
 <?php
 $id = $_GET['id'];
+$contrato = $_GET['contrato'];
 
 if(empty($id))
 	$msg_erro = "O estagiário não foi encontrado.";		
 else{		
 	$query_estag = "SELECT es.*, ct.* FROM estagiarios AS es INNER JOIN contratos AS ct ON es.id = ct.id_estagiario 
-  WHERE es.id = {$id} ORDER BY ct.numero_contrato DESC LIMIT 1";
+  WHERE es.id = {$id} AND ct.numero_contrato = {$contrato} ORDER BY ct.numero_contrato DESC LIMIT 1";
 	$result_estag = sql_executa($query_estag);	
 	if(sql_num_rows($result_estag)==0)
 		$msg_erro = "O estagiário não foi encontrado.";			

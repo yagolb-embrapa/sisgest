@@ -12,14 +12,14 @@ outra para as que nao estao.
 function show_menu ( $id,  $permissoes, $funcao )
 {	  	
 	echo "<div id=\"staticMenu\">
-	<table border='0'  width='600px' align='center' class='menu'>
+	<table border='0'  width='680px' align='center' class='menu'>
 	<tr>";	
 		
 	//Estagiários	
 	echo "
-	<td align='left' width='14%' >
+	<td align='left' width='1%' >
 		<ul id='nav'> 
-			<li ><span>&nbsp;&nbsp;Estágio</span>		
+			<li ><span>&nbsp;Estágio</span>		
 				<ul>";
 					if($_SESSION['USERNIVEL'] != 'c'){
 						echo "<li><span onclick=\"top.location.href='../estagiario/estagiario.gerenciamento.php';\">
@@ -34,13 +34,25 @@ function show_menu ( $id,  $permissoes, $funcao )
 	</td>";		
     if($_SESSION['USERNIVEL'] != 'c'){
 
+    //Acompanhamento
+    if($_SESSION['USERNIVEL'] != 'u' ) {		
+		echo "
+		<td align='left' width='13%' >		
+			<ul id='nav3'> 
+				<li ><span onclick=\"top.location.href='../acompanhamento/acompanhamento.gerenciamento.php';\">
+						Acompanhamento</span>
+				</li> 
+			</ul>
+		</td>";
+	}
+
 	//Relatórios
     if($_SESSION['USERNIVEL'] == 'a') {		
 		echo "
-		<td align='left' width='14%' >		
+		<td align='left' width='7%' >		
 			<ul id='nav3'> 
 				<li ><span onclick=\"top.location.href='../relatorio/relatorios.lista.php';\">
-						&nbsp;&nbsp;Relatórios</span>
+						Relatórios</span>
 				</li> 
 			</ul>
 		</td>";
@@ -49,10 +61,10 @@ function show_menu ( $id,  $permissoes, $funcao )
 	//Termos
 	if($_SESSION['USERNIVEL'] == 'a'){		
 		echo "
-		<td align='left' width='13%' >		
+		<td align='left' width='1%' >		
 			<ul id='nav3'> 
 				<li ><span onclick=\"top.location.href='../termo/termo.lista.php';\">
-						&nbsp;&nbsp;Termos</span>
+						Termos</span>
 				</li> 
 			</ul>
 		</td>";	
@@ -74,9 +86,9 @@ function show_menu ( $id,  $permissoes, $funcao )
 	//Configurações	
 	if($_SESSION['USERNIVEL'] == 'a'){		
 		echo "
-		<td align='left' width='20%' >		
+		<td align='left' width='11%' >		
 			<ul id='nav2'> 
-				<li ><span>&nbsp;&nbsp;Configurações</span>		
+				<li ><span>Configurações</span>		
 					<ul>";		
 	                	echo "<li><span onclick=\"top.location.href='../emails/emails.gerenciamento.php';\">
     	                	Gerenciar Emails</span></li>";                
@@ -102,9 +114,9 @@ function show_menu ( $id,  $permissoes, $funcao )
 	//Contas		
 	if($_SESSION['USERNIVEL'] == 'a'){	
 		echo "
-		<td align='left' width='13%' >		
+		<td align='left' width='1%' >		
 			<ul id='nav2'> 
-				<li ><span>&nbsp;&nbsp;Contas</span>		
+				<li ><span>Contas</span>		
 					<ul>";					
 						echo "<li><span onclick=\"top.location.href='../conta/conta.abertura.php';\">
 							Abertura de Contas</span></li>";					
@@ -119,9 +131,9 @@ function show_menu ( $id,  $permissoes, $funcao )
 
 	//Ajuda	
 	echo "
-	<td align='left' width='13%' >		
+	<td align='left' width='1%' >		
 		<ul id='nav2'> 
-			<li ><span>&nbsp;&nbsp;Ajuda</span>		
+			<li ><span>Ajuda</span>		
 				<ul>";										
 					echo "<li><span onclick=\"top.location.href='../ajuda/ajuda.tutorial.pdf';\">
 						Tutorial</span></li>";	
@@ -133,7 +145,7 @@ function show_menu ( $id,  $permissoes, $funcao )
     }
 
 	//Sair	
-	echo "<td align='center' width='13%'><ul><li>
+	echo "<td align='center' width='1%'><ul><li>
 		<span onclick=\"top.location.href='../logout.php';\">Sair</span></td>
 	</li></ul>
 	</tr>
@@ -145,14 +157,14 @@ function show_menu ( $id,  $permissoes, $funcao )
 function show_menu_root ( $id,  $permissoes, $funcao )
 {	  	
 	echo "<div id=\"staticMenu\">
-	<table border='0'  width='600px' align='center' class='menu'>
+	<table border='0'  width='680px' align='center' class='menu'>
 	<tr>";	
 		
 	//Estagiários	
 	echo "
-	<td align='left' width='14%' >
+	<td align='left' width='1%' >
 		<ul id='nav'> 
-			<li ><span>&nbsp;&nbsp;Estágio</span>		
+			<li ><span>Estágio</span>		
 				<ul>";
 					if($_SESSION['USERNIVEL'] != 'c'){
 						echo "<li><span onclick=\"top.location.href='estagiario/estagiario.gerenciamento.php';\">
@@ -167,13 +179,25 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 	</td>";	
     if($_SESSION['USERNIVEL'] != 'c'){
 
+    //Acompanhamento
+    if($_SESSION['USERNIVEL'] != 'u') {		
+		echo "
+		<td align='left' width='13%' >		
+			<ul id='nav3'> 
+				<li ><span onclick=\"top.location.href='acompanhamento/acompanhamento.gerenciamento.php';\">
+						Acompanhamento</span>
+				</li> 
+			</ul>
+		</td>";
+	}
+
 	//Relatórios
     if($_SESSION['USERNIVEL'] == 'a'){		
 		echo "
-		<td align='left' width='14%' >		
+		<td align='left' width='7%' >		
 			<ul id='nav3'> 
 				<li ><span onclick=\"top.location.href='relatorio/relatorios.lista.php';\">
-					&nbsp;&nbsp;Relatórios</span>
+					Relatórios</span>
 				</li>  
 			</ul>
 		</td>";	
@@ -182,10 +206,10 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 	//Termos
 	if($_SESSION['USERNIVEL'] == 'a'){		
 		echo "
-		<td align='left' width='13%' >		
+		<td align='left' width='1%' >		
 			<ul id='nav3'> 
 				<li ><span onclick=\"top.location.href='termo/termo.lista.php';\">
-					&nbsp;&nbsp;Termos</span>
+						Termos</span>
 				</li> 
 			</ul>
 		</td>";	
@@ -207,9 +231,9 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 	//Configurações	
 	if($_SESSION['USERNIVEL'] == 'a'){		
 		echo "
-		<td align='left' width='20%' >		
+		<td align='left' width='11%' >		
 			<ul id='nav2'> 
-				<li ><span>&nbsp;&nbsp;Configurações</span>		
+				<li ><span>Configurações</span>		
 					<ul>";								
 						echo "<li><span onclick=\"top.location.href='emails/emails.gerenciamento.php';\">
                             Gerenciar Emails</span></li>";
@@ -235,9 +259,9 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 	//Contas	
 	if($_SESSION['USERNIVEL'] == 'a'){		
 		echo "
-		<td align='left' width='13%' >		
+		<td align='left' width='1%' >		
 			<ul id='nav2'> 
-				<li ><span>&nbsp;&nbsp;Contas</span>		
+				<li ><span>Contas</span>		
 					<ul>";								
 						echo "<li><span onclick=\"top.location.href='conta/conta.abertura.php';\">
 							Abertura de Contas</span></li>";					
@@ -252,9 +276,9 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 
 	//Ajuda	
 	echo "
-	<td align='left' width='13%' >		
+	<td align='left' width='1%' >		
 		<ul id='nav2'> 
-			<li ><span>&nbsp;&nbsp;Ajuda</span>		
+			<li ><span>Ajuda</span>		
 				<ul>";										
 				echo "<li><span onclick=\"top.location.href='ajuda/ajuda.tutorial.pdf';\">
 					Tutorial</span></li>";	
@@ -266,7 +290,7 @@ function show_menu_root ( $id,  $permissoes, $funcao )
     }
 
 	//Sair	
-	echo "<td align='center' width='13%'><ul><li>
+	echo "<td align='center' width='1%'><ul><li>
 		<span onclick=\"top.location.href='logout.php';\">Sair</span></td>
 		</li></ul>
 		</tr>
