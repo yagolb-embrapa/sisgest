@@ -14,52 +14,45 @@ function show_menu ( $id,  $permissoes, $funcao )
 	echo "<div id=\"staticMenu\">
 	<table border='0'  width='680px' align='center' class='menu'>
 	<tr>";	
-		
-	//Estagiários	
-	echo "
-	<td align='left' width='1%' >
-		<ul id='nav'> 
-			<li ><span>&nbsp;Estágio</span>		
-				<ul>";
-					if($_SESSION['USERNIVEL'] != 'c'){
+	
+	if($_SESSION['USERNIVEL'] == 'a' || $_SESSION['USERNIVEL'] == 'g') {
+		//Estagiários	
+		echo "
+		<td align='left' width='1%' >
+			<ul id='nav'> 
+				<li ><span>&nbsp;Estágio</span>		
+					<ul>";
 						echo "<li><span onclick=\"top.location.href='../estagiario/estagiario.gerenciamento.php';\">
 							Meus estagiários/bolsistas</span></li>";
-    				}
-					echo "<li><span onclick=\"top.location.href='../estagiario/estagiario.inclusao.php';\">
-								Solicitação</span></li>";																						
-				echo "
-				</ul>
-			</li> 
-		</ul>
-	</td>";		
-    if($_SESSION['USERNIVEL'] != 'c'){
+						echo "<li><span onclick=\"top.location.href='../estagiario/estagiario.inclusao.php';\">
+							Solicitação</span></li>";																						
+						echo "
+					</ul>
+				</li> 
+			</ul>
+		</td>";		
 
-    //Acompanhamento
-    if($_SESSION['USERNIVEL'] != 'u' ) {		
+    	//Acompanhamento		
 		echo "
 		<td align='left' width='13%' >		
 			<ul id='nav3'> 
 				<li ><span onclick=\"top.location.href='../acompanhamento/acompanhamento.gerenciamento.php';\">
-						Acompanhamento</span>
+					Acompanhamento</span>
 				</li> 
 			</ul>
 		</td>";
-	}
 
-	//Relatórios
-    if($_SESSION['USERNIVEL'] == 'a') {		
-		echo "
-		<td align='left' width='7%' >		
-			<ul id='nav3'> 
-				<li ><span onclick=\"top.location.href='../relatorio/relatorios.lista.php';\">
+		//Relatórios	
+			echo "
+			<td align='left' width='7%' >		
+				<ul id='nav3'> 
+					<li ><span onclick=\"top.location.href='../relatorio/relatorios.lista.php';\">
 						Relatórios</span>
-				</li> 
-			</ul>
-		</td>";
-	}
+					</li> 
+				</ul>
+			</td>";
 
-	//Termos
-	if($_SESSION['USERNIVEL'] == 'a'){		
+		//Termos		
 		echo "
 		<td align='left' width='1%' >		
 			<ul id='nav3'> 
@@ -67,24 +60,9 @@ function show_menu ( $id,  $permissoes, $funcao )
 						Termos</span>
 				</li> 
 			</ul>
-		</td>";	
-    }    
+		</td>";	  
 
-    /* Decidindo quem podera acessar
-    //Acompanhamento
-    if($_SESSION['USERNIVEL'] == 'a') {		
-		echo "
-		<td align='left' width='20%' >		
-			<ul id='nav3'> 
-				<li ><span onclick=\"top.location.href='../acompanhamento/acompanhamento.php';\">
-						&nbsp;&nbsp;Acompanhamento</span>
-				</li> 
-			</ul>
-		</td>";
-	}*/
-
-	//Configurações	
-	if($_SESSION['USERNIVEL'] == 'a'){		
+		//Configurações		
 		echo "
 		<td align='left' width='11%' >		
 			<ul id='nav2'> 
@@ -109,10 +87,8 @@ function show_menu ( $id,  $permissoes, $funcao )
 				</li> 
 			</ul>
 		</td>";		
-	}
 
-	//Contas		
-	if($_SESSION['USERNIVEL'] == 'a'){	
+		//Contas		
 		echo "
 		<td align='left' width='1%' >		
 			<ul id='nav2'> 
@@ -127,28 +103,108 @@ function show_menu ( $id,  $permissoes, $funcao )
 				</li> 
 			</ul>
 		</td>";
+
+		//Ajuda	
+		echo "
+		<td align='left' width='1%' >		
+			<ul id='nav2'> 
+				<li ><span>Ajuda</span>		
+					<ul>";										
+						echo "<li><span onclick=\"top.location.href='../ajuda/ajuda.tutorial.pdf';\">
+							Tutorial</span></li>";	
+						echo"
+					</ul>
+				</li> 
+			</ul>
+		</td>";
+    
+		//Sair	
+		echo "<td align='center' width='1%'><ul><li>
+			<span onclick=\"top.location.href='../logout.php';\">Sair</span></td>
+		</li></ul>";
+	} else if($_SESSION['USERNIVEL'] == 'u') {
+		//Estagiários	
+		echo "
+		<td align='left' width='1%' >
+			<ul id='nav'> 
+				<li ><span>&nbsp;Estágio</span>		
+					<ul>";
+						echo "<li><span onclick=\"top.location.href='../estagiario/estagiario.gerenciamento.php';\">
+							Meus estagiários/bolsistas</span></li>";
+						echo "<li><span onclick=\"top.location.href='../estagiario/estagiario.inclusao.php';\">
+							Solicitação</span></li>";																						
+						echo "
+					</ul>
+				</li> 
+			</ul>
+		</td>";	
+
+		//Ajuda	
+		echo "
+		<td align='left' width='1%' >		
+			<ul id='nav2'> 
+				<li ><span>Ajuda</span>		
+					<ul>";										
+						echo "<li><span onclick=\"top.location.href='../ajuda/ajuda.tutorial.pdf';\">
+							Tutorial</span></li>";	
+						echo"
+					</ul>
+				</li> 
+			</ul>
+		</td>";
+    
+		//Sair	
+		echo "<td align='center' width='1%'><ul><li>
+			<span onclick=\"top.location.href='../logout.php';\">Sair</span></td>
+		</li></ul>";
+	} else {
+		//Estagiários	
+		echo "
+		<td align='left' width='15%' >
+			<ul id='nav'> 
+				<li ><span>&nbsp;Estágio</span>		
+					<ul>";
+						echo "<li><span onclick=\"top.location.href='../estagiario/estagiario.gerenciamento.php';\">
+							Meus estagiários/bolsistas</span></li>";
+						echo "<li><span onclick=\"top.location.href='../estagiario/estagiario.inclusao.php';\">
+							Solicitação</span></li>";																						
+						echo "
+					</ul>
+				</li> 
+			</ul>
+		</td>";	
+
+		//Acompanhamento		
+		echo "
+		<td align='left' width='25%' >		
+			<ul id='nav3'> 
+				<li ><span onclick=\"top.location.href='../acompanhamento/acompanhamento.gerenciamento.php';\">
+					Acompanhamento</span>
+				</li> 
+			</ul>
+		</td>";
+
+		//Ajuda	
+		echo "
+		<td align='left' width='15%' >		
+			<ul id='nav2'> 
+				<li ><span>Ajuda</span>		
+					<ul>";										
+						echo "<li><span onclick=\"top.location.href='../ajuda/ajuda.tutorial.pdf';\">
+							Tutorial</span></li>";	
+						echo"
+					</ul>
+				</li> 
+			</ul>
+		</td>";
+    
+		//Sair	
+		echo "<td align='center' width='15%'><ul><li>
+			<span onclick=\"top.location.href='../logout.php';\">Sair</span></td>
+		</li></ul>";
 	}
 
-	//Ajuda	
-	echo "
-	<td align='left' width='1%' >		
-		<ul id='nav2'> 
-			<li ><span>Ajuda</span>		
-				<ul>";										
-					echo "<li><span onclick=\"top.location.href='../ajuda/ajuda.tutorial.pdf';\">
-						Tutorial</span></li>";	
-				echo"
-				</ul>
-			</li> 
-		</ul>
-	</td>";
-    }
-
-	//Sair	
-	echo "<td align='center' width='1%'><ul><li>
-		<span onclick=\"top.location.href='../logout.php';\">Sair</span></td>
-	</li></ul>
-	</tr>
+	echo "</tr>
 	</table></div><br>";
 }
 
@@ -159,29 +215,26 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 	echo "<div id=\"staticMenu\">
 	<table border='0'  width='680px' align='center' class='menu'>
 	<tr>";	
-		
-	//Estagiários	
-	echo "
-	<td align='left' width='1%' >
-		<ul id='nav'> 
-			<li ><span>Estágio</span>		
-				<ul>";
-					if($_SESSION['USERNIVEL'] != 'c'){
+	
+	if($_SESSION['USERNIVEL'] == 'a' || $_SESSION['USERNIVEL'] == 'g') {
+		//Estagiários	
+		echo "
+		<td align='left' width='1%' >
+			<ul id='nav'> 
+				<li ><span>Estágio</span>		
+					<ul>";
 						echo "<li><span onclick=\"top.location.href='estagiario/estagiario.gerenciamento.php';\">
 							Meus estagiários/bolsistas</span></li>";
-    				}	
-					echo "<li><span onclick=\"top.location.href='estagiario/estagiario.inclusao.php';\">
-						Solicitação</span></li>";																				
-				echo "
-				</ul>
-			</li> 
-		</ul>
-	</td>";	
-    if($_SESSION['USERNIVEL'] != 'c'){
+						echo "<li><span onclick=\"top.location.href='estagiario/estagiario.inclusao.php';\">
+							Solicitação</span></li>";																				
+						echo "
+					</ul>
+				</li> 
+			</ul>
+		</td>";	
 
-    //Acompanhamento
-    if($_SESSION['USERNIVEL'] != 'u') {		
-		echo "
+    	//Acompanhamento
+    	echo "
 		<td align='left' width='13%' >		
 			<ul id='nav3'> 
 				<li ><span onclick=\"top.location.href='acompanhamento/acompanhamento.gerenciamento.php';\">
@@ -189,11 +242,9 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 				</li> 
 			</ul>
 		</td>";
-	}
-
-	//Relatórios
-    if($_SESSION['USERNIVEL'] == 'a'){		
-		echo "
+	
+		//Relatórios
+    	echo "
 		<td align='left' width='7%' >		
 			<ul id='nav3'> 
 				<li ><span onclick=\"top.location.href='relatorio/relatorios.lista.php';\">
@@ -201,10 +252,8 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 				</li>  
 			</ul>
 		</td>";	
-	}
 
-	//Termos
-	if($_SESSION['USERNIVEL'] == 'a'){		
+		//Termos
 		echo "
 		<td align='left' width='1%' >		
 			<ul id='nav3'> 
@@ -213,23 +262,8 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 				</li> 
 			</ul>
 		</td>";	
-	}
 
-	/* Decidindo quem tera acesso
-	//Acompanhamento
-    if($_SESSION['USERNIVEL'] == 'u') {		
-		echo "
-		<td align='left' width='20%' >		
-			<ul id='nav3'> 
-				<li ><span onclick=\"top.location.href='acompanhamento/acompanhamento.php';\">
-						&nbsp;&nbsp;Acompanhamento</span>
-				</li> 
-			</ul>
-		</td>";
-	}*/
-
-	//Configurações	
-	if($_SESSION['USERNIVEL'] == 'a'){		
+		//Configurações	
 		echo "
 		<td align='left' width='11%' >		
 			<ul id='nav2'> 
@@ -254,10 +288,8 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 				</li> 
 			</ul>
 		</td>";			
-	}
 
-	//Contas	
-	if($_SESSION['USERNIVEL'] == 'a'){		
+		//Contas	
 		echo "
 		<td align='left' width='1%' >		
 			<ul id='nav2'> 
@@ -272,28 +304,108 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 				</li> 
 			</ul>
 		</td>";
+
+		//Ajuda	
+		echo "
+		<td align='left' width='1%' >		
+			<ul id='nav2'> 
+				<li ><span>Ajuda</span>		
+					<ul>";										
+						echo "<li><span onclick=\"top.location.href='ajuda/ajuda.tutorial.pdf';\">
+							Tutorial</span></li>";	
+						echo"
+					</ul>
+				</li> 
+			</ul>
+		</td>";
+
+		//Sair	
+		echo "<td align='center' width='1%'><ul><li>
+			<span onclick=\"top.location.href='logout.php';\">Sair</span></td>
+			</li></ul>";
+	} else if($_SESSION['USERNIVEL'] == 'u') {
+		//Estagiários	
+		echo "
+		<td align='left' width='1%' >
+			<ul id='nav'> 
+				<li ><span>Estágio</span>		
+					<ul>";
+						echo "<li><span onclick=\"top.location.href='estagiario/estagiario.gerenciamento.php';\">
+							Meus estagiários/bolsistas</span></li>";
+						echo "<li><span onclick=\"top.location.href='estagiario/estagiario.inclusao.php';\">
+							Solicitação</span></li>";																				
+						echo "
+					</ul>
+				</li> 
+			</ul>
+		</td>";	
+
+		//Ajuda	
+		echo "
+		<td align='left' width='1%' >		
+			<ul id='nav2'> 
+				<li ><span>Ajuda</span>		
+					<ul>";										
+						echo "<li><span onclick=\"top.location.href='ajuda/ajuda.tutorial.pdf';\">
+							Tutorial</span></li>";	
+						echo"
+					</ul>
+				</li> 
+			</ul>
+		</td>";
+
+		//Sair	
+		echo "<td align='center' width='1%'><ul><li>
+			<span onclick=\"top.location.href='logout.php';\">Sair</span></td>
+			</li></ul>";
+	} else {
+		//Estagiários	
+		echo "
+		<td align='left' width='15%' >
+			<ul id='nav'> 
+				<li ><span>Estágio</span>		
+					<ul>";
+						echo "<li><span onclick=\"top.location.href='estagiario/estagiario.gerenciamento.php';\">
+							Meus estagiários/bolsistas</span></li>";
+						echo "<li><span onclick=\"top.location.href='estagiario/estagiario.inclusao.php';\">
+							Solicitação</span></li>";																				
+						echo "
+					</ul>
+				</li> 
+			</ul>
+		</td>";	
+
+		//Acompanhamento
+    	echo "
+		<td align='left' width='25%' >		
+			<ul id='nav3'> 
+				<li ><span onclick=\"top.location.href='acompanhamento/acompanhamento.gerenciamento.php';\">
+						Acompanhamento</span>
+				</li> 
+			</ul>
+		</td>";
+
+		//Ajuda	
+		echo "
+		<td align='left' width='15%' >		
+			<ul id='nav2'> 
+				<li ><span>Ajuda</span>		
+					<ul>";										
+						echo "<li><span onclick=\"top.location.href='ajuda/ajuda.tutorial.pdf';\">
+							Tutorial</span></li>";	
+						echo"
+					</ul>
+				</li> 
+			</ul>
+		</td>";
+
+		//Sair	
+		echo "<td align='center' width='15%'><ul><li>
+			<span onclick=\"top.location.href='logout.php';\">Sair</span></td>
+			</li></ul>";
 	}
-
-	//Ajuda	
 	echo "
-	<td align='left' width='1%' >		
-		<ul id='nav2'> 
-			<li ><span>Ajuda</span>		
-				<ul>";										
-				echo "<li><span onclick=\"top.location.href='ajuda/ajuda.tutorial.pdf';\">
-					Tutorial</span></li>";	
-				echo"
-				</ul>
-			</li> 
-		</ul>
-	</td>";
-    }
-
-	//Sair	
-	echo "<td align='center' width='1%'><ul><li>
-		<span onclick=\"top.location.href='logout.php';\">Sair</span></td>
-		</li></ul>
-		</tr>
-		</table></div><br>";
+	</tr>
+	</table></div><br>";
 } 
 ?>

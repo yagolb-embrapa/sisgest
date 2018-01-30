@@ -41,6 +41,10 @@ Criação da tabela "chefias"
 		Administrativa
 		Pesquisa e Desenvolvimento
 		Transferência de Tecnologia
+	sigla: character varying(5)
+		CHADM
+		CHPD
+		CHTT
 
 Criação da tabela "emails_corpo"
 	numero: integer, NOT NULL
@@ -51,6 +55,9 @@ Criação da tabela "emails_corpo"
 		5
 		6
 		7
+		8
+		9
+		10
 	assunto: text, NOT NULL
 		[Sisgest]: Solicitação de estagiário/bolsista
 		[Sisgest]: Verificação de disponibilidade de recurso financeiro para estágio
@@ -58,21 +65,30 @@ Criação da tabela "emails_corpo"
 		[Sisgest]: Homologação de estágio pela Chefia da Unidade
 		[Sisgest]: Aprovação de estágio solicitado
 		[Sisgest]: Indeferimento de estágio solicitado
-		[Sisgest]: Informações pendentes na solicitação de estágio
+		[Sisgest]: Informações pendentes na solicitação de estágio/bolsa
+		[Sisgest]: Aprovação do bolsista/estudante
+		[Sisgest]: Pendências resolvidas
+		[Sisgest]: Alteração de fonte de financiamento
 	corpo: text, NOT NULL
 		<html><body>Prezado(a): $s<br>Sua solicitação de estágio, submetida à análise do SGP, foi recebida com sucesso. O processo seguirá para verificação de disponibilidade de recurso financeiro junto ao SOF e posterior autorização da Chefia da Unidade.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
 
 		<html><body>Prezado(a) Supervisor(a) do SOF,<br>Solicitamos a gentileza de verificar a existência de recurso financeiro para a implementação do estágio solicitado pelo empregado(a): %s, no projeto: %s.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
 
-		<html><body>Prezado(a) Supervisor(a),<br>O projeto código: %s não tem disponibilidade financeira para custeio do estagiário(a): %s. Por favor, indique outra fonte de financiamento para a implementação do referido estágio.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
+		<html><body>Prezado(a) %s,<br>O projeto código: %s não tem disponibilidade financeira para custeio do estagiário(a): %s. Por favor, indique outra fonte de financiamento para a implementação do referido estágio.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
 
 		<html><body>Prezado(a) Chefe,<br>Solicitamos a gentileza de analisar a contratação de estágio do(a) empregado(a) %s, vinculado ao projeto %s. Informamos que o SOF já constatou a disponibilidade de recurso financeiro para a implementação desse estágio.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
 
-		<html><body>Prezado(a) Supervisor(a),<br>Informamos que a sua solicitação de contratação do(a) estagiário(a): %s, custeado pelo projeto código: %s foi autorizada pela Chefia da Unidade.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
+		<html><body>Prezado(a) %s,<br>Informamos que a sua solicitação de contratação do(a) estagiário(a): %s, custeado pelo projeto código: %s foi autorizada pela Chefia da Unidade.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
 
-		<html><body>Prezado(a) Supervisor(a),<br>Informamos que a sua solicitação de contratação do(a) estagiário(a): %s, custeado pelo projeto código: $s não foi autorizada pela Chefia da Unidade.<br>Para maiores esclarecimentos, favor entrar em contato com o SGP.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
+		<html><body>Prezado(a) %s,<br>Informamos que a sua solicitação de contratação do(a) estagiário(a): %s, custeado pelo projeto código: $s não foi autorizada pela Chefia da Unidade.<br>Para maiores esclarecimentos, favor entrar em contato com o SGP.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
 
-		<html><body>Prezado(a) Supervisor(a),<br>Informamos que as informações referentes à solicitação de contratação do(a) estagiário(a): %s, custeado pelo projeto código: %s estão incompletas.<br>Favor entrar em contato com o SGP para orientações sobre as pendências identificadas. O processo será tramitado logo que as pendências forem solucionadas.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
+		<html><body>Prezado(a) %s,<br>Informamos que as informações referentes à solicitação de contratação do(a) estagiário(a): %s, custeado pelo projeto código: %s estão incompletas.<br>Favor entrar em contato com o SGP para orientações sobre as pendências identificadas. O processo será tramitado logo que as pendências forem solucionadas.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
+
+		<html><body>Prezado(a) %s,<br>Acusamos o recebimento da documentação para vinculação do bolsista/estudante %s. As providências necessárias para formalização do vínculo serão tomadas pelo SGP.<br><br>Atenciosamente,<br><br>Setor de Gestão de Pessoas<br>Embrapa Informática Agropecuária<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE. QUALQUER DÚVIDA, POR FAVOR, ENTRE EM CONTATO COM O SGP.</body></html>
+
+		<html><body>Prezado(a) Supervisor(a) do SGP,<br>Comunicamos que as alterações referentes à vinculação do estagiário/bolsista %s foram enviadas. Solicitamos as providências para implementação do referido processo.<br><br>Atenciosamente,<br><br>%s<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE.</body></html>
+
+		<html><body>Prezado(a) Supervisor(a) do SOF,<br>Comunicamos que a alteração referente à nova fonte de financiamento (nome e código do projeto) do estagiário %s foi realizada. Solicitamos as providências para confirmação de disponibilidade financeira do referido processo.<br><br>Atenciosamente,<br><br>%s<br><br><b>OBS:</b> ESTA MENSAGEM FOI GERADA AUTOMATICAMENTE.</body></html>
 
 Tabela "users"
 	Criação da coluna "id_supervisor": integer, FK
@@ -130,6 +146,7 @@ Desmembrou-se a tabela "estagiarios" em duas:
 		ext_atestado_matricula character varying(4)
 		ext_plano_trabalho character varying(4)
 		ext_declaracao character varying(4)
+		matricula_embrapa character varying(7)
 
 	Tabela "estagiarios":
 		id integer DEFAULT nextval('estagiarios_id_seq'::regclass) NOT NULL, PK

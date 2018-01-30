@@ -77,7 +77,7 @@ if($qry) {
 					$qryStatus = sql_executa($qryStrStatus);
 					$rowStatus = sql_fetch_array($qryStatus); 
 					$printStatus = $rowStatus['descricao'];
-					if($row['id_status'] != 6 && $row['id_status'] != 7) {
+					if($row['id_status'] != 8 && $row['id_status'] != 9) {
 						$flagLink = 0;
 						switch ($row['id_status']) {
   							case 1:

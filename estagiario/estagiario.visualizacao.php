@@ -66,8 +66,10 @@ if($msg_erro){
 		</table>		
 	<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
 }else{
+  if($_SESSION['USERNIVEL'] == 'a' || $_SESSION['USERNIVEL'] == 'g') {
     echo "<p><a href='javascript://' onclick=\"document.location.href='estagiario.edicao.php?id=".$id."';\">
         <img src='../img/icon_edit.gif' width='16' height='16' border='0'>Editar Dados</a></p>";
+  }
 ?>
 
    <!-- Abas -->	
@@ -85,6 +87,10 @@ if($msg_erro){
       <tr class='specalt'>     
         <td ><span>Data de nascimento</span></td>       
         <td><span><?php echo (empty($campo['data_nascimento']))?" <i>Não preenchido</i> ":formata($campo['data_nascimento'],'redata'); ?></span></td>
+       </tr>
+       <tr class='specalt'>     
+        <td ><span>Sexo</span></td>       
+        <td><span><?php echo (empty($campo['sexo']))?" <i>Não preenchido</i> ": ($campo['sexo'] == 'm')?"Masculino":"Feminino"; ?></span></td>
        </tr>
 		<tr class='specalt'>
         <td ><span>Nacionalidade</span></td>
@@ -105,7 +111,11 @@ if($msg_erro){
        <tr class='specalt'>
         <td ><span>E-mail Embrapa</span></td>
         <td><span><?php echo (empty($campo['email_embrapa']))?" <i>Não preenchido</i> ":$campo['email_embrapa']; ?></span></td>
-       </tr>             
+       </tr>  
+       <tr class='specalt'>
+        <td ><span>Matrícula Embrapa</span></td>
+        <td><span><?php echo (empty($campo['matricula_embrapa']))?" <i>Não preenchido</i> ":$campo['matricula_embrapa']; ?></span></td>
+       </tr>            
        <tr class='specalt'>
         <td ><span>Fumante</span></td>
         <td><span><?php echo ($campo['fumante'] == 't') ? "Sim": "Não"; ?></span></td>
@@ -329,13 +339,31 @@ if($msg_erro){
        <!--Separador--><tr class='specalt'><td colspan="2"><hr size="1" color="#DFDFDF"></td></tr>
        <tr class='specalt'>
         <td ><span>Status do Estágio</span></td>
-        <td><span><?php echo ($campo['status']!='0')?"Em andamento":"Finalizado"; ?></span>    			
+        <?php 
+          if($campo['id_status'] == 8) {
+            $printStatus = "Vigente";
+          } else if($campo['id_status'] == 9) {
+            $printStatus = "Encerrado";
+          } else {
+            $printStatus = "Em análise";
+          }
+        ?>
+        <td><span><?php echo $printStatus; ?></span>    			
         </td>        
        </tr>
+       <tr class='specalt'>
+        <td ><span>Categoria</span></td>
+        <?php
+          $query = "SELECT descricao FROM categorias WHERE id_categoria = '".$campo['id_categoria']."'";
+          $result = sql_executa($query);
+          $rowCat = sql_fetch_array($result); 
+        ?>
+        <td><span><?php echo $rowCat['descricao']; ?></span></td>
+        </tr>
       <tr class='specalt'>
         <td ><span>Tipo do Estágio</span></td>
-        <td><span><?php echo (empty($campo['estagio_obrigatorio']))?" <i>Não preenchido</i> ":(($campo['estagio_obrigatorio']=='S')?"Obrigatório":"Não Obrigatório") ?></span>    			
-        </td>        
+        <td><span><?php echo (empty($campo['estagio_obrigatorio']))?" <i>Não preenchido</i> ":(($campo['estagio_obrigatorio']=='S')?"Obrigatório":"Não Obrigatório") ?></span></td>
+        </tr>        
 		<tr class='specalt'>
         <td ><span>Vigência:</span></td>
         <td><span><?php echo (empty($campo['vigencia_inicio']))?" <i>Não preenchido</i> ":formata($campo['vigencia_inicio'],'redata'); ?></span>
@@ -343,6 +371,21 @@ if($msg_erro){
         		<span><?php echo (empty($campo['vigencia_fim']))?" <i>Não preenchido</i> ":formata($campo['vigencia_fim'],'redata'); ?></span>						
         	</td>
        </tr>
+      <tr class='specalt'>
+        <td ><span>Chefia</span></td>
+        <?php
+          if($campo['id_chefia_associada'] == null) {
+            $printCh = " <i>Não preenchido</i> ";
+          } else {
+            $query = "SELECT nome FROM chefias WHERE id_chefia = '".$campo['id_chefia_associada']."'";
+            $result = sql_executa($query);
+            $rowCh = sql_fetch_array($result);
+            $printCh = $rowCh['nome'];  
+          }
+           
+        ?>
+        <td><span><?php echo $printCh; ?></span></td>
+      </tr>
        <?php
        		$sqltaditivo = "select * from termos_aditivos where id_estagiario = {$id}";
        		$qrytaditivo = sql_executa($sqltaditivo);
@@ -434,7 +477,40 @@ if($msg_erro){
        <tr class='specalt'>
         <td ><span>Nome do Projeto</span></td>
         <td><span><?php echo (empty($campo['numero_projeto']))?" <i>Não preenchido</i> ":$campo['nome_projeto']; ?></span></td>
-       </tr>        
+       </tr>
+
+       <!--Separador--><tr class='specalt'><td colspan="2"><hr size="1" color="#DFDFDF"></td></tr> 
+
+       <tr class='specalt'>
+        <td ><span>CPF</span></td>
+        <td><span><?php echo ($campo['ext_cpf'] != null)?"<a target='_blank' href='./arquivos/".$campo['cpf']."-cpf.".$campo['ext_cpf']."'> <i>Visualizar Imagem</i> </a>":" <i>Documento não enviado</i> "; ?></span></td>
+       </tr> 
+       <tr class='specalt'>
+        <td ><span>RG</span></td>
+        <td><span><?php echo ($campo['ext_rg'] != null)?"<a target='_blank' href='./arquivos/".$campo['cpf']."-rg.".$campo['ext_rg']."'> <i>Visualizar Imagem</i> </a>":" <i>Documento não enviado</i> "; ?></span></td>
+       </tr>   
+       <tr class='specalt'>
+        <td ><span>Foto</span></td>
+        <td><span><?php echo ($campo['ext_foto'] != null)?"<a target='_blank' href='./arquivos/".$campo['cpf']."-foto.".$campo['ext_foto']."'> <i>Visualizar Imagem</i> </a>":" <i>Documento não enviado</i> "; ?></span></td>
+       </tr>
+       <tr class='specalt'>
+        <td ><span>Atestado de Matrícula</span></td>
+        <td><span><?php echo ($campo['ext_atestado_matricula'] != null)?"<a target='_blank' href='./arquivos/".$campo['cpf']."-atestado_matricula.".$campo['ext_atestado_matricula']."'> <i>Visualizar Imagem</i> </a>":" <i>Documento não enviado</i> "; ?></span></td>
+       </tr> 
+       <tr class='specalt'>
+        <td ><span>Plano de Trabalho</span></td>
+        <td><span><?php echo ($campo['ext_plano_trabalho'] != null)?"<a target='_blank' href='./arquivos/".$campo['cpf']."-plano_trabalho.".$campo['ext_plano_trabalho']."'> <i>Visualizar Imagem</i> </a>":" <i>Documento não enviado</i> "; ?></span></td>
+       </tr> 
+       <?php
+          if($campo['id_categoria'] == 2){
+            ?>
+            <tr class='specalt'>
+              <td ><span>Declaração PIBIC</span></td>
+              <td><span><?php echo ($campo['ext_declaracao'] != null)?"<a target='_blank' href='./arquivos/".$campo['cpf']."-declaracao.".$campo['ext_declaracao']."'> <i>Visualizar Imagem</i> </a>":" <i>Documento não enviado</i> "; ?></span></td>
+            </tr> 
+            <?php
+        }
+       ?>
        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>      
        <tr class='specalt'>
         <td colspan='2'>

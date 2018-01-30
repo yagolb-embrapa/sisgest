@@ -108,10 +108,9 @@
 		$row = sql_fetch_array($result);
 		$email_sgp = $row['email'];
 
-		define("EMAILSGP", $email_sgp);
-		$header = "From: Setor de Gestão de Pessoas <".EMAILSGP.">". "\r\n";
+		$header = "From: Setor de Gestão de Pessoas <".$email_sgp.">". "\r\n";
 		$header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-		$parameter ="-f".EMAILSGP;
+		$parameter ="-f".$email_sgp;
 
 		$query = "SELECT numero_projeto, id_supervisor FROM contratos
 		WHERE id_estagiario = '".$id_estagiario."' AND numero_contrato = '".$n_contrato."'";
@@ -120,10 +119,11 @@
 		$cod_projeto = $row['numero_projeto'];
 		$id_supervisor = $row['id_supervisor'];
 
-		$query = "SELECT nome FROM supervisores WHERE id = '".$id_supervisor."'";
+		$query = "SELECT nome, email FROM supervisores WHERE id = '".$id_supervisor."'";
 		$result = sql_executa($query);
 		$row = sql_fetch_array($result);
 		$nome_supervisor = $row['nome'];
+		$email_supervisor = $row['email'];
 
 		$query = "SELECT nome FROM estagiarios WHERE id = '".$id_estagiario."'";
 		$result = sql_executa($query);
@@ -138,8 +138,7 @@
 		switch ($n_email) {
 			case 2:
 				$corpo = sprintf($row['corpo'], $nome_supervisor, $cod_projeto);
-				$to = "b.yagon1@gmail.com";
-				/*
+
 				$query = "SELECT id FROM setores WHERE setor = 'SOF'";
 				$result = sql_executa($query);
 				$rowSof = sql_fetch_array($result);
@@ -149,20 +148,15 @@
 				$result = sql_executa($query);
 				$rowSof2 = sql_fetch_array($result);
 				$email_sof = $rowSof2['email'];
-				$to = $mail_sof;
-				*/
+				$to = $email_sof;
 				break;
 			case 3:
-				$corpo = sprintf($row['corpo'], $cod_projeto, $nome_estagiario);
-				$to = "b.yagon1@gmail.com";
-				/*
-				$to "sup";
-				*/
+				$corpo = sprintf($row['corpo'], $nome_supervisor, $cod_projeto, $nome_estagiario);
+				$to = $email_supervisor;
 				break;
 			case 4:
 				$corpo = sprintf($row['corpo'], $nome_supervisor, $cod_projeto);
-				$to = "b.yagon1@gmail.com";
-				/*
+
 				$query = "SELECT id_chefia_associada FROM contratos WHERE 
 				id_estagiario = '".$id_estagiario."' AND numero_contrato = '".$n_contrato."'";
 				$result = sql_executa($query);
@@ -183,27 +177,32 @@
 				$rowCh = sql_fetch_array($result);
 				$email_chefia = $rowCh['email'];
 				$to = $email_chefia;
-				*/
 				break;
 			case 5:
 			case 6:
 			case 7:
-				$corpo = sprintf($row['corpo'], $nome_estagiario, $cod_projeto);
-				$to = "b.yagon1@gmail.com";
-				/*
-				$to "sup";
-				*/
+				$corpo = sprintf($row['corpo'], $nome_supervisor, $nome_estagiario, $cod_projeto);
+				$to = $email_supervisor;
+				break;
+			case 8:
+				$corpo = sprintf($row['corpo'], $nome_supervisor, $nome_estagiario);
+				$to = $email_supervisor;
 				break;
 			default:
 				break;
 		}
 
 		$corpo = str_replace("\\n","<br>",$corpo);
-		mail($to, $assunto, $corpo, $header, $parameter);
-		// Email $n_email
-		unset($_POST, $_SESSION['is_estagiario_temp'], $_SESSION['tipo_temp'], $_SESSION['estagiario_temp'], $_SESSION['contrato_temp']);
-		echo "<script>alert('Análise respondida com sucesso!');</script>";
+		if(mail($to, $assunto, $corpo, $header, $parameter)) {
+			unset($_POST, $_SESSION['is_estagiario_temp'], $_SESSION['tipo_temp'], $_SESSION['estagiario_temp'], $_SESSION['contrato_temp']);
+			echo "<script>alert('Análise respondida com sucesso!');</script>";
 			echo "<script> location.replace('./acompanhamento.gerenciamento.php'); </script>";
+		} else {
+			unset($_POST, $_SESSION['is_estagiario_temp'], $_SESSION['tipo_temp'], $_SESSION['estagiario_temp'], $_SESSION['contrato_temp']);
+			echo "<script>alert('Aconteceu um erro no envio do email.');</script>";
+			echo "<script> location.replace('./acompanhamento.gerenciamento.php'); </script>";
+		}
+		// Email $n_email
 	} else {
 		$erro = 1;
 	}

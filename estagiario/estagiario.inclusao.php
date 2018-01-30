@@ -42,9 +42,20 @@ include("../functions/functions.uploud.php");
       if(valor == '2') {
         $("#texto_declaracao").show();
         $("#arq_declaracao").show();
+        $('#tipo_bolsa').hide();
+        $('#tipo_estagio').hide();
       } else {
-        $("#texto_declaracao").hide();
-        $("#arq_declaracao").hide();
+        if(valor == '3') {
+          $('#tipo_estagio').show();
+          $('#tipo_bolsa').hide();
+          $("#texto_declaracao").hide();
+          $("#arq_declaracao").hide();
+        } else {
+          $('#tipo_estagio').hide();
+          $('#tipo_bolsa').show();
+          $("#texto_declaracao").hide();
+          $("#arq_declaracao").hide();
+        }
       }
     }					
 	</script>
@@ -66,7 +77,7 @@ if($submit){
 	$municipio = $_POST['municipio'];//pega manualmente pq como esta em outra pagina, nao ta pegando com a linha acima
 	
 	//colocar aqui os campos que podem ser vazios no formulario
-	$excecoes_vazio = array("telres","telcel","emaile","complemento","ra","ramal","numero_projeto","nome_projeto","observacao","cargaoutra","agencia","conta","banco","cracha","beneficiario0","beneficiario1","beneficiario2","beneficiario3","beneficiario4","parentesco0","parentesco1","parentesco2","parentesco3","parentesco4","fumante");
+	$excecoes_vazio = array("telres","telcel","emaile","complemento","ra","ramal","numero_projeto","nome_projeto","observacao","cargaoutra","cracha","beneficiario0","beneficiario1","beneficiario2","beneficiario3","beneficiario4","parentesco0","parentesco1","parentesco2","parentesco3","parentesco4","fumante", "id_bolsista", "obrig");
   if($categoria == 2) {
     $excecoes_vazio[] = "arq_declaracao";
   }
@@ -221,7 +232,6 @@ if($submit){
 	}else{
         $query = "INSERT INTO estagiarios (nome, data_nascimento, nacionalidade, id_estado_civil, cpf, rg, data_expedicao, orgao_expedidor, endereco, complemento, bairro, cep, id_municipio, uf, tel_residencial, tel_celular, email, email_embrapa, agencia, conta_corrente, id_banco, id_instituicao_ensino, curso, inicio_curso, termino_curso, id_nivel, ra, sexo, fumante, observacao) 
                   VALUES('$nome', '".formata($datanasc,'data')."', '$nacionalidade', $estadocivil, '$cpf', '$rg', '".formata($dataexpedicao,'data')."', '$orgaoexpedidor', '$endereco', '$complemento', '$bairro', '$cep', $municipio, '$uf', '$telres', '$telcel', '$email', '$emaile', '$agencia', '$conta', $banco, $instituicao, '$curso','$inicio_curso', '$termino_curso', $nivel, '$ra', '$sexo', '$fumante', '$observacao');";
-
 		$result = sql_executa($query);
 
 		//$query_horarios = "INSERT INTO horarios () VALUES ()";
@@ -232,8 +242,10 @@ if($submit){
 			$result_estag = sql_executa($query_estag);
 			$campo_estag = sql_fetch_array($result_estag);	
 
-      $query = "INSERT INTO contratos (estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, status, tipo_vinculo, id_bolsista, termo_aceite, id_categoria, id_status, id_chefia_associada, ext_cpf, ext_rg, ext_foto, ext_plano_trabalho, ext_atestado_matricula, ext_declaracao, numero_contrato, id_estagiario) 
-    VALUES ('$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $status, '$tipo_vinculo', $id_bolsista, '$termo_aceite', $categoria, 2, $chefia_associada, '$cpf_ext', '$rg_ext', '$foto_ext', '$plano_trabalho_ext', '$atestado_matricula_ext', '$declaracao_ext', 1, {$campo_estag['id']});";
+      $query = "INSERT INTO contratos (estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, id_bolsista, termo_aceite, id_categoria, id_status, id_chefia_associada, ext_cpf, ext_rg, ext_foto, ext_plano_trabalho, ext_atestado_matricula, ext_declaracao, numero_contrato, id_estagiario, status, tipo_vinculo) 
+    VALUES ('$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $id_bolsista, '$termo_aceite', $categoria, 1, $chefia_associada, '$cpf_ext', '$rg_ext', '$foto_ext', '$plano_trabalho_ext', '$atestado_matricula_ext', '$declaracao_ext', 1, {$campo_estag['id']}, 3, 'n');";
+
+
     $result2 = sql_executa($query);		
 			//salvando horarios
 			if(!salva_horarios ($campo_estag['id'], $_POST)){
@@ -267,16 +279,62 @@ if($submit){
                 $id_benef[$i] = $b['id'];
                 $i++;
             }
+      if($result2) {
+        echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>           
+          <tr bgcolor='#EFFFF4'>
+            <td align='center'><span align='center' style='color:#296F3E;'>Estagiário incluído com sucesso!{$msg_hor}</span></td>
+          </tr>
+        </table>    
+        <div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
+      
+        $query = "SELECT nome, email FROM supervisores WHERE id = '".$supervisot."'";
+        $result = sql_executa($query);
+        $row = sql_fetch_array($result);
+        $nome_supervisor = $row['nome'];
+        $email_supervisor = $row['email'];
 
-			echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
-				<tr bgcolor='#EFFFF4'>
-					<td align='center'><span align='center' style='color:#296F3E;'>Estagiário incluído com sucesso!{$msg_hor}</span></td>
-				</tr>
-			</table>		
-			<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
-			
-			unset($_POST);
-			unset($nome,$datanasc,$nacionalidade,$estadocivil,$cpf,$rg,$dataexpedicao,$orgaoexpedidor,$endereco,$complemento,$bairro,$cep, $municipio, $uf, $telres, $telcel, $email, $emaile, $agencia, $conta, $banco, $instituicao, $curso,$inicio_curso,$termino_curso, $nivel, $ra, $vigenciai,$vigenciaf,$remuneracao, $cracha, $piec, $origem, $cargahoraria, $supervisor, $area, $numero_projeto, $ramal, $nome_projeto,$anoicurso,$icurso,$termino_curso,$anotcurso,$tcurso);
+        $query = "SELECT id FROM setores WHERE setor = 'SGP'";
+        $result = sql_executa($query);
+        $row = sql_fetch_array($result);
+        $id_email_sgp = $row['id'];
+
+        $query = "SELECT email FROM emails WHERE id_setor = '".$id_email_sgp."'";
+        $result = sql_executa($query);
+        $row = sql_fetch_array($result);
+        $email_sgp = $row['email'];
+
+        $header = "From: Setor de Gestão de Pessoas <".$email_sgp.">". "\r\n";
+        $header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $parameter ="-f".$email_sgp;
+
+        $query = "SELECT assunto, corpo FROM emails_corpo WHERE numero = '1'";
+        $result = sql_executa($query);
+        $row = sql_fetch_array($result);
+        $assunto = $row['assunto'];
+
+        $corpo = sprintf($row['corpo'], $nome_supervisor);
+        $corpo = str_replace("\\n","<br>",$corpo);
+
+        $to = $email_supervisor;
+
+        if(mail($to, $assunto, $corpo, $header, $parameter)) {
+          echo "<script>alert('Email enviado com sucesso!');</script>";
+        } else {
+          echo "<script>alert('Aconteceu um erro no envio do email');</script>";
+        }
+
+        unset($_POST);
+        unset($nome,$datanasc,$nacionalidade,$estadocivil,$cpf,$rg,$dataexpedicao,$orgaoexpedidor,$endereco,$complemento,$bairro,$cep, $municipio, $uf, $telres, $telcel, $email, $emaile, $agencia, $conta, $banco, $instituicao, $curso,$inicio_curso,$termino_curso, $nivel, $ra, $vigenciai,$vigenciaf,$remuneracao, $cracha, $piec, $origem, $cargahoraria, $supervisor, $area, $numero_projeto, $ramal, $nome_projeto,$anoicurso,$icurso,$termino_curso,$anotcurso,$tcurso);
+
+      } else {
+        echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>           
+          <tr bgcolor='#FFEFEF'>
+            <td align='center'><span align='center' style='color:red;'>Não foi possível adicionar o estagiário, verifique se os campos com (*) foram preenchidos corretamente.</span></td>
+          </tr>
+          </table>    
+          <div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
+      }
+
 		}
         else{
             echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
@@ -366,7 +424,7 @@ if($submit){
        <tr class='specalt'>
         <td ><span>Estado Civil(*)</span></td>
         <td><select id="estadocivil" name="estadocivil" class="select">
-        			<option value="">-- Estado Civil --</option>
+        			<option value="" disabled="disabled" selected="selected">-- Estado Civil --</option>
         			<?php
         				$ecs = Register::filter('estado_civil');       				        					
         				foreach($ecs as $ecivil){
@@ -399,7 +457,7 @@ if($submit){
        <tr  class='specalt'>
         <td><span>UF(*)</span></td>
         <td><select name="uf" onchange="ajax.loadDiv('divMunic','../functions/ajax.municLoad.php?uf='+this.value);">
-          <option value="">-UF-</option>
+          <option value="" disabled="disabled" selected="selected">-UF-</option>
           <?php
         		$ufs = Register::filter('uf');       				        					
         		foreach($ufs as $uf_reg){
@@ -455,7 +513,7 @@ if($submit){
        <tr class='specalt'>
         <td width="25%"><span>Nível(*)</span></td>
         <td><select id="nivel" name="nivel" class="select">
-        			<option value="">-- Nível --</option>
+        			<option value="" disabled="disabled" selected="selected">-- Nível --</option>
         			<?php
         				$niv = Register::filter('niveis', array('order' => array('id' => 'ASC')));       				        					
         				foreach($niv as $niveis){
@@ -475,7 +533,7 @@ if($submit){
        <tr class='specalt'>
         <td ><span>Instituição de ensino(*)</span></td>
         <td><select id="instituicao" name="instituicao" class="select">
-        			<option value="">-- Instituição --</option>
+        			<option value="" disabled="disabled" selected="selected">-- Instituição --</option>
         			<?php
         				$query_inst = "SELECT * FROM instituicoes_ensino ORDER BY razao_social";
         				//$inst = Register::filter('instituicoes_ensino', array('depth' => 0));
@@ -537,19 +595,19 @@ if($submit){
        <table width="100%" class='formulario'>
   	  	 <tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td></tr>	
         <tr class='specalt'>
-        <td width="25%"><span>Agência</span></td>
+        <td width="25%"><span>Agência(*)</span></td>
         <td width="75%"><input name="agencia" id="agencia" type="text"  value="<?php echo $agencia; ?>">
         <span id='sagencia' class="sErro">&nbsp;*</span></td>
        </tr>
         <tr class='specalt'>
-        <td ><span>Conta Corrente</span></td>
+        <td ><span>Conta Corrente(*)</span></td>
         <td><input name="conta" id="conta" type="text"  value="<?php echo $conta; ?>">
         <span id='sconta' class="sErro">&nbsp;*</span></td>
        </tr>
         <tr class='specalt'>
-        <td ><span>Banco</span></td>
+        <td ><span>Banco(*)</span></td>
         <td><select id="banco" name="banco" class="select">
-        			<option value='null'>-- Banco --</option>
+        			<option value="" disabled="disabled" selected="selected">-- Banco --</option>
         			<?php
         				$bnc = Register::filter('bancos');       				        					
         				foreach($bnc as $bancos){
@@ -571,26 +629,10 @@ if($submit){
        <table width="100%" class='formulario'>
        <tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td></tr>
 
-        <tr class='specalt'>
-        <td ><span>Ativo</span></td>
-        <td><input name="status" type="radio" id="status1" value="1" <?php if($status!="0") echo "checked"; ?> >        		
-        			<label for="status1"><span>Sim</span></label>
-        		<input name="status" type="radio" id="status0" value="0" <?php if($status=="0") echo "checked";?> >
-        			<label for="status0"><span>Não</span></label>
-        	<span id='sstatus' class="sErro">&nbsp;*</span>        			
-       </tr>
-      <tr class='specalt'>
-        <td><span>Tipo de Vínculo</span></td>
-        <td><input name="tipo_vinculo" type="radio" id="vinc_estagiario" value="e" <?php if($tipo_vinculo!="b") echo "checked"; ?> >        		
-        			<label for="estagiario"><span>Estagiário</span></label>
-            <input name="tipo_vinculo" type="radio" id="vinc_bolsista" value="b" <?php if($tipo_vinculo=="b") echo "checked"; ?> >
-        			<label for="bolsista"><span>Bolsista</span></label>
-        	<span id='stipo_vinculo' class="sErro">&nbsp;*</span>        			
-      </tr>
       <tr class='specalt' >
         <td><span>Categoria(*)</span></td>
         <td><select id="categoria" name="categoria" onchange="exibir_declaracao()" class="select">
-                <option value="">-- Categoria --</option>
+                <option value="" disabled="disabled" selected="selected">-- Categoria --</option>
                 <?php
                   $qryStrCat = "SELECT * FROM categorias";
                   $qryCat = sql_executa($qryStrCat);
@@ -607,7 +649,7 @@ if($submit){
        <tr class='specalt' >
         <td><span>Chefia associada(*)</span></td>
         <td><select id="chefia_associada" name="chefia_associada" class="select">
-                <option value="">-- Chefia --</option>
+                <option value="" disabled="disabled" selected="selected">-- Chefia --</option>
                 <?php
                   $qryStrChef = "SELECT * FROM chefias";
                   $qryChef = sql_executa($qryStrChef);
@@ -624,7 +666,7 @@ if($submit){
       <tr class='specalt'  id="tipo_bolsa">
         <td><span>Tipo de Modalidade</span></td>
         <td><select id="id_bolsista" name="id_bolsista" class="select">
-                <option value="">-- Modalidade --</option>
+                <option value="" disabled="disabled" selected="selected">-- Modalidade --</option>
         	    <?php
         	        $modalidades = Register::filter('modalidades_bolsista', array('order' => array('nome' => 'ASC')));       				        					
         	        foreach($modalidades as $mod){
@@ -685,7 +727,7 @@ if($submit){
        <tr class='specalt'>
         <td ><span>Origem dos Recursos(*)</span></td>
         <td><select id="origem" name="origem" class="select">
-        			<option value="">-- Origem --</option>
+        			<option value="" disabled="disabled" selected="selected">-- Origem --</option>
         			<?php
         				$orig = Register::filter('origens_recursos');       				        					
         				foreach($orig as $origens){
@@ -814,6 +856,8 @@ if($submit){
 
     $("#texto_declaracao").hide();
     $("#arq_declaracao").hide();
+    $('#tipo_bolsa').hide();
+    $('#tipo_estagio').hide();
 
     $(document).ready(function() {
         $('input#vigenciai').mask('39/19/2999');
@@ -855,6 +899,7 @@ if($submit){
 
 
 	mostraErros('<?php echo $string_erros; ?>');	
+  exibir_declaracao();
 </script>
 <?php 
 include_once('../inc/copyright.php');
