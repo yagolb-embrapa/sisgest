@@ -1,25 +1,3 @@
-estagiario/estagiario.edicao.php - conferir se todos os campos existem, estao preenchidos e se e possivel alterar.
 criar pagina de renovacao de contratos
 permissoes
-****fazer pendencias
 EMAIL DOS SUPERVISORES
-
-				case 9:
-				$corpo = sprintf($row['corpo'], $nome_estagiario);
-				$to = $email_sgp;
-				break;
-			case 10:
-				$corpo = sprintf($row['corpo'], $nome_estagiario);
-				
-				$query = "SELECT id FROM setores WHERE setor = 'SOF'";
-				$result = sql_executa($query);
-				$rowSof = sql_fetch_array($result);
-				$id_email_sof = $rowSof['id'];
-
-				$query = "SELECT email FROM emails WHERE id_setor = '".$id_email_sof."'";
-				$result = sql_executa($query);
-				$rowSof2 = sql_fetch_array($result);
-				$email_sof = $rowSof2['email'];
-
-				$to = $email_sof;
-				break;

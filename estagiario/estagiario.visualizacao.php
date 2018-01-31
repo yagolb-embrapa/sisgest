@@ -67,7 +67,7 @@ if($msg_erro){
 	<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
 }else{
   if($_SESSION['USERNIVEL'] == 'a' || $_SESSION['USERNIVEL'] == 'g') {
-    echo "<p><a href='javascript://' onclick=\"document.location.href='estagiario.edicao.php?id=".$id."';\">
+    echo "<p><a href='javascript://' onclick=\"document.location.href='estagiario.edicao.php?id=".$id."&contrato=".$contrato."&tipo=1';\">
         <img src='../img/icon_edit.gif' width='16' height='16' border='0'>Editar Dados</a></p>";
   }
 ?>

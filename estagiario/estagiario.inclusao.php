@@ -287,7 +287,7 @@ if($submit){
         </table>    
         <div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
       
-        $query = "SELECT nome, email FROM supervisores WHERE id = '".$supervisot."'";
+        $query = "SELECT nome, email FROM supervisores WHERE id = '".$supervisor."'";
         $result = sql_executa($query);
         $row = sql_fetch_array($result);
         $nome_supervisor = $row['nome'];

@@ -26,7 +26,7 @@
 
 </style>
 <?php
-$qryStr = "SELECT es.nome, ct.id_categoria, ct.id_status, ct.vigencia_inicio, ct.vigencia_fim 
+$qryStr = "SELECT es.nome, ct.id_categoria, ct.id_status, ct.vigencia_inicio, ct.vigencia_fim, ct.numero_contrato, es.id
 			FROM estagiarios AS es INNER JOIN contratos AS ct ON es.id = ct.id_estagiario 
 			WHERE ct.id_supervisor = '".$id_supervisor."' 
 			ORDER BY ct.id_status ASC, ct.vigencia_inicio DESC 
@@ -54,7 +54,7 @@ if($qry) {
 			}
 			?>
 			<tr>
-				<td align="left" width="40%"><?php echo $row["nome"]; ?></td>
+				<td align="left" width="40%"><?php echo "<a href='./estagiario.visualizacao.php?id=".$row['id']."&contrato=".$row['numero_contrato']."'>".$row['nome']."</a>"; ?></td>
 				<?php
 					$qryStrCat = "SELECT descricao FROM categorias WHERE id_categoria = '".$row["id_categoria"]."'";
 					$qryCat = sql_executa($qryStrCat);
@@ -65,8 +65,12 @@ if($qry) {
 					$qryStrStatus = "SELECT descricao FROM status_estagiario WHERE id_status = '".$row["id_status"]."'";
 					$qryStatus = sql_executa($qryStrStatus);
 					$rowStatus = sql_fetch_array($qryStatus); 
+					$printStatus = $rowStatus[0];
+					if($row['id_status'] == 6 || $row['id_status'] == 7) {
+						$printStatus = "<a href='./estagiario.edicao.php?id=".$row['id']."&contrato=".$row['numero_contrato']."&tipo=".$row['id_status']."'>".$rowStatus[0]."</a>";
+					}
 				?>
-				<td align="center" width="13%"><?php echo $rowStatus[0]; ?></td>
+				<td align="center" width="13%"><?php echo $printStatus; ?></td>
 				<?php
 					$dataInicio = new DateTime($row["vigencia_inicio"]);
 					$dataFim = new DateTime($row["vigencia_fim"]);

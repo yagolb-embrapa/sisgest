@@ -183,26 +183,23 @@ input[type=text]:focus{
 
 .lista_registros0{
 	background-color:#d5d5d5;
-	padding: 3px 5px 3px 5px;
 	color:#333333;
-	margin: 0 0 1px 0;
-	width:720px;
+	font-size: 8pt;
 }
 
 .lista_registros1{
 	background-color:#FFFFFF;
-	padding: 3px 5px 3px 5px;
 	color:#333333;
-	margin: 0 0 1px 0;
-	width:720px;
+	font-size: 8pt;
 }
 
 .lista_registros2{
 	background-color:#B0C4DE;
-	padding: 3px 5px 3px 5px;
+	padding: 0px 0px 0px 0px;
 	color:#333333;
-	margin: 0 0 1px 0;
-	width:720px;
+	margin: 0 0 0px 0;
+	width:100%;
+	font-size: 10pt;
 }
 
 .lista_registros_content{
