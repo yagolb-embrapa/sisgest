@@ -6,6 +6,7 @@ require_once("../inc/header.php");
 include("../functions/functions.database.php");//temporario 
 include("../functions/functions.forms.php");
 require_once("../classes/DB.php");
+include("../functions/functions.uploud.php");
 
 $id = $_GET['id'];
 $n_contrato = $_GET['contrato'];
@@ -155,6 +156,90 @@ if($submit){
     $id_benef[3] = $id_beneficiario3;
     $id_benef[4] = $id_beneficiario4;
 
+    //verifica se os arquivos foram enviados com sucesso
+    $qtdErros = count($erros);
+    $cpf_arq = $_FILES["arq_cpf"];
+    $rg_arq = $_FILES["arq_rg"];
+    $foto_arq = $_FILES["arq_foto"];
+    $atestado_matricula_arq = $_FILES["arq_atestado_matricula"];
+    $plano_trabalho_arq = $_FILES["arq_plano_trabalho"];
+    $declaracao_arq = $_FILES["arq_declaracao"];
+    if(is_uploaded_file($cpf_arq['tmp_name'])) if(!($cpf_arq["error"] == 0)) $erros[] = 'arq_cpf'; else $flag_cpf = 1;
+    if(is_uploaded_file($rg_arq['tmp_name'])) if(!($rg_arq["error"] == 0)) $erros[] = 'arq_rg'; else $flag_rg = 1;
+    if(is_uploaded_file($foto_arq['tmp_name'])) if(!($foto_arq["error"] == 0)) $erros[] = 'arq_foto'; else $flag_foto = 1;
+    if(is_uploaded_file($atestado_matricula_arq['tmp_name'])) if(!($atestado_matricula_arq["error"] == 0)) $erros[] = 'arq_atestado_matricula'; else $flag_atestado_matricula = 1;
+    if(is_uploaded_file($plano_trabalho_arq['tmp_name'])) if(!($plano_trabalho_arq["error"] == 0)) $erros[] = 'arq_plano_trabalho'; else $flag_plano_trabalho = 1;
+    if($categoria == 2) if(is_uploaded_file($declaracao_arq['tmp_name'])) if(!($declaracao_arq["error"] == 0)) $erros[] = 'arq_declaracao'; else $flag_declaracao = 1;
+
+    //verifica se os arquivos possuem extensoes validas
+  if(count($erros) == $qtdErros) {
+    if($flag_cpf == 1)
+        if(!(validExtension(".pdf", $cpf_arq) || validExtension(".jpg", $cpf_arq) || validExtension(".jpeg", $cpf_arq) || validExtension(".png", $cpf_arq)))
+            $erros[] = 'arq_cpf';
+    if($flag_rg == 1)
+        if(!(validExtension(".pdf", $rg_arq) || validExtension(".jpg", $rg_arq) || validExtension(".jpeg", $rg_arq) || validExtension(".png", $rg_arq)))
+            $erros[] = 'arq_rg';
+    if($flag_foto == 1)
+        if(!(validExtension(".pdf", $foto_arq) || validExtension(".jpg", $foto_arq) || validExtension(".jpeg", $foto_arq) || validExtension(".png", $foto_arq)))
+            $erros[] = 'arq_foto';
+    if($flag_atestado_matricula == 1)
+        if(!(validExtension(".pdf", $atestado_matricula_arq) || validExtension(".jpg", $atestado_matricula_arq) || validExtension(".jpeg", $atestado_matricula_arq) || validExtension(".png", $atestado_matricula_arq)))
+            $erros[] = 'arq_atestado_matricula';
+    if($flag_plano_trabalho == 1)
+        if(!(validExtension(".pdf", $plano_trabalho_arq) || validExtension(".jpg", $plano_trabalho_arq) || validExtension(".jpeg", $plano_trabalho_arq) || validExtension(".png", $plano_trabalho_arq)))
+            $erros[] = 'arq_plano_trabalho';
+    if($categoria == 2) {
+      if($flag_declaracao == 1)
+        if(!(validExtension(".pdf", $declaracao_arq) || validExtension(".jpg", $declaracao_arq) || validExtension(".jpeg", $declaracao_arq) || validExtension(".png", $declaracao_arq)))
+            $erros[] = 'arq_declaracao';
+    }
+ 
+    //faz o uploud pra pasta arquivos
+    if(count($erros) == $qtdErros) {
+        if($flag_cpf == 1) {
+            $query = "SELECT ext_cpf FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
+            $rowCpf = sql_fetch_array(sql_executa($query));
+            unlink("./arquivos/".$cpf."-cpf.".$rowCpf['ext_cpf']);
+            if(!($cpf_ext = uploadFile($cpf_arq, $cpf."-cpf"))) $erros[] = 'arq_cpf';
+        }
+        if($flag_rg == 1) {
+            $query = "SELECT ext_rg FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
+            $rowRg = sql_fetch_array(sql_executa($query));
+            unlink("./arquivos/".$cpf."-rg.".$rowRg['ext_rg']);
+            if(!($rg_ext = uploadFile($rg_arq, $cpf."-rg"))) $erros[] = 'arq_rg';
+        }
+        if($flag_foto == 1) {
+            $query = "SELECT ext_foto FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
+            $rowFoto = sql_fetch_array(sql_executa($query));
+            unlink("./arquivos/".$cpf."-foto.".$rowFoto['ext_foto']);
+            if(!($foto_ext = uploadFile($foto_arq, $cpf."-foto"))) $erros[] = 'arq_foto';
+        }
+        if($flag_atestado_matricula == 1) {
+            $query = "SELECT ext_atestado_matricula FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
+            $rowAtestado = sql_fetch_array(sql_executa($query));
+            unlink("./arquivos/".$cpf."-atestado_matricula.".$rowAtestado['ext_atestado_matricula']);
+            if(!($atestado_matricula_ext = uploadFile($atestado_matricula_arq, $cpf."-atestado_matricula"))) $erros[] = 'arq_atestado_matricula';
+        }
+        if($flag_plano_trabalho == 1) {
+            $query = "SELECT ext_plano_trabalho FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
+            $rowPlano = sql_fetch_array(sql_executa($query));
+            unlink("./arquivos/".$cpf."-plano_trabalho.".$rowPlano['ext_plano_trabalho']);
+            if(!($plano_trabalho_ext = uploadFile($plano_trabalho_arq, $cpf."-plano_trabalho"))) $erros[] = 'arq_plano_trabalho';
+        }
+        if($categoria == 2) {
+            if($flag_declaracao == 1) {
+                $query = "SELECT ext_declaracao FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
+                $rowDeclaracao = sql_fetch_array(sql_executa($query));
+                unlink("./arquivos/".$cpf."-declaracao.".$rowDeclaracao['ext_declaracao']);
+                if(!($declaracao_ext = uploadFile($declaracao_arq, $cpf."-declaracao"))) $erros[] = 'arq_declaracao';
+            } 
+                
+        } else {
+            $declaracao_ext = "";
+        }
+    }
+  }
+
 	// 3 - Mostra mensagem de erro ou cria query de insercao 
 	if(count($erros)>0){
 		//essa string é usada pelo javascript no final da pagina para marcar os campos com o asterisco vermelho 
@@ -248,6 +333,27 @@ if($submit){
         	$query .= ", tdistrato='".formata($tdistrato, "data")."'";
         if($tipo == 6)
         	$query .= ", id_status = '1'";
+        if($flag_cpf == 1) {
+            $query .= ", ext_cpf = '$cpf_ext'";
+        }
+        if($flag_rg == 1) {
+            $query .= ", ext_rg = '$rg_ext'";
+        }
+        if($flag_atestado_matricula == 1) {
+            $query .= ", ext_atestado_matricula = '$atestado_matricula_ext'";
+        }
+        if($flag_plano_trabalho == 1) {
+            $query .= ", ext_plano_trabalho = '$plano_trabalho_ext'";
+        }
+        if($flag_foto == 1) {
+            $query .= ", ext_foto = '$foto_ext'";
+        }
+        if($categoria == 2) {
+            if($flag_declaracao == 1) {
+                $query .= ", ext_declaracao = '$declaracao_ext'";
+            }    
+        }
+
 		$query .= " WHERE numero_contrato = {$n_contrato} AND id_estagiario = {$id};";
 
 		$result = sql_executa($query);

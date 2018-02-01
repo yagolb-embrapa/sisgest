@@ -107,6 +107,7 @@ Tabela "estagiarios"
 Dado permissao 0777:
 	functions/functions.uploud.php
 	estagiario/estagiario.inclusao.php
+	estagiario/estagiario.edicao.php
 	estagiario/arquivos/
 
 GRANDES ALTERAÇÕES
