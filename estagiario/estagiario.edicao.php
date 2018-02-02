@@ -627,10 +627,10 @@ if($submit){
 ?>
    <!-- Abas -->	
 	<ul class='listaAbas'>
-       <li><a href="javascript: mostrarAba('aba1','a1');" id='a1' class='active'>Identificação</a></li>
+       <li><a href="javascript: mostrarAba('aba1','a1');" id='a1' <?php if($tipo != 7) echo "class='active'"; ?>>Identificação</a></li>
        <li><a href="javascript: mostrarAba('aba2','a2');" id='a2'>Curso</a></li>
        <li><a href="javascript: mostrarAba('aba3','a3');" id='a3'>Banco</a></li>
-       <li><a href="javascript: mostrarAba('aba4','a4');" id='a4'>Estágio</a></li>
+       <li><a href="javascript: mostrarAba('aba4','a4');" id='a4' <?php if($tipo == 7) echo "class='active'"; ?>>Estágio</a></li>
        <li><a href="javascript: mostrarAba('aba5','a5');" id='a5'>Arquivos</a></li>           
        <li><a href="javascript: mostrarAba('aba6','a6');" id='a6'>Frequência</a></li>       
        <li><a href="javascript: mostrarAba('aba7','a7');" id='a7'>Rel.Frequência</a></li>       
@@ -640,7 +640,7 @@ if($submit){
 	<form enctype="multipart/form-data" id="frmUsr" name="frmUsr" method="post">
 	
 	<!-- ============ Conteudo da Primeira ABA ============ --> 	
-	<div id="aba1" class='conteudoAba' style='display:block;'>
+	<div id="aba1" class='conteudoAba' <?php if($tipo != 7) echo "style='display:block;'"; ?>>
 		<div id="erro"></div>  	 	
   	  	<table width="100%" class='formulario'>
   	  	<tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td></tr>		  
@@ -914,7 +914,7 @@ if($submit){
  
 
 	     <!-- ============ Conteudo da quarta ABA  ============ -->  
-       <div id="aba4" class='conteudoAba'>
+       <div id="aba4" class='conteudoAba' <?php if($tipo == 7) echo "style='display:block;'"; ?>>
        <table width="100%" class='formulario'>
        <tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td></tr>
       <tr class='specalt' >
