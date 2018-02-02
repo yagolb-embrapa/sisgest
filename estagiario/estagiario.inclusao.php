@@ -303,21 +303,22 @@ if($submit){
         $row = sql_fetch_array($result);
         $email_sgp = $row['email'];
 
-        $header = "From: Setor de Gestão de Pessoas <".$email_sgp.">". "\r\n";
-        $header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $parameter ="-f".$email_sgp;
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+        $headers .= 'From: Sisgest <'.$email_sgp.'>'."\r\n";
 
         $query = "SELECT assunto, corpo FROM emails_corpo WHERE numero = '1'";
         $result = sql_executa($query);
         $row = sql_fetch_array($result);
         $assunto = $row['assunto'];
+        $assunto = '=?UTF-8?B?'.base64_encode($assunto).'?=';
 
         $corpo = sprintf($row['corpo'], $nome_supervisor);
         $corpo = str_replace("\\n","<br>",$corpo);
 
         $to = $email_supervisor;
 
-        if(mail($to, $assunto, $corpo, $header, $parameter)) {
+        if(mail($to, $assunto, $corpo, $headers)) {
           echo "<script>alert('Email enviado com sucesso!');</script>";
         } else {
           echo "<script>alert('Aconteceu um erro no envio do email');</script>";

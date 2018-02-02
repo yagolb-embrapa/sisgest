@@ -81,36 +81,33 @@ if($qry) {
 						$flagLink = 0;
 						switch ($row['id_status']) {
   							case 1:
-  								if($_SESSION['USERNIVEL'] == 'g') {
+  								if($_SESSION['USERNIVEL'] == 'g' || $_SESSION['USERNIVEL'] == 'a') {
 									$flagLink = 1;
   								}
     							break;
   							case 2:
-  								if($_SESSION['USERNIVEL'] == 'f') {
+  								if($_SESSION['USERNIVEL'] == 'f' || $_SESSION['USERNIVEL'] == 'a') {
 									$flagLink = 1;
   								}
     							break;
   							case 3:
-  								if($_SESSION['USERNIVEL'] == 'd') {
+  								if($_SESSION['USERNIVEL'] == 'd' || $_SESSION['USERNIVEL'] == 'a') {
 									$flagLink = 1;
   								}
   								break;
   							case 4:
-  								if($_SESSION['USERNIVEL'] == 'p') {
+  								if($_SESSION['USERNIVEL'] == 'p' || $_SESSION['USERNIVEL'] == 'a') {
 									$flagLink = 1;
   								}
   								break;
   							case 5:
-    							if($_SESSION['USERNIVEL'] == 't') {
+    							if($_SESSION['USERNIVEL'] == 't' || $_SESSION['USERNIVEL'] == 'a') {
 									$flagLink = 1;
   								}
     							break;
   							default:
     							$flagLink = 0;
     							break;
-						}
-						if($_SESSION['USERNIVEL'] == 'a') {
-							$flagLink = 1;
 						}
 						if($flagLink) {
 							$printStatus = "<a href='./acompanhamento.analise.php?tipo=".$row['id_status']."&estagiario=".$row['id']."&contrato=".$row['numero_contrato']."'>".$rowStatus['descricao']."</a>";

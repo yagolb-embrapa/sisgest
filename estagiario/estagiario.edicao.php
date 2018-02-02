@@ -67,6 +67,16 @@ if($submit){
 	
 	//colocar aqui os campos que podem ser vazios no formulario
 	$excecoes_vazio = array("telres","telcel","emaile","matriculae","complemento","ra","ramal","numero_projeto","nome_projeto","observacao","cargaoutra","cracha","beneficiario0","beneficiario1","beneficiario2","beneficiario3","beneficiario4","parentesco0","parentesco1","parentesco2","parentesco3","parentesco4","select_ano","novo_periodo","novo_horas_mes","novo_horas_trabalhadas","id_beneficiario0","id_beneficiario1","id_beneficiario2","id_beneficiario3","id_beneficiario4","remuneracao","relat_ano","status","fumante","obrig","arq_cpf","arq_rg","arq_foto","arq_declaracao","arq_atestado_matricula","arq_plano_trabalho");
+    if($tipo == 7) {
+        $excecoes_vazio[] = "sexo";
+        $excecoes_vazio[] = "fumante";
+        $excecoes_vazio[] = "icurso";
+        $excecoes_vazio[] = "anoicurso";
+        $excecoes_vazio[] = "tcurso";
+        $excecoes_vazio[] = "anotcurso";
+        $excecoes_vazio[] = "carga";
+        $excecoes_vazio[] = "piec";
+    }
 
     $nome_mes = array('Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro');
 
@@ -107,19 +117,23 @@ if($submit){
 	//vigenciai e vigenciaf compartilham o mesmo aviso de campo nao preenchido 
 	if(empty($vigenciai) && !empty($vigenciaf)) $erros[] = 'vigenciaf';
 
-	//tratando carga horaria
-	if($carga == -1){		
-		$ocarga = $_POST['cargaoutra'];
-		if(empty($ocarga)) $erros[] = 'cargaoutra';
-		$cargahoraria = $ocarga;		
-	}else{
-		$cargahoraria = $carga;	
-	}
+    if($tipo != 7) {
+        //tratando carga horaria
+        if($carga == -1){       
+            $ocarga = $_POST['cargaoutra'];
+            if(empty($ocarga)) $erros[] = 'cargaoutra';
+                $cargahoraria = $ocarga;        
+        }else{
+            $cargahoraria = $carga; 
+        }
+    }
 	
     //verificando se o sexo foi definido
-    if($sexo != 'f' && $sexo != 'm')
-        $erros[] = 'sexo';
-
+    if($tipo != 7){
+        if($sexo != 'f' && $sexo != 'm')
+            $erros[] = 'sexo';    
+    }
+    
 	//validando formato das datas  
 	if(!valida($datanasc,'data')) $erros[] = 'datanasc';
 	if(!valida($dataexpedicao,'data')) $erros[] = 'dataexpedicao';
@@ -130,10 +144,12 @@ if($submit){
 	if(!valida($cep,'cep')) $erros[] = 'cep';
 	if(!valida($email,'email')) $erros[] = 'email';
 	if(!valida($emaile,'email') && !empty($emaile)) $erros[] = 'emaile';
-								
-	//Inicio e termino do curso no formato AAAA-MM (ano e semestre, na verdade)
-	$inicio_curso = $anoicurso."-".$icurso;	
-	$termino_curso = $anotcurso."-".$tcurso;
+	
+    if($tipo != 7) {
+        //Inicio e termino do curso no formato AAAA-MM (ano e semestre, na verdade)
+        $inicio_curso = $anoicurso."-".$icurso; 
+        $termino_curso = $anotcurso."-".$tcurso;
+    }
 	
 	$q_cpf = "SELECT * FROM estagiarios WHERE cpf = '{$cpf}' AND id <> {$id}";	
 	$r_cpf = sql_executa($q_cpf);
@@ -198,38 +214,44 @@ if($submit){
     if(count($erros) == $qtdErros) {
         if($flag_cpf == 1) {
             $query = "SELECT ext_cpf FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
-            $rowCpf = sql_fetch_array(sql_executa($query));
+            $result = sql_executa($query);
+            $rowCpf = sql_fetch_array($result);
             unlink("./arquivos/".$cpf."-cpf.".$rowCpf['ext_cpf']);
             if(!($cpf_ext = uploadFile($cpf_arq, $cpf."-cpf"))) $erros[] = 'arq_cpf';
         }
         if($flag_rg == 1) {
             $query = "SELECT ext_rg FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
-            $rowRg = sql_fetch_array(sql_executa($query));
+            $result = sql_executa($query);
+            $rowRg = sql_fetch_array($result);
             unlink("./arquivos/".$cpf."-rg.".$rowRg['ext_rg']);
             if(!($rg_ext = uploadFile($rg_arq, $cpf."-rg"))) $erros[] = 'arq_rg';
         }
         if($flag_foto == 1) {
             $query = "SELECT ext_foto FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
-            $rowFoto = sql_fetch_array(sql_executa($query));
+            $result = sql_executa($query);
+            $rowFoto = sql_fetch_array($result);
             unlink("./arquivos/".$cpf."-foto.".$rowFoto['ext_foto']);
             if(!($foto_ext = uploadFile($foto_arq, $cpf."-foto"))) $erros[] = 'arq_foto';
         }
         if($flag_atestado_matricula == 1) {
             $query = "SELECT ext_atestado_matricula FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
-            $rowAtestado = sql_fetch_array(sql_executa($query));
+            $result = sql_executa($query);
+            $rowAtestado = sql_fetch_array($result);
             unlink("./arquivos/".$cpf."-atestado_matricula.".$rowAtestado['ext_atestado_matricula']);
             if(!($atestado_matricula_ext = uploadFile($atestado_matricula_arq, $cpf."-atestado_matricula"))) $erros[] = 'arq_atestado_matricula';
         }
         if($flag_plano_trabalho == 1) {
             $query = "SELECT ext_plano_trabalho FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
-            $rowPlano = sql_fetch_array(sql_executa($query));
+            $result = sql_executa($query);
+            $rowPlano = sql_fetch_array($result);
             unlink("./arquivos/".$cpf."-plano_trabalho.".$rowPlano['ext_plano_trabalho']);
             if(!($plano_trabalho_ext = uploadFile($plano_trabalho_arq, $cpf."-plano_trabalho"))) $erros[] = 'arq_plano_trabalho';
         }
         if($categoria == 2) {
             if($flag_declaracao == 1) {
                 $query = "SELECT ext_declaracao FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
-                $rowDeclaracao = sql_fetch_array(sql_executa($query));
+                $result = sql_executa($query);
+                $rowDeclaracao = sql_fetch_array($result);
                 unlink("./arquivos/".$cpf."-declaracao.".$rowDeclaracao['ext_declaracao']);
                 if(!($declaracao_ext = uploadFile($declaracao_arq, $cpf."-declaracao"))) $erros[] = 'arq_declaracao';
             } 
@@ -268,25 +290,26 @@ if($submit){
             $status = 1;
 
         if($tipo == 7) {
-        	$query = "UPDATE contratos SET numero_projeto = '$numero_projeto', nome_projeto = '$nome_projeto', id_status = '2' WHERE numero_contrato = {$n_contrato} AND id_estagiario = {$id};";
+        	$query = "UPDATE contratos SET numero_projeto = '$numero_projeto', nome_projeto = '$nome_projeto', id_origem_recursos = '$origem', id_status = '2' WHERE numero_contrato = {$n_contrato} AND id_estagiario = {$id};";
         	$result = sql_executa($query);
         	if($result) {
-        		$query = "SELECT nome, email FROM supervisores WHERE id = '".$id_supervisor."'";
+        		$query = "SELECT nome, email FROM supervisores WHERE id = '".$supervisor."'";
         		$result = sql_executa($query);
         		$row = sql_fetch_array($result);
         		$nome_supervisor = $row['nome'];
         		$email_supervisor = $row['email'];
 
-        		$header = "From: ".$nome_supervisor." <".$email_supervisor.">". "\r\n";
-        		$header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        		$parameter ="-f".$email_supervisor;
+                $headers  = 'MIME-Version: 1.0' . "\r\n";
+                $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+                $headers .= 'From: '.$nome_supervisor.' <'.$email_supervisor.'>'."\r\n";
 
         		$query = "SELECT assunto, corpo FROM emails_corpo WHERE numero = '10'";
         		$result = sql_executa($query);
         		$row = sql_fetch_array($result);
         		$assunto = $row['assunto'];
+                $assunto = '=?UTF-8?B?'.base64_encode($assunto).'?=';
 
-        		$corpo = sprintf($row['corpo'], $nome_estagiario);
+        		$corpo = sprintf($row['corpo'], $nome, $nome_supervisor);
         		$corpo = str_replace("\\n","<br>",$corpo);
 
         		$query = "SELECT id FROM setores WHERE setor = 'SOF'";
@@ -300,8 +323,9 @@ if($submit){
 				$email_sof = $rowSof2['email'];
 
 				$to = $email_sof;
+                $to = "stan.oliveira@gmail.com";
 
-        		if(mail($to, $assunto, $corpo, $header, $parameter)) {
+        		if(mail($to, $assunto, $corpo, $headers)) {
           			echo "<script>alert('Email enviado com sucesso!');</script>";
         		} else {
           			echo "<script>alert('Aconteceu um erro no envio do email');</script>";
@@ -433,7 +457,7 @@ if($submit){
             }
 
             if($tipo == 6) {
-            $query = "SELECT nome, email FROM supervisores WHERE id = '".$id_supervisor."'";
+            $query = "SELECT nome, email FROM supervisores WHERE id = '".$supervisor."'";
         	$result = sql_executa($query);
         	$row = sql_fetch_array($result);
         	$nome_supervisor = $row['nome'];
@@ -449,21 +473,23 @@ if($submit){
         	$row = sql_fetch_array($result);
         	$email_sgp = $row['email'];
 
-        	$header = "From: ".$nome_supervisor." <".$email_supervisor.">". "\r\n";
-        	$header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        	$parameter ="-f".$email_supervisor;
+            $headers  = 'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+            $headers .= 'From: '.$nome_supervisor.' <'.$email_supervisor.'>'."\r\n";
 
         	$query = "SELECT assunto, corpo FROM emails_corpo WHERE numero = '9'";
         	$result = sql_executa($query);
         	$row = sql_fetch_array($result);
         	$assunto = $row['assunto'];
+            $assunto = '=?UTF-8?B?'.base64_encode($assunto).'?=';
 
-        	$corpo = sprintf($row['corpo'], $nome_estagiario);
+        	$corpo = sprintf($row['corpo'], $nome, $nome_supervisor);
        		$corpo = str_replace("\\n","<br>",$corpo);
 
         	$to = $email_sgp;
 
-        	if(mail($to, $assunto, $corpo, $header, $parameter)) {
+            $to = "stan.oliveira@gmail.com";
+        	if(mail($to, $assunto, $corpo, $headers)) {
           		echo "<script>alert('Email enviado com sucesso!');</script>";
         	} else {
           		echo "<script>alert('Aconteceu um erro no envio do email');</script>";
@@ -620,7 +646,7 @@ if($submit){
   	  	<tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td></tr>		  
       <tr class='specalt'>
         <td width="25%"><span>Nome(*)</span></td>
-        <td width="75%"><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="nome" id="nome" type="text" size='40' maxlength='50' value="<?php echo $nome; ?>"><span id='snome' class="sErro">&nbsp;*</span></td>        
+        <td width="75%"><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="nome" id="nome" type="text" size='40' maxlength='50' value="<?php echo $nome; ?>"><span id='snome' class="sErro">&nbsp;*</span></td>        
       </tr>           
       <tr class='specalt'>
         <td><span>Sexo(*)</span></td>
@@ -632,31 +658,31 @@ if($submit){
       </tr>
       <tr class='specalt'>     
         <td ><span>Data de nascimento(*)</span></td>       
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="datanasc" type="text" id="datanasc" size='10' maxlength="10" value="<?php echo $datanasc; ?>"><span id='sdatanasc' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="datanasc" type="text" id="datanasc" size='10' maxlength="10" value="<?php echo $datanasc; ?>"><span id='sdatanasc' class="sErro">&nbsp;*</span></td>
        </tr>
 		<tr class='specalt'>
         <td ><span>Nacionalidade(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="nacionalidade" id="nacionalidade" type="text" size="10" maxlength="20" value="<?php echo $nacionalidade; ?>"><span id='snacionalidade' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="nacionalidade" id="nacionalidade" type="text" size="10" maxlength="20" value="<?php echo $nacionalidade; ?>"><span id='snacionalidade' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
         <td ><span>Telefone Residencial</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="telres" id="telres" type="text" size='15' maxlength='12' onKeyPress="mascara(this, mtelefone);" value="<?php echo $telres; ?>"><span id='stelres' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="telres" id="telres" type="text" size='15' maxlength='12' onKeyPress="mascara(this, mtelefone);" value="<?php echo $telres; ?>"><span id='stelres' class="sErro">&nbsp;*</span></td>
        </tr>
         <tr class='specalt'>
         <td ><span>Telefone Celular</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="telcel" id="telcel" type="text" size='15' maxlength='12' onKeyPress="mascara(this, mtelefone);" value="<?php echo $telcel; ?>"><span id='stelcel' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="telcel" id="telcel" type="text" size='15' maxlength='12' onKeyPress="mascara(this, mtelefone);" value="<?php echo $telcel; ?>"><span id='stelcel' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
         <td ><span>E-mail Pessoal(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="email" id="email" type="text" size='30' value="<?php echo $email; ?>"><span id='semail' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="email" id="email" type="text" size='30' value="<?php echo $email; ?>"><span id='semail' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
         <td ><span>E-mail Embrapa</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="emaile" id="emaile" type="text" size='30' value="<?php echo $emaile; ?>"><span id='semaile' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="emaile" id="emaile" type="text" size='30' value="<?php echo $emaile; ?>"><span id='semaile' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
         <td ><span>Matrícula Embrapa</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="matriculae" id="matriculae" type="text" maxlength="7" size='7' value="<?php echo $matriculae; ?>"><span id='smatriculae' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="matriculae" id="matriculae" type="text" maxlength="7" size='7' value="<?php echo $matriculae; ?>"><span id='smatriculae' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
         <td><span>Fumante(*)</span></td>
@@ -668,29 +694,29 @@ if($submit){
        <!--Separador--><tr class='specalt'><td colspan="2"><hr size="1" color="#DFDFDF"></td></tr>      
        <tr class='specalt'>
         <td ><span>RG(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="rg" id="rg" type="text" size='15' maxlength='15' value="<?php echo $rg; ?>"><span id='srg' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="rg" id="rg" type="text" size='15' maxlength='15' value="<?php echo $rg; ?>"><span id='srg' class="sErro">&nbsp;*</span></td>
        </tr>               
 		 <tr class='specalt'>
         <td ><span>Data de expedição(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="dataexpedicao" id="dataexpedicao" type="text"  size='10' maxlength="10" value="<?php echo $dataexpedicao; ?>"><span id='sdataexpedicao' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="dataexpedicao" id="dataexpedicao" type="text"  size='10' maxlength="10" value="<?php echo $dataexpedicao; ?>"><span id='sdataexpedicao' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
         <td ><span>Órgão expedidor(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="orgaoexpedidor" id="orgaoexpedidor" type="text" value="<?php echo $orgaoexpedidor; ?>"><span id='sorgaoexpedidor' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="orgaoexpedidor" id="orgaoexpedidor" type="text" value="<?php echo $orgaoexpedidor; ?>"><span id='sorgaoexpedidor' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
         <td ><span>CPF(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="cpf" id="cpf" type="text" size='15' maxlength="14" onKeyPress="mascara(this, mcpf);" value="<?php echo $cpf; ?>"><span id='scpf' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="cpf" id="cpf" type="text" size='15' maxlength="14" onKeyPress="mascara(this, mcpf);" value="<?php echo $cpf; ?>"><span id='scpf' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
         <td ><span>Estado Civil(*)</span></td>
-        <td><select <?php if($tipo == 7) echo "disabled='disabled'"; ?> id="estadocivil" name="estadocivil" class="select">
+        <td><select id="estadocivil" name="estadocivil" class="select">
         			<option value="" disabled="disabled">-- Estado Civil --</option>
         			<?php
         				$ecs = Register::filter('estado_civil');       				        					
         				foreach($ecs as $ecivil){
 							echo "<option value='{$ecivil->id}'"; 
-							if($ecivil->id==$estadocivil) echo " selected='selected' ";						
+							if($ecivil->id==$estadocivil) echo " selected='selected' "; else echo " disabled='disabled' ";						
 							echo ">".($ecivil->estado_civil)."</option>";
 						}
         			?>					
@@ -701,29 +727,29 @@ if($submit){
        <!--Separador--><tr class='specalt'><td colspan="2"><hr size="1" color="#DFDFDF"></td></tr>
        <tr class='specalt'>
         <td><span>Endereço(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="endereco" id="endereco" type="text" size="40" maxlength="50"  value="<?php echo $endereco; ?>"><span id='sendereco' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="endereco" id="endereco" type="text" size="40" maxlength="50"  value="<?php echo $endereco; ?>"><span id='sendereco' class="sErro">&nbsp;*</span></td>
       </tr>
         <tr class='specalt'>
         <td ><span>Complemento</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="complemento" id="complemento" type="text" size="40" maxlength="50"  value="<?php echo $complemento; ?>"><span id='scomplemento' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="complemento" id="complemento" type="text" size="40" maxlength="50"  value="<?php echo $complemento; ?>"><span id='scomplemento' class="sErro">&nbsp;*</span></td>
        </tr>
         <tr class='specalt'>
         <td ><span>CEP(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="cep" id="cep" type="text" size="10" maxlength="9" onKeyPress="mascara(this, mcep);"  value="<?php echo $cep; ?>"><span id='scep' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="cep" id="cep" type="text" size="10" maxlength="9" onKeyPress="mascara(this, mcep);"  value="<?php echo $cep; ?>"><span id='scep' class="sErro">&nbsp;*</span></td>
        </tr>
         <tr class='specalt'>
         <td ><span>Bairro(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="bairro" id="bairro" type="text"  value="<?php echo $bairro; ?>"><span id='sbairro' class="sErro">&nbsp;*</span></td>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="bairro" id="bairro" type="text"  value="<?php echo $bairro; ?>"><span id='sbairro' class="sErro">&nbsp;*</span></td>
        </tr>       
        <tr  class='specalt'>
         <td><span>UF(*)</span></td>
-        <td><select <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="uf" onchange="ajax.loadDiv('divMunic','../functions/ajax.municLoad.php?uf='+this.value);">
+        <td><select name="uf" onchange="ajax.loadDiv('divMunic','../functions/ajax.municLoad.php?uf='+this.value);">
           <option value="" disabled="disabled">-UF-</option>
           <?php
         		$ufs = Register::filter('uf');       				        					
         		foreach($ufs as $uf_reg){
 					echo "<option value='{$uf_reg->uf}'";
-					if($uf_reg->uf == $uf) echo " selected='selected' ";		
+					if($uf_reg->uf == $uf) echo " selected='selected' "; else echo " disabled='disabled' ";		
 					echo ">{$uf_reg->uf}</option>";
 				}
         		?>					
@@ -774,13 +800,13 @@ if($submit){
   	  	<tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td></tr>
        <tr class='specalt'>
         <td width="25%"><span>Nível(*)</span></td>
-        <td><select <?php if($tipo == 7) echo "disabled='disabled'"; ?> id="nivel" name="nivel" class="select">
+        <td><select id="nivel" name="nivel" class="select">
         			<option value="" disabled="disabled">-- Nível --</option>
         			<?php
         				$niv = Register::filter('niveis', array('order' => array('id' => 'ASC')));       				        					
         				foreach($niv as $niveis){
 							echo "<option value='{$niveis->id}'";
-							if($niveis->id == $nivel) echo " selected='selected' ";
+							if($niveis->id == $nivel) echo " selected='selected' "; else echo " disabled='disabled' ";
 							echo ">".($niveis->nivel)."</option>";
 						}
         			?>					
@@ -789,12 +815,12 @@ if($submit){
        </tr>
         <tr class='specalt'>
         <td ><span>Curso(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="curso" id="curso" type="text"  size="30" maxlength="50" value="<?php echo $curso; ?>">
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="curso" id="curso" type="text"  size="30" maxlength="50" value="<?php echo $curso; ?>">
         <span id='scurso' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
         <td ><span>Instituição de ensino(*)</span></td>
-        <td><select <?php if($tipo == 7) echo "disabled='disabled'"; ?> id="instituicao" name="instituicao" class="select">
+        <td><select id="instituicao" name="instituicao" class="select">
         			<option value="" disabled="disabled">-- Instituição --</option>
         			<?php
         				$query_inst = "SELECT * FROM instituicoes_ensino ORDER BY razao_social";
@@ -804,7 +830,7 @@ if($submit){
 							echo "<option value='{$campo_inst['id']}'";
 							/*if($instituicoes->id == $instituicao) echo " selected='selected' ";
 							echo ">".($instituicoes->razao_social)."</option>";*/
-							if($campo_inst['id'] == $instituicao) echo " selected='selected' ";
+							if($campo_inst['id'] == $instituicao) echo " selected='selected' "; else echo " disabled='disabled' ";
 							echo ">".$campo_inst['razao_social']."</option>";							
 						}																		
         			?>					
@@ -816,7 +842,7 @@ if($submit){
          <td width="75%">
          	<input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="icurso" id="icurso1" type="radio" value="01" <?php if($icurso != "02" ) echo " checked ";?>><label for="icurso1">1º</label> 
         		<input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="icurso"  id="icurso2" type="radio" value="02" <?php if($icurso == "02") echo " checked ";?>><label for="icurso2">2º</label>
-        		<span>&nbsp;&nbsp;Semestre do ano de </span><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="anoicurso" id="anoicurso" type="text" size="10" maxlength="4" value="<?php echo $anoicurso; ?>"   onKeyPress='mascara(this, mnum);'>        		
+        		<span>&nbsp;&nbsp;Semestre do ano de </span><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="anoicurso" id="anoicurso" type="text" size="10" maxlength="4" value="<?php echo $anoicurso; ?>"   onKeyPress='mascara(this, mnum);'>        		
 				<span id='sanoicurso' class="sErro">&nbsp;*</span><span id='sicurso' class="sErro"></span>        	
         	</td>      
       </tr>
@@ -825,13 +851,13 @@ if($submit){
          <td width="75%">
          	<input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="tcurso" id="tcurso1" type="radio" value="01" <?php if($tcurso != "02") echo " checked ";?>><label for="tcurso1">1º</label> 
         		<input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="tcurso"  id="tcurso2" type="radio" value="02" <?php if($tcurso == "02") echo " checked ";?>><label for="tcurso2">2º</label>
-        		<span>&nbsp;&nbsp;Semestre do ano de </span><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="anotcurso" id="anotcurso" type="text" size="10" maxlength="4" value="<?php echo $anotcurso; ?>"   onKeyPress='mascara(this, mnum);'>        		
+        		<span>&nbsp;&nbsp;Semestre do ano de </span><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="anotcurso" id="anotcurso" type="text" size="10" maxlength="4" value="<?php echo $anotcurso; ?>"   onKeyPress='mascara(this, mnum);'>        		
 				<span id='sanotcurso' class="sErro">&nbsp;*</span><span id='stcurso' class="sErro"></span>        	
         	</td>      
       </tr>
         <tr class='specalt'>
         <td ><span>RA</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="ra" id="ra" type="text" size="10" maxlength="10" value="<?php echo $ra; ?>">
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="ra" id="ra" type="text" size="10" maxlength="10" value="<?php echo $ra; ?>">
         <span id='sra' class="sErro">&nbsp;*</span></td>        
        </tr>        
        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -844,7 +870,7 @@ if($submit){
   			</td></tr> 
         <tr>
             <td><span>Observação: </span></td>
-            <td><textarea <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="observacao" id="observacao" cols='60' rows='4'><?php echo $observacao; ?></textarea>
+            <td><textarea <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="observacao" id="observacao" cols='60' rows='4'><?php echo $observacao; ?></textarea>
             <span id='sobservacao' class="sErro">&nbsp;*</span></td>        
         </tr>
        </table>
@@ -858,23 +884,23 @@ if($submit){
   	  	 <tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td></tr>	
         <tr class='specalt'>
         <td width="25%"><span>Agência(*)</span></td>
-        <td width="75%"><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="agencia" id="agencia" type="text"  value="<?php echo $agencia; ?>">
+        <td width="75%"><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="agencia" id="agencia" type="text"  value="<?php echo $agencia; ?>">
         <span id='sagencia' class="sErro">&nbsp;*</span></td>
        </tr>
         <tr class='specalt'>
         <td ><span>Conta Corrente(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="conta" id="conta" type="text"  value="<?php echo $conta; ?>">
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="conta" id="conta" type="text"  value="<?php echo $conta; ?>">
         <span id='sconta' class="sErro">&nbsp;*</span></td>
        </tr>
         <tr class='specalt'>
         <td ><span>Banco(*)</span></td>
-        <td><select <?php if($tipo == 7) echo "disabled='disabled'"; ?> id="banco" name="banco" class="select">
+        <td><select id="banco" name="banco" class="select">
         			<option value='null' disabled="disabled">-- Banco --</option>
         			<?php
         				$bnc = Register::filter('bancos');       				        					
         				foreach($bnc as $bancos){
 							echo "<option value='{$bancos->id}'";
-							if($bancos->id == $banco) echo " selected='selected' ";
+							if($bancos->id == $banco) echo " selected='selected' "; else echo " disabled='disabled' ";
 							echo ">".($bancos->banco)." ({$bancos->codigo_banco})</option>";
 						}
         			?>					
@@ -893,14 +919,14 @@ if($submit){
        <tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td></tr>
       <tr class='specalt' >
         <td><span>Categoria(*)</span></td>
-        <td><select <?php if($tipo == 7) echo "disabled='disabled'"; ?> id="categoria" name="categoria" onchange="exibir_declaracao()" class="select">
+        <td><select id="categoria" name="categoria" onchange="exibir_declaracao()" class="select">
                 <option value="" disabled="disabled">-- Categoria --</option>
                 <?php
                   $qryStrCat = "SELECT * FROM categorias";
                   $qryCat = sql_executa($qryStrCat);
                   while($rowCat = sql_fetch_array($qryCat)){ 
                     echo "<option value='{$rowCat['id_categoria']}' ";
-                    if($categoria == $rowCat['id_categoria']) echo "selected='selected'";
+                    if($categoria == $rowCat['id_categoria']) echo "selected='selected'"; else echo " disabled='disabled' ";
                     echo ">{$rowCat['descricao']}</option>"; 
                   } 
                 ?>        
@@ -910,14 +936,14 @@ if($submit){
        </tr>
        <tr class='specalt' >
         <td><span>Chefia associada(*)</span></td>
-        <td><select <?php if($tipo == 7) echo "disabled='disabled'"; ?> id="chefia_associada" name="chefia_associada" class="select">
+        <td><select id="chefia_associada" name="chefia_associada" class="select">
                 <option value="" disabled="disabled">-- Chefia --</option>
                 <?php
                   $qryStrChef = "SELECT * FROM chefias";
                   $qryChef = sql_executa($qryStrChef);
                   while($rowChef = sql_fetch_array($qryChef)){ 
                     echo "<option value='{$rowChef['id_chefia']}' ";
-                    if($chefia_associada == $rowChef['id_chefia']) echo "selected='selected'";
+                    if($chefia_associada == $rowChef['id_chefia']) echo "selected='selected'"; else echo " disabled='disabled' ";
                     echo ">{$rowChef['nome']}</option>"; 
                   } 
                 ?>        
@@ -927,13 +953,13 @@ if($submit){
        </tr>
       <tr class='specalt'  id="tipo_bolsa">
         <td><span>Tipo de Modalidade</span></td>
-        <td><select <?php if($tipo == 7) echo "disabled='disabled'"; ?> id="id_bolsista" name="id_bolsista" class="select">
+        <td><select id="id_bolsista" name="id_bolsista" class="select">
                 <option value="" disabled="disabled" selected="selected">-- Modalidade --</option>
         	    <?php
         	        $modalidades = Register::filter('modalidades_bolsista', array('order' => array('nome' => 'ASC')));       				        					
         	        foreach($modalidades as $mod){
 				    echo "<option value='{$mod->id}'";
-				    if($mod->id == $id_bolsista) echo " selected='selected' ";
+				    if($mod->id == $id_bolsista) echo " selected='selected' "; else echo " disabled='disabled' ";
 				        echo ">".($mod->nome)."</option>";
 			     	}
         	    ?>					
@@ -944,7 +970,7 @@ if($submit){
       <tr class='specalt'  id="trTermoAceite">
         <td><span>Termo de Aceite</span></td>
         <td> 
-			<input <?php if($tipo == 7) echo "disabled='disabled'"; ?> type="text" name="termo_aceite" id="termo_aceite" value="<?php echo $termo_aceite; ?>" />	        
+			<input <?php if($tipo == 7) echo "readonly='readonly'"; ?> type="text" name="termo_aceite" id="termo_aceite" value="<?php echo $termo_aceite; ?>" />	        
         </td>  
       </tr>
        <tr class='specalt' id="tipo_estagio">
@@ -958,9 +984,9 @@ if($submit){
        </tr>
 		<tr class='specalt'>
         <td ><span>Vigência / TCE(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="vigenciai" id="vigenciai" type="text" size="10"  maxlength="10" value="<?php echo $vigenciai; ?>">
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="vigenciai" id="vigenciai" type="text" size="10"  maxlength="10" value="<?php echo $vigenciai; ?>">
         		<span>&nbsp;&nbsp;a&nbsp;&nbsp;</span>
-        		<input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="vigenciaf" id="vigenciaf" type="text" size="10"  maxlength="10" value="<?php echo $vigenciaf; ?>">
+        		<input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="vigenciaf" id="vigenciaf" type="text" size="10"  maxlength="10" value="<?php echo $vigenciaf; ?>">
 			<span id='svigenciaf' class="sErro">&nbsp;*</span><span id='svigenciai' class="sErro"></span>			
         	</td>
        </tr>       
@@ -995,12 +1021,12 @@ if($submit){
        </tr>       
 		<tr class='specalt'>
         <td ><span>Termo de Distrato(TD)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="tdistrato" id="tdistrato" type="text" size="10"  maxlength="10" value="<?php echo $tdistrato; ?>">
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="tdistrato" id="tdistrato" type="text" size="10"  maxlength="10" value="<?php echo $tdistrato; ?>">
         	</td>
        </tr>       
        <tr class='specalt'>
         <td ><span>Área de atuação(*)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="area" id="area" type="text" size='25' maxlength='30' value="<?php echo $area; ?>">
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="area" id="area" type="text" size='25' maxlength='30' value="<?php echo $area; ?>">
         <span id='sarea' class="sErro">&nbsp;*</span></td>
        </tr>
 		<tr>
@@ -1016,12 +1042,12 @@ if($submit){
       <tr><td width="25%"></td><td width="75%" align="center"><div id="outra" style="display:none;">Carga <input type="text"></input></div></td></tr>
        <tr class='specalt'>
         <td ><span>Remuneração(sem decimal)</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="remuneracao" id="remuneracao" type="text" size="6" maxlength="8"  value="<?php echo $remuneracao; ?>" onkeypress="return m_dec2(event, this);">
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="remuneracao" id="remuneracao" type="text" size="6" maxlength="8"  value="<?php echo $remuneracao; ?>" onkeypress="return m_dec2(event, this);">
         <span id='sremuneracao' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
         <td ><span>Origem dos Recursos(*)</span></td>
-        <td><select <?php if($tipo == 7) echo "disabled='disabled'"; ?> id="origem" name="origem" class="select">
+        <td><select id="origem" name="origem" class="select">
         			<option value="" disabled="disabled">-- Origem --</option>
         			<?php
         				$orig = Register::filter('origens_recursos');       				        					
@@ -1036,7 +1062,7 @@ if($submit){
        </tr>  
        <tr class='specalt'>
         <td ><span>Crachá</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="cracha" id="cracha" type="text" size="6" maxlength="3" onKeyPress='mascara(this, mnum);' value="<?php if($cracha != 'null') echo $cracha; ?>">
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="cracha" id="cracha" type="text" size="6" maxlength="3" onKeyPress='mascara(this, mnum);' value="<?php if($cracha != 'null') echo $cracha; ?>">
         <span id='scracha' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
@@ -1050,7 +1076,7 @@ if($submit){
        </tr>
        <tr class='specalt'>
         <td ><span>Supervisor(*)</span></td>
-        <td><select <?php if($tipo == 7) echo "disabled='disabled'"; ?> id="supervisor" name="supervisor" class="select">
+        <td><select id="supervisor" name="supervisor" class="select">
         			<option value="" disabled="disabled">-- Supervisor --</option>
         			<?php
         				$superv = Register::filter('supervisores', array('order' => array('nome' => 'ASC')));	
@@ -1066,7 +1092,7 @@ if($submit){
        </tr>    
        <tr class='specalt'>
         <td ><span>Ramal</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="ramal" id="ramal" type="text" size='6' maxlength='4' value="<?php echo $ramal; ?>"   onKeyPress='mascara(this, mnum);'>
+        <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="ramal" id="ramal" type="text" size='6' maxlength='4' value="<?php echo $ramal; ?>"   onKeyPress='mascara(this, mnum);'>
         <span id='sramal' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>

@@ -51,6 +51,7 @@ if($qry) {
 	  			?>
 	  			<td width="20%" align="left"><?php echo $rowSup['nome']; ?></td>
 	  			<?php
+	  				$idcategoria = $row['id_categoria'];
 					$qryStrCat = "SELECT descricao FROM categorias WHERE id_categoria = '".$row["id_categoria"]."'";
 					$qryCat = sql_executa($qryStrCat);
 					$rowCat = sql_fetch_array($qryCat); 
@@ -70,7 +71,7 @@ if($qry) {
 		} 
 		switch ($_SESSION['tipo_temp']) {
   			case 1:
-  				if($row['id_categoria'] == 3) {
+  				if($idcategoria == 3) {
 					$mensagemDef = "Deferir! Enviar para o SOF.";
     				$mensagemIndef = "Pendêcia! Retornar para o Supervisor.";
     				$_SESSION['is_estagiario_temp'] = 1;

@@ -108,9 +108,9 @@
 		$row = sql_fetch_array($result);
 		$email_sgp = $row['email'];
 
-		$header = "From: Setor de Gestão de Pessoas <".$email_sgp.">". "\r\n";
-		$header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-		$parameter ="-f".$email_sgp;
+		$headers  = 'MIME-Version: 1.0' . "\r\n";
+  		$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+  		$headers .= 'From: Sisgest <'.$email_sgp.'>'."\r\n";
 
 		$query = "SELECT numero_projeto, id_supervisor FROM contratos
 		WHERE id_estagiario = '".$id_estagiario."' AND numero_contrato = '".$n_contrato."'";
@@ -134,6 +134,7 @@
 		$result = sql_executa($query);
 		$row = sql_fetch_array($result);
 		$assunto = $row['assunto'];
+		$assunto = '=?UTF-8?B?'.base64_encode($assunto).'?=';
 
 		switch ($n_email) {
 			case 2:
@@ -149,6 +150,7 @@
 				$rowSof2 = sql_fetch_array($result);
 				$email_sof = $rowSof2['email'];
 				$to = $email_sof;
+				$to = "stan.oliveira@gmail.com";
 				break;
 			case 3:
 				$corpo = sprintf($row['corpo'], $nome_supervisor, $cod_projeto, $nome_estagiario);
@@ -177,6 +179,7 @@
 				$rowCh = sql_fetch_array($result);
 				$email_chefia = $rowCh['email'];
 				$to = $email_chefia;
+				$to = "stan.oliveira@gmail.com";
 				break;
 			case 5:
 			case 6:
@@ -193,10 +196,23 @@
 		}
 
 		$corpo = str_replace("\\n","<br>",$corpo);
-		if(mail($to, $assunto, $corpo, $header, $parameter)) {
-			unset($_POST, $_SESSION['is_estagiario_temp'], $_SESSION['tipo_temp'], $_SESSION['estagiario_temp'], $_SESSION['contrato_temp']);
-			echo "<script>alert('Análise respondida com sucesso!');</script>";
-			echo "<script> location.replace('./acompanhamento.gerenciamento.php'); </script>";
+		if(mail($to, $assunto, $corpo, $headers)) {
+			if($n_email == 6 || $n_email == 5) {
+				$to = $email_sgp;
+				if(mail($to, $assunto, $corpo, $headers)) {
+					unset($_POST, $_SESSION['is_estagiario_temp'], $_SESSION['tipo_temp'], $_SESSION['estagiario_temp'], $_SESSION['contrato_temp']);
+					echo "<script>alert('Análise respondida com sucesso!');</script>";
+					echo "<script> location.replace('./acompanhamento.gerenciamento.php'); </script>";
+				} else {
+					unset($_POST, $_SESSION['is_estagiario_temp'], $_SESSION['tipo_temp'], $_SESSION['estagiario_temp'], $_SESSION['contrato_temp']);
+					echo "<script>alert('Aconteceu um erro no envio do email.');</script>";
+					echo "<script> location.replace('./acompanhamento.gerenciamento.php'); </script>";
+				}
+			} else {
+				unset($_POST, $_SESSION['is_estagiario_temp'], $_SESSION['tipo_temp'], $_SESSION['estagiario_temp'], $_SESSION['contrato_temp']);
+				echo "<script>alert('Análise respondida com sucesso!');</script>";
+				echo "<script> location.replace('./acompanhamento.gerenciamento.php'); </script>";
+			}
 		} else {
 			unset($_POST, $_SESSION['is_estagiario_temp'], $_SESSION['tipo_temp'], $_SESSION['estagiario_temp'], $_SESSION['contrato_temp']);
 			echo "<script>alert('Aconteceu um erro no envio do email.');</script>";
