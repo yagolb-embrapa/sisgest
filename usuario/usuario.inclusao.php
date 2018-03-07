@@ -47,7 +47,7 @@ require_once("../sessions.php");
 		<div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div>
 		
 		<?php
-if($_SESSION['USERNIVEL'] != 'a'){
+if($_SESSION['USERNIVEL'] != 'a'  && $_SESSION['USERNIVEL'] != 'g'){
 	echo "Você não tem permissão para acessar essa área do sistema.";
 	exit(); 
 }

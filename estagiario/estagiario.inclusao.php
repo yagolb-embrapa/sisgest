@@ -135,12 +135,14 @@ if($submit){
   $foto_arq = $_FILES["arq_foto"];
   $atestado_matricula_arq = $_FILES["arq_atestado_matricula"];
   $plano_trabalho_arq = $_FILES["arq_plano_trabalho"];
+  $historico_escolar_arq = $_FILES["arq_historico_escolar"];
   $declaracao_arq = $_FILES["arq_declaracao"];
   if(!($cpf_arq["error"] == 0)) $erros[] = 'arq_cpf';
   if(!($rg_arq["error"] == 0)) $erros[] = 'arq_rg';
   if(!($foto_arq["error"] == 0)) $erros[] = 'arq_foto';
   if(!($atestado_matricula_arq["error"] == 0)) $erros[] = 'arq_atestado_matricula';
   if(!($plano_trabalho_arq["error"] == 0)) $erros[] = 'arq_plano_trabalho';
+  if(!($historico_escolar_arq["error"] == 0)) $erros[] = 'arq_historico_escolar';
   if($categoria == 2) if(!($declaracao_arq["error"] == 0)) $erros[] = 'arq_declaracao';
 
   //verifica se os arquivos possuem extensoes validas
@@ -155,6 +157,8 @@ if($submit){
       $erros[] = 'arq_atestado_matricula';
     if(!(validExtension(".pdf", $plano_trabalho_arq) || validExtension(".jpg", $plano_trabalho_arq) || validExtension(".jpeg", $plano_trabalho_arq) || validExtension(".png", $plano_trabalho_arq)))
       $erros[] = 'arq_plano_trabalho';
+    if(!(validExtension(".pdf", $historico_escolar_arq) || validExtension(".jpg", $historico_escolar_arq) || validExtension(".jpeg", $historico_escolar_arq) || validExtension(".png", $historico_escolar_arq)))
+      $erros[] = 'arq_historico_escolar';
     if($categoria == 2) {
       if(!(validExtension(".pdf", $declaracao_arq) || validExtension(".jpg", $declaracao_arq) || validExtension(".jpeg", $declaracao_arq) || validExtension(".png", $declaracao_arq)))
       $erros[] = 'arq_declaracao';
@@ -167,6 +171,7 @@ if($submit){
       if(!($foto_ext = uploadFile($foto_arq, $cpf."-foto"))) $erros[] = 'arq_foto';
       if(!($atestado_matricula_ext = uploadFile($atestado_matricula_arq, $cpf."-atestado_matricula"))) $erros[] = 'arq_atestado_matricula';
       if(!($plano_trabalho_ext = uploadFile($plano_trabalho_arq, $cpf."-plano_trabalho"))) $erros[] = 'arq_plano_trabalho';
+      if(!($historico_escolar_ext = uploadFile($historico_escolar_arq, $cpf."-historico_escolar"))) $erros[] = 'arq_historico_escolar';
       if($categoria == 2) {
         if(!($declaracao_ext = uploadFile($declaracao_arq, $cpf."-declaracao"))) 
           $erros[] = 'arq_declaracao';
@@ -242,8 +247,8 @@ if($submit){
 			$result_estag = sql_executa($query_estag);
 			$campo_estag = sql_fetch_array($result_estag);	
 
-      $query = "INSERT INTO contratos (estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, id_bolsista, termo_aceite, id_categoria, id_status, id_chefia_associada, ext_cpf, ext_rg, ext_foto, ext_plano_trabalho, ext_atestado_matricula, ext_declaracao, numero_contrato, id_estagiario, status, tipo_vinculo) 
-    VALUES ('$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $id_bolsista, '$termo_aceite', $categoria, 1, $chefia_associada, '$cpf_ext', '$rg_ext', '$foto_ext', '$plano_trabalho_ext', '$atestado_matricula_ext', '$declaracao_ext', 1, {$campo_estag['id']}, 3, 'n');";
+      $query = "INSERT INTO contratos (estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, id_bolsista, termo_aceite, id_categoria, id_status, id_chefia_associada, ext_cpf, ext_rg, ext_foto, ext_plano_trabalho, ext_historico_escolar, ext_atestado_matricula, ext_declaracao, numero_contrato, id_estagiario, status, tipo_vinculo) 
+    VALUES ('$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $id_bolsista, '$termo_aceite', $categoria, 1, $chefia_associada, '$cpf_ext', '$rg_ext', '$foto_ext', '$plano_trabalho_ext', '$historico_escolar_ext', '$atestado_matricula_ext', '$declaracao_ext', 1, {$campo_estag['id']}, 3, 'n');";
 
 
     $result2 = sql_executa($query);		
@@ -388,11 +393,11 @@ if($submit){
        </tr>
        <tr class='specalt'>
         <td ><span>Telefone Residencial</span></td>
-        <td><input name="telres" id="telres" type="text" size='15' maxlength='12' onKeyPress="mascara(this, mtelefone);" value="<?php echo $telres; ?>"><span id='stelres' class="sErro">&nbsp;*</span></td>
+        <td><input name="telres" id="telres" type="text" size='15' maxlength='12' onKeyPress="mascara(this, mtelefonefixo);" value="<?php echo $telres; ?>"><span id='stelres' class="sErro">&nbsp;*</span></td>
        </tr>
         <tr class='specalt'>
         <td ><span>Telefone Celular</span></td>
-        <td><input name="telcel" id="telcel" type="text" size='15' maxlength='12' onKeyPress="mascara(this, mtelefone);" value="<?php echo $telcel; ?>"><span id='stelcel' class="sErro">&nbsp;*</span></td>
+        <td><input name="telcel" id="telcel" type="text" size='15' maxlength='13' onKeyPress="mascara(this, mtelefone);" value="<?php echo $telcel; ?>"><span id='stelcel' class="sErro">&nbsp;*</span></td>
        </tr>
        <tr class='specalt'>
         <td ><span>E-mail Pessoal(*)</span></td>
@@ -824,6 +829,11 @@ if($submit){
           <td width="25%"><span>Plano de trabalho(*)</span></td>
           <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input name="arq_plano_trabalho" id="arq_plano_trabalho" type="file">
           <span id='sarq_plano_trabalho' class="sErro">&nbsp;*</span></td>
+        </tr>
+        <tr class="specalt">
+          <td width="25%"><span>Histórico escolar(*)</span></td>
+          <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input name="arq_historico_escolar" id="arq_historico_escolar" type="file">
+          <span id='sarq_historico_escolar' class="sErro">&nbsp;*</span></td>
         </tr>
         <tr class="specalt">
           <td width="25%"><span id="texto_declaracao">Declaração PIBIC(*)</span></td>

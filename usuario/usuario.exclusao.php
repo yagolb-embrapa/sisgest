@@ -4,7 +4,7 @@ $qtd_abas = 0;
 require_once("../functions/functions.database.php");//temporario 
 require_once("../functions/functions.forms.php");
 require_once("../sessions.php");
-if($_SESSION['USERNIVEL'] != 'a'){
+if($_SESSION['USERNIVEL'] != 'a'  && $_SESSION['USERNIVEL'] != 'g'){
 	echo "Você não tem permissão para acessar essa área do sistema.";
 	exit(); 
 }

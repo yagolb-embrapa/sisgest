@@ -93,7 +93,7 @@ Criação da tabela "emails_corpo"
 Tabela "users"
 	Criação da coluna "id_supervisor": integer, FK
 
-Tabela "estagiarios"
+*******Tabela "estagiarios"
 	Criação da coluna "id_categoria": integer, FK
 	Criação da coluna "id_status": integer, FK
 	Criação da coluna "ext_rg": character varying(4)
@@ -101,6 +101,7 @@ Tabela "estagiarios"
 	Criação da coluna "ext_foto": character varying(4)
 	Criação da coluna "ext_atestado_matricula": character varying(4)
 	Criação da coluna "ext_plano_trabalho": character varying(4)
+	Criação da coluna "ext_historico_escolar": character varying(4)
 	Criação da coluna "ext_declaracao": character varying(4)
 	Criação da coluna "id_chefia_associada": integer, FK
 	
@@ -146,6 +147,7 @@ Desmembrou-se a tabela "estagiarios" em duas:
 		ext_foto character varying(4)
 		ext_atestado_matricula character varying(4)
 		ext_plano_trabalho character varying(4)
+		ext_historico_escolar character varying(4)
 		ext_declaracao character varying(4)
 		matricula_embrapa character varying(7)
 

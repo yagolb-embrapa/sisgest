@@ -501,6 +501,10 @@ if($msg_erro){
         <td ><span>Plano de Trabalho</span></td>
         <td><span><?php echo ($campo['ext_plano_trabalho'] != null)?"<a target='_blank' href='./arquivos/".$campo['cpf']."-plano_trabalho.".$campo['ext_plano_trabalho']."'> <i>Visualizar Imagem</i> </a>":" <i>Documento não enviado</i> "; ?></span></td>
        </tr> 
+       <tr class='specalt'>
+        <td ><span>Histórico escolar</span></td>
+        <td><span><?php echo ($campo['ext_historico_escolar'] != null)?"<a target='_blank' href='./arquivos/".$campo['cpf']."-historico_escolar.".$campo['ext_historico_escolar']."'> <i>Visualizar Imagem</i> </a>":" <i>Documento não enviado</i> "; ?></span></td>
+       </tr> 
        <?php
           if($campo['id_categoria'] == 2){
             ?>

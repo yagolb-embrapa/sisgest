@@ -120,6 +120,14 @@ function mtelefone(v)
 {
 	v=v.replace(/\D/g,"") //Remove tudo o que n�o � d�gito	
 	v=v.replace(/(\d{2})(\d)/,"$1 $2") //Coloca um ponto entre o terceiro e o quarto d�gitos
+	v=v.replace(/(\d{5})(\d)/,"$1-$2") //Coloca um ponto entre o terceiro e o quarto d�gitos
+	return v
+}
+
+function mtelefonefixo(v)
+{
+	v=v.replace(/\D/g,"") //Remove tudo o que n�o � d�gito	
+	v=v.replace(/(\d{2})(\d)/,"$1 $2") //Coloca um ponto entre o terceiro e o quarto d�gitos
 	v=v.replace(/(\d{4})(\d)/,"$1-$2") //Coloca um ponto entre o terceiro e o quarto d�gitos
 	return v
 }

@@ -110,8 +110,8 @@ function show_menu ( $id,  $permissoes, $funcao )
 			<ul id='nav2'> 
 				<li ><span>Ajuda</span>		
 					<ul>";										
-						echo "<li><span onclick=\"top.location.href='../ajuda/ajuda.tutorial.pdf';\">
-							Tutorial</span></li>";	
+						echo "<li><a target='_blank' href='../ajuda/ajuda.tutorial.pdf'>
+							Tutorial</a></li>";	
 						echo"
 					</ul>
 				</li> 
@@ -145,8 +145,8 @@ function show_menu ( $id,  $permissoes, $funcao )
 			<ul id='nav2'> 
 				<li ><span>Ajuda</span>		
 					<ul>";										
-						echo "<li><span onclick=\"top.location.href='../ajuda/ajuda.tutorial.pdf';\">
-							Tutorial</span></li>";	
+						echo "<li><a target='_blank' href='../ajuda/ajuda.tutorial.pdf'>
+							Tutorial</a></li>";	
 						echo"
 					</ul>
 				</li> 
@@ -190,8 +190,8 @@ function show_menu ( $id,  $permissoes, $funcao )
 			<ul id='nav2'> 
 				<li ><span>Ajuda</span>		
 					<ul>";										
-						echo "<li><span onclick=\"top.location.href='../ajuda/ajuda.tutorial.pdf';\">
-							Tutorial</span></li>";	
+						echo "<li><a target='_blank' href='../ajuda/ajuda.tutorial.pdf'>
+							Tutorial</a></li>";	
 						echo"
 					</ul>
 				</li> 
@@ -311,8 +311,8 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 			<ul id='nav2'> 
 				<li ><span>Ajuda</span>		
 					<ul>";										
-						echo "<li><span onclick=\"top.location.href='ajuda/ajuda.tutorial.pdf';\">
-							Tutorial</span></li>";	
+						echo "<li><a target='_blank' href='ajuda/ajuda.tutorial.pdf'>
+							Tutorial</a></li>";	
 						echo"
 					</ul>
 				</li> 
@@ -346,8 +346,8 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 			<ul id='nav2'> 
 				<li ><span>Ajuda</span>		
 					<ul>";										
-						echo "<li><span onclick=\"top.location.href='ajuda/ajuda.tutorial.pdf';\">
-							Tutorial</span></li>";	
+						echo "<li><a target='_blank' href='ajuda/ajuda.tutorial.pdf'>
+							Tutorial</a></li>";	
 						echo"
 					</ul>
 				</li> 
@@ -391,8 +391,8 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 			<ul id='nav2'> 
 				<li ><span>Ajuda</span>		
 					<ul>";										
-						echo "<li><span onclick=\"top.location.href='ajuda/ajuda.tutorial.pdf';\">
-							Tutorial</span></li>";	
+						echo "<li><a target='_blank' href='ajuda/ajuda.tutorial.pdf'>
+							Tutorial</a></li>";	
 						echo"
 					</ul>
 				</li> 

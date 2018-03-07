@@ -47,7 +47,7 @@ require_once("../sessions.php");
 		<div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div>
 		
 		<?php
-if($_SESSION['USERNIVEL'] != 'a'){
+if($_SESSION['USERNIVEL'] != 'a'  && $_SESSION['USERNIVEL'] != 'g'){
 	echo "Você não tem permissão para acessar essa área do sistema.";
 	exit(); 
 }			
@@ -175,9 +175,13 @@ if($submit){
        <tr class='specalt'>
         <td><span>Nível (*)</span></td>
      		<td><select name='nivel' id='nivel'>  
-        		<option value='' <?php if($nivel != 'a' && $nivel != 'u') echo selected; ?> >Selecione</option>
         		<option value='a' <?php if($nivel == 'a') echo selected; ?> >Administrador</option>
         		<option value='u' <?php if($nivel == 'u') echo selected; ?> >Usuário</option>
+        		<option value='g' <?php if($nivel == 'g') echo selected; ?> >SGP</option>
+        		<option value='f' <?php if($nivel == 'f') echo selected; ?> >SOF</option>
+        		<option value='d' <?php if($nivel == 'd') echo selected; ?> >CHADM</option>
+        		<option value='p' <?php if($nivel == 'p') echo selected; ?> >CHPD</option>
+        		<option value='t' <?php if($nivel == 't') echo selected; ?> >CHTT</option>
         </select>
         <span id='snivel' class="sErro">&nbsp;*</span>
         </td>	

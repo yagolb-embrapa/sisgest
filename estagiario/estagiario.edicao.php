@@ -1,6 +1,6 @@
 <?php 
 
-$qtd_abas = 7;
+$qtd_abas = 5;
 require_once("../inc/header.php");
 
 include("../functions/functions.database.php");//temporario 
@@ -66,7 +66,7 @@ if($submit){
 	$municipio = $_POST['municipio'];//pega manualmente pq como esta em outra pagina, nao ta pegando com a linha acima
 	
 	//colocar aqui os campos que podem ser vazios no formulario
-	$excecoes_vazio = array("telres","telcel","emaile","matriculae","complemento","ra","ramal","numero_projeto","nome_projeto","observacao","cargaoutra","cracha","beneficiario0","beneficiario1","beneficiario2","beneficiario3","beneficiario4","parentesco0","parentesco1","parentesco2","parentesco3","parentesco4","select_ano","novo_periodo","novo_horas_mes","novo_horas_trabalhadas","id_beneficiario0","id_beneficiario1","id_beneficiario2","id_beneficiario3","id_beneficiario4","remuneracao","relat_ano","status","fumante","obrig","arq_cpf","arq_rg","arq_foto","arq_declaracao","arq_atestado_matricula","arq_plano_trabalho");
+	$excecoes_vazio = array("telres","telcel","emaile","matriculae","complemento","ra","ramal","numero_projeto","nome_projeto","observacao","cargaoutra","cracha","beneficiario0","beneficiario1","beneficiario2","beneficiario3","beneficiario4","parentesco0","parentesco1","parentesco2","parentesco3","parentesco4","select_ano","novo_periodo","novo_horas_mes","novo_horas_trabalhadas","id_beneficiario0","id_beneficiario1","id_beneficiario2","id_beneficiario3","id_beneficiario4","remuneracao","relat_ano","status","fumante","obrig","arq_cpf","arq_rg","arq_foto","arq_declaracao","arq_atestado_matricula","arq_plano_trabalho", "arq_historico_escolar");
     if($tipo == 7) {
         $excecoes_vazio[] = "sexo";
         $excecoes_vazio[] = "fumante";
@@ -179,12 +179,14 @@ if($submit){
     $foto_arq = $_FILES["arq_foto"];
     $atestado_matricula_arq = $_FILES["arq_atestado_matricula"];
     $plano_trabalho_arq = $_FILES["arq_plano_trabalho"];
+    $historico_escolar_arq = $_FILES["arq_historico_escolar"];
     $declaracao_arq = $_FILES["arq_declaracao"];
     if(is_uploaded_file($cpf_arq['tmp_name'])) if(!($cpf_arq["error"] == 0)) $erros[] = 'arq_cpf'; else $flag_cpf = 1;
     if(is_uploaded_file($rg_arq['tmp_name'])) if(!($rg_arq["error"] == 0)) $erros[] = 'arq_rg'; else $flag_rg = 1;
     if(is_uploaded_file($foto_arq['tmp_name'])) if(!($foto_arq["error"] == 0)) $erros[] = 'arq_foto'; else $flag_foto = 1;
     if(is_uploaded_file($atestado_matricula_arq['tmp_name'])) if(!($atestado_matricula_arq["error"] == 0)) $erros[] = 'arq_atestado_matricula'; else $flag_atestado_matricula = 1;
     if(is_uploaded_file($plano_trabalho_arq['tmp_name'])) if(!($plano_trabalho_arq["error"] == 0)) $erros[] = 'arq_plano_trabalho'; else $flag_plano_trabalho = 1;
+    if(is_uploaded_file($historico_escolar_arq['tmp_name'])) if(!($historico_escolar_arq["error"] == 0)) $erros[] = 'arq_historico_escolar'; else $flag_historico_escolar = 1;
     if($categoria == 2) if(is_uploaded_file($declaracao_arq['tmp_name'])) if(!($declaracao_arq["error"] == 0)) $erros[] = 'arq_declaracao'; else $flag_declaracao = 1;
 
     //verifica se os arquivos possuem extensoes validas
@@ -204,6 +206,9 @@ if($submit){
     if($flag_plano_trabalho == 1)
         if(!(validExtension(".pdf", $plano_trabalho_arq) || validExtension(".jpg", $plano_trabalho_arq) || validExtension(".jpeg", $plano_trabalho_arq) || validExtension(".png", $plano_trabalho_arq)))
             $erros[] = 'arq_plano_trabalho';
+    if($flag_historico_escolar == 1)
+        if(!(validExtension(".pdf", $historico_escolar_arq) || validExtension(".jpg", $historico_escolar_arq) || validExtension(".jpeg", $historico_escolar_arq) || validExtension(".png", $historico_escolar_arq)))
+            $erros[] = 'arq_historico_escolar';
     if($categoria == 2) {
       if($flag_declaracao == 1)
         if(!(validExtension(".pdf", $declaracao_arq) || validExtension(".jpg", $declaracao_arq) || validExtension(".jpeg", $declaracao_arq) || validExtension(".png", $declaracao_arq)))
@@ -246,6 +251,13 @@ if($submit){
             $rowPlano = sql_fetch_array($result);
             unlink("./arquivos/".$cpf."-plano_trabalho.".$rowPlano['ext_plano_trabalho']);
             if(!($plano_trabalho_ext = uploadFile($plano_trabalho_arq, $cpf."-plano_trabalho"))) $erros[] = 'arq_plano_trabalho';
+        }
+        if($flag_historico_escolar == 1) {
+            $query = "SELECT ext_historico_escolar FROM contratos WHERE id_estagiario = '$id' AND numero_contrato = '$n_contrato'";
+            $result = sql_executa($query);
+            $rowPlano = sql_fetch_array($result);
+            unlink("./arquivos/".$cpf."-historico_escolar.".$rowPlano['ext_historico_escolar']);
+            if(!($historico_escolar_ext = uploadFile($historico_escolar_arq, $cpf."-historico_escolar"))) $erros[] = 'arq_historico_escolar';
         }
         if($categoria == 2) {
             if($flag_declaracao == 1) {
@@ -368,6 +380,9 @@ if($submit){
         }
         if($flag_plano_trabalho == 1) {
             $query .= ", ext_plano_trabalho = '$plano_trabalho_ext'";
+        }
+        if($flag_historico_escolar == 1) {
+            $query .= ", ext_historico_escolar = '$historico_escolar_ext'";
         }
         if($flag_foto == 1) {
             $query .= ", ext_foto = '$foto_ext'";
@@ -631,9 +646,7 @@ if($submit){
        <li><a href="javascript: mostrarAba('aba2','a2');" id='a2'>Curso</a></li>
        <li><a href="javascript: mostrarAba('aba3','a3');" id='a3'>Banco</a></li>
        <li><a href="javascript: mostrarAba('aba4','a4');" id='a4' <?php if($tipo == 7) echo "class='active'"; ?>>Estágio</a></li>
-       <li><a href="javascript: mostrarAba('aba5','a5');" id='a5'>Arquivos</a></li>           
-       <li><a href="javascript: mostrarAba('aba6','a6');" id='a6'>Frequência</a></li>       
-       <li><a href="javascript: mostrarAba('aba7','a7');" id='a7'>Rel.Frequência</a></li>       
+       <li><a href="javascript: mostrarAba('aba5','a5');" id='a5'>Arquivos</a></li>                
    </ul>
    </div>
    
@@ -1157,6 +1170,12 @@ if($submit){
           <span id='sarq_plano_trabalho' class="sErro">&nbsp;*</span>
           <?php echo ($ext_plano_trabalho != null)?"<a target='_blank' href='./arquivos/".$cpf."-plano_trabalho.".$ext_plano_trabalho."'> <i>Visualizar Imagem</i> </a>":" <i>Documento não enviado</i> "; ?></td>
         </tr>
+        <tr class="specalt">
+          <td width="25%"><span>Histórico escolar</span></td>
+          <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="arq_historico_trabalho" id="arq_plano_trabalho" type="file">
+          <span id='sarq_plano_trabalho' class="sErro">&nbsp;*</span>
+          <?php echo ($ext_plano_trabalho != null)?"<a target='_blank' href='./arquivos/".$cpf."-plano_trabalho.".$ext_plano_trabalho."'> <i>Visualizar Imagem</i> </a>":" <i>Documento não enviado</i> "; ?></td>
+        </tr>
         <tr class="specalt" id="div_declaracao">
           <td width="25%"><span id="texto_declaracao">Declaração PIBIC</span></td>
           <td width="75%"><input type="hidden" name="MAX_FILE_SIZE" value="1000000" /><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="arq_declaracao" id="arq_declaracao" type="file">
@@ -1164,147 +1183,6 @@ if($submit){
           <?php echo ($ext_declaracao != null)?"<a target='_blank' href='./arquivos/".$cpf."-declaracao.".$ext_declaracao."'> <i>Visualizar Imagem</i> </a>":" <i>Documento não enviado</i> "; ?></td>
         </tr>
         </table>
-       </div>
-
-	   <!-- ============ Conteudo da sexta ABA ============ -->       
-       <div id="aba6" class='conteudoAba'> 
-       <table width="100%" class='formulario'>
-         <tbody>
-            <tr>
-                <td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td>
-            </tr>	
-            <tr class='specalt'>
-                <td width="100%">
-                    <table width='100%'>
-                    <tbody>
-                        <tr>
-                            <td> <span>Ano</span></td>
-                            <td><select id="select_ano" name="select_ano" class="select">
-                                <option value="">-- Ano --</option>
-                                <?php
-                                    //Busca quais anos tem horas de trabalho
-                                    $queryAnoFreq = "SELECT DISTINCT(EXTRACT(year FROM periodo))
-                                                     FROM frequencias
-                                                     WHERE id_estagiario = {$id}";
-                                    $anos_freq = DB::fetch_all($queryAnoFreq);
-
-                                    //Lista os anos no campo select
-                                    foreach($anos_freq as $anos){
-                                        echo "<option value={$anos['date_part']}";
-                                        echo ">".$anos['date_part']."</option>";
-                                    }
-                                    echo "\n";
-                                ?>
-                                </select>
-                            </td>
-                        </tr>
-                    </tbody>
-                    </table>
-
-            <tr>
-                <td>&nbsp;</td><td align='right'>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>
-                    <table width="100%">
-                        <tr align='right'>
-                            <td id="divTotalAnt" width="70%"></td>
-                            <td id="divSaldoAnt"></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <table id='divFreq' class='formulario' width='100%'></table>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                <table width="100%">
-                    <tr align='right'>
-                        <td id="divTotalFinal" width="70%"></td>
-                        <td id="divSaldoFinal"></td>
-                    </tr>
-                </table>
-                </td>
-            </tr>
-            <tr name='adicHorasTrab'>
-                <td>
-                    <table>
-                    <tbody>
-                        <tr>
-                            <td>Período: <input name='novo_periodo'  id='novo_periodo' type='text' size='7' maxlength='7'></td>
-                            <td>Horas Planejadas: <input name='novo_horas_mes'  id='novo_horas_mes' type='text' size='6' maxlength='6'></td>
-                            <td>Horas Trabalhadas: <input name='novo_horas_trabalhadas'  id='novo_horas_trabalhadas' type='text' size='6' maxlength='6'></td>
-                            <td><input type='button' id='buttonAdicHoras' value='Adicionar'/></td>
-                        </tr>
-                    </tbody>
-                    </table>
-                </td>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-            </tr>
-          </tbody>
-       </table>
-       </div>
-
-
-
-    <!-- ============ Conteudo da setima ABA ============ -->       
-       <div id="aba7" class='conteudoAba'> 
-        <table width="100%" class='formulario'>
-         <tbody>
-            <tr>
-                <td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td>
-            </tr>	
-            <tr class='specalt'>
-                <td width="100%">
-                    <table width='100%'>
-                    <tbody>
-                        <tr>
-                            <td> <span>Ano</span></td>
-                            <td><select id="relat_ano" name="relat_ano" class="select">
-                                <option value="">-- Ano --</option>
-                                <?php
-                                    //Busca quais anos tem horas de trabalho
-                                    $queryAnoFreq = "SELECT DISTINCT(EXTRACT(year FROM periodo))
-                                                     FROM frequencias
-                                                     WHERE id_estagiario = {$id}";
-                                    $anos_freq = DB::fetch_all($queryAnoFreq);
-
-                                    if(sizeof($anos_freq == 0)){
-                                        echo "<option value=" . date('Y');
-                                        echo ">".date('Y')."</option>";
-                                    }
-                                    else {
-                                        //Lista os anos no campo select
-                                        foreach($anos_freq as $anos){
-                                            echo "<option value={$anos['date_part']}";
-                                            echo ">".$anos['date_part']."</option>";
-                                        }
-                                    }
-                                    echo "\n";
-                                ?>
-                                </select>
-                            </td>
-                        </tr>
-                    </tbody>
-                    </table>
-                </td>
-            <tr>
-                <td>&nbsp;</td><td align='right'>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>
-                    <table id='divRelatFreq' class='formulario' width='100%'></table>
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td align='right'>&nbsp;</td>
-            </tr>
-          </tbody>
-       </table>
        </div>
 
     </table> 

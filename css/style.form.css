@@ -26,10 +26,10 @@ table.formulario{
 
 .formulario th {
 	font: bold 12px Verdana;
-	color: #4f6b72;		
+	color:#333333;		
 	text-align: left;
 	padding: 3px 6px 3px 12px;	
-	background: #CAE8EA;	
+	background: #B0C4DE;	
 }
 
 .formulario td {		
@@ -56,10 +56,10 @@ table.formPrintSmall{
 
 .formPrintSmall th {
 	font: bold 12px Verdana;
-	color: #4f6b72;
+	color:#333333;
 	text-align: left;
 	padding: 3px 6px 3px 12px;
-	background: #CAE8EA;
+	background: #B0C4DE;
 }
 
 .formPrintSmall td {
@@ -82,10 +82,10 @@ table.formPrint{
 
 .formPrint th {
 	font: bold 12px Verdana;
-	color: #4f6b72;		
+	color:#333333;	
 	text-align: left;
 	padding: 3px 6px 3px 12px;
-	background: #CAE8EA;	
+	background: #B0C4DE;	
 }
 
 .formPrint td {		
@@ -108,10 +108,10 @@ table.visualizacao{
 
 .visualizacao th {
 	font: bold 12px Verdana;
-	color: #4f6b72;		
+	color:#333333;	
 	text-align: left;
 	padding: 3px 6px 3px 12px;
-	background: #CAE8EA;	
+	background: #B0C4DE;	
 }
 
 .visualizacao td {		
@@ -219,7 +219,7 @@ table.horarios{
 	color: black;
 	font-weight: bold;			
 	text-align: center;
-	/*background: #CAE8EA;*/
+	/*background: #B0C4DE;*/
 	background: #d5d5d5;
 }
 
