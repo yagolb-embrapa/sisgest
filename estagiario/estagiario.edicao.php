@@ -75,7 +75,6 @@ if($submit){
         $excecoes_vazio[] = "tcurso";
         $excecoes_vazio[] = "anotcurso";
         $excecoes_vazio[] = "carga";
-        $excecoes_vazio[] = "piec";
     }
 
     $nome_mes = array('Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro');
@@ -360,7 +359,7 @@ if($submit){
         } else {
         	$query = "UPDATE contratos SET  
 			estagio_obrigatorio = '$obrig', vigencia_inicio = '".formata($vigenciai,'data')."', vigencia_fim = '".formata($vigenciaf,'data')."', 
-			remuneracao = $remuneracao, cracha = $cracha, participou_piec ='$piec', id_origem_recursos =$origem, 
+			remuneracao = $remuneracao, cracha = $cracha, id_origem_recursos =$origem, 
 			carga_horaria = $cargahoraria, id_supervisor = $supervisor, area_atuacao = '$area', 
             numero_projeto = '$numero_projeto', ramal = '$ramal', nome_projeto = '$nome_projeto', 
             tipo_vinculo = '$tipo_vinculo', id_bolsista = {$id_bolsista}, termo_aceite = '{$termo_aceite}', 
@@ -594,7 +593,6 @@ if($submit){
 		$ocarga = $carga_horaria;
 	}
 	$origem = $id_origem_recursos;
-	$piec = $participou_piec;
 	$supervisor = $id_supervisor;
 	$numero_projeto = $numero_projeto;
 	$conta = $conta_corrente;
@@ -1077,15 +1075,6 @@ if($submit){
         <td ><span>Crachá</span></td>
         <td><input <?php if($tipo == 7) echo "readonly='readonly'"; ?> name="cracha" id="cracha" type="text" size="6" maxlength="3" onKeyPress='mascara(this, mnum);' value="<?php if($cracha != 'null') echo $cracha; ?>">
         <span id='scracha' class="sErro">&nbsp;*</span></td>
-       </tr>
-       <tr class='specalt'>
-        <td ><span>Participou do PIEC?</span></td>
-        <td><input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="piec" type="radio" id="piecn" value="N" <?php if($piec!="S") echo "checked";?> >
-        			<label for="piecn"><span>Não</span></label>        			 
-        		<input <?php if($tipo == 7) echo "disabled='disabled'"; ?> name="piec" type="radio" id="piecs" value="S" <?php if($piec=='S') echo "checked"; ?> >        		
-        			<label for="piecs"><span>Sim</span></label>
-        	<span id='spiec' class="sErro">&nbsp;*</span>        			
-        </td>        
        </tr>
        <tr class='specalt'>
         <td ><span>Supervisor(*)</span></td>

@@ -9,14 +9,8 @@
 	//if (!$_GET["pag"]) $pagina = 'a'; else $pagina = $_GET["pag"];
 	//$offset = 10; //resultados por pagina.		
 	
-	//selecao das origens de recursos
-    $qryStr = "SELECT id,origem
-               FROM origens_recursos 
-	 		   ORDER BY origem ";
-		
-	//botao de inclusao
-	echo "<div align='center' style='padding: 0 0 10px 0;'>
-		<input type='button' value='Incluir Nova Origem' style='padding: 2px 15px 2px 15px; height:24px;' onClick=\"document.location.href='origem.inclusao.php';\"></div>";	
+	//selecao de supervisores
+    $qryStr = "SELECT * FROM dados_embrapa ORDER BY id ASC;";	
 ?>
 <style>
 .limiter{
@@ -40,20 +34,15 @@ if(sql_num_rows($qry)>0){
 	  	<table width='100%' height='36' border='0' cellpadding='0' cellspacing='0' class='lista_registros_content'>
         <tr>
           <td height='18%'>";          
-          	echo (strlen($row['origem'])>45)?substr($row['origem'],0,42)."...":$row['origem'];
+          	echo $row['nome'];
 		echo "</td>
 			 <td width='17%' rowspan='2' align='center' valign='middle'>
-				<a href='javascript://' onclick=\"document.location.href='origem.visualizacao.php?id=".$row['id']."'\">
+				<a href='javascript://' onclick=\"document.location.href='dados_embrapa.visualizacao.php?id_dado=".$row['id']."'\">
 				<img src='../img/icone_lupa.png' width='16' height='16' />Visualizar Dados</a> </td>		  						
           <td width='15%' rowspan='2' align='center' valign='middle'>
-         	<a href='javascript://' onclick=\"document.location.href='origem.edicao.php?id=".$row['id']."';\">         	
+         	<a href='javascript://' onclick=\"document.location.href='dados_embrapa.edicao.php?id_dado=".$row['id']."';\">         	
          	<img src='../img/icon_edit.gif' width='16' height='16' border='0'>Editar Dados</a></td>          
           <td width='17%' rowspan='2' align='center' valign='middle'>";
-          
-          if($_SESSION['USERNIVEL'] == 'a' || $_SESSION['USERNIVEL'] == 'g'){
-           		echo "<a href='javascript://' onclick=\"if (confirm('Deseja realmente excluir a origem de recursos? Esta operação não poderá ser desfeita.')){ajax.loadDiv('divManip','origem.exclusao.php?id=".$row['id']."');}\">
-         		<img src='../img/icon_delete.gif' width='16' height='16' border='0'>Excluir Origem</a> </td>";
-          }
          	
         echo "</tr>
       </table>
@@ -64,7 +53,7 @@ if(sql_num_rows($qry)>0){
 	//Nao encontrou nenhum supervisor com aquela letra
 	echo "<table width='700px' style='border:0px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
 				<tr bgcolor='#F5FAFA'>
-					<td align='center'><span align='center' style='color:black;'>Nenhuma origem de recursos cadastrada.</span></td>
+					<td align='center'><span align='center' style='color:black;'>Nenhum dado da Embrapa cadastrado.</span></td>
 				</tr>
 			</table>";
 }	

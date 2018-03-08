@@ -25,7 +25,7 @@
 //*************************** OLHAR ISSO ***************************//
 $qryStr = "SELECT es.id, es.nome, ct.id_categoria, ct.id_status, ct.vigencia_inicio, ct.vigencia_fim, ct.id_supervisor, ct.numero_projeto, ct.remuneracao, ct.numero_contrato
 			FROM estagiarios AS es INNER JOIN contratos AS ct ON es.id = ct.id_estagiario 
-			ORDER BY ct.id_status ASC, ct.vigencia_inicio DESC 
+			ORDER BY ct.id_status ASC, es.nome ASC 
 			LIMIT ".$offset." OFFSET ".(($offset*$pagina)-$offset)."";
 $qry = sql_executa($qryStr);
 if($qry) {

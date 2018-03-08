@@ -453,11 +453,6 @@ if($msg_erro){
         <td><span><?php echo (empty($campo['cracha']))?" <i>Não preenchido</i> ":$campo['cracha']; ?></span></td>
        </tr>
        <tr class='specalt'>
-        <td ><span>Participou do PIEC?</span></td>
-        <td><span><?php echo (empty($campo['participou_piec']))?" <i>Não preenchido</i> ":(($campo['participou_piec']=='S')?"Sim":"Não") ?></span>    			
-        </td>        
-       </tr>
-       <tr class='specalt'>
         <td ><span>Supervisor</span></td>
         <td><span><?php 
         		$q_sup = "SELECT nome FROM supervisores WHERE id = {$campo['id_supervisor']}";

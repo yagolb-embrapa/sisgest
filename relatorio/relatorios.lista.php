@@ -24,15 +24,15 @@ include("../functions/functions.forms.php");
 				<option value="2">Bolsistas por Modalidade</option>				
 				<option value="3">Bolsistas por Supervisor</option>				
 				<option value="4">Contratos a Vencer</option>				
-				<option value="5">Entrega de Frequência</option>
-				<option value="15">Estagiários por Horário</option>								
+				<!-- <option value="5">Entrega de Frequência</option> -->
+				<!-- <option value="15">Estagiários por Horário</option> -->								
 				<option value="6">Estagiários por Modalidade</option>
 				<option value="14">Estagiários por Nível</option>				
 				<option value="7">Estagiários por Supervisor</option>				
 				<option value="8">Estagiários Vigentes</option>				
 				<option value="9">Estágios Finalizados</option>	
 				<option value="13">Folha de Pagamento de Estagiários</option>			
-				<option value="10">Participação no PIEC</option>
+				<!-- <option value="10">Participação no PIEC</option> -->
 				<option value="11">Relação de Crachás</option>
 			</select>	
         	</td>        	

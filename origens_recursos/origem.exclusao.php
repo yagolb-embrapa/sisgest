@@ -5,7 +5,7 @@ require_once("../functions/functions.database.php");//temporario
 require_once("../functions/functions.forms.php");
 require_once("../sessions.php");
 
-if($_SESSION['USERNIVEL'] != 'a'){
+if($_SESSION['USERNIVEL'] != 'a' && $_SESSION['USERNIVEL'] != 'g'){
 	echo "Somente o administrador pode fazer a exclusão de registros do sistema.";
 	exit(); 
 }

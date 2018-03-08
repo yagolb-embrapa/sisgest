@@ -247,8 +247,8 @@ if($submit){
 			$result_estag = sql_executa($query_estag);
 			$campo_estag = sql_fetch_array($result_estag);	
 
-      $query = "INSERT INTO contratos (estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, participou_piec, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, id_bolsista, termo_aceite, id_categoria, id_status, id_chefia_associada, ext_cpf, ext_rg, ext_foto, ext_plano_trabalho, ext_historico_escolar, ext_atestado_matricula, ext_declaracao, numero_contrato, id_estagiario, status, tipo_vinculo) 
-    VALUES ('$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, '$piec', $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $id_bolsista, '$termo_aceite', $categoria, 1, $chefia_associada, '$cpf_ext', '$rg_ext', '$foto_ext', '$plano_trabalho_ext', '$historico_escolar_ext', '$atestado_matricula_ext', '$declaracao_ext', 1, {$campo_estag['id']}, 3, 'n');";
+      $query = "INSERT INTO contratos (estagio_obrigatorio, vigencia_inicio, vigencia_fim, remuneracao, cracha, id_origem_recursos, carga_horaria, id_supervisor, area_atuacao, numero_projeto, ramal, nome_projeto, id_bolsista, termo_aceite, id_categoria, id_status, id_chefia_associada, ext_cpf, ext_rg, ext_foto, ext_plano_trabalho, ext_historico_escolar, ext_atestado_matricula, ext_declaracao, numero_contrato, id_estagiario, status, tipo_vinculo) 
+    VALUES ('$obrig', '".formata($vigenciai,'data')."', '".formata($vigenciaf,'data')."', $remuneracao, $cracha, $origem, $cargahoraria, $supervisor, '$area', '$numero_projeto', '$ramal', '$nome_projeto', $id_bolsista, '$termo_aceite', $categoria, 1, $chefia_associada, '$cpf_ext', '$rg_ext', '$foto_ext', '$plano_trabalho_ext', '$historico_escolar_ext', '$atestado_matricula_ext', '$declaracao_ext', 1, {$campo_estag['id']}, 3, 'n');";
 
 
     $result2 = sql_executa($query);		
@@ -330,7 +330,7 @@ if($submit){
         }
 
         unset($_POST);
-        unset($nome,$datanasc,$nacionalidade,$estadocivil,$cpf,$rg,$dataexpedicao,$orgaoexpedidor,$endereco,$complemento,$bairro,$cep, $municipio, $uf, $telres, $telcel, $email, $emaile, $agencia, $conta, $banco, $instituicao, $curso,$inicio_curso,$termino_curso, $nivel, $ra, $vigenciai,$vigenciaf,$remuneracao, $cracha, $piec, $origem, $cargahoraria, $supervisor, $area, $numero_projeto, $ramal, $nome_projeto,$anoicurso,$icurso,$termino_curso,$anotcurso,$tcurso);
+        unset($nome,$datanasc,$nacionalidade,$estadocivil,$cpf,$rg,$dataexpedicao,$orgaoexpedidor,$endereco,$complemento,$bairro,$cep, $municipio, $uf, $telres, $telcel, $email, $emaile, $agencia, $conta, $banco, $instituicao, $curso,$inicio_curso,$termino_curso, $nivel, $ra, $vigenciai,$vigenciaf,$remuneracao, $cracha, $origem, $cargahoraria, $supervisor, $area, $numero_projeto, $ramal, $nome_projeto,$anoicurso,$icurso,$termino_curso,$anotcurso,$tcurso);
 
       } else {
         echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>           
@@ -749,15 +749,6 @@ if($submit){
         <td ><span>Crachá</span></td>
         <td><input name="cracha" id="cracha" type="text" size="6" maxlength="3" onKeyPress='mascara(this, mnum);' value="<?php if($cracha != 'null') echo $cracha; ?>">
         <span id='scracha' class="sErro">&nbsp;*</span></td>
-       </tr>
-       <tr class='specalt'>
-        <td ><span>Participou do PIEC?</span></td>
-        <td><input name="piec" type="radio" id="piecn" value="N" <?php if($piec!="S") echo "checked";?> >
-        			<label for="piecn"><span>Não</span></label>        			 
-        		<input name="piec" type="radio" id="piecs" value="S" <?php if($piec=='S') echo "checked"; ?> >        		
-        			<label for="piecs"><span>Sim</span></label>
-        	<span id='spiec' class="sErro">&nbsp;*</span>        			
-        </td>        
        </tr>
        <tr class='specalt'>
         <td ><span>Supervisor(*)</span></td>

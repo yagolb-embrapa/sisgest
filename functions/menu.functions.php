@@ -74,14 +74,16 @@ function show_menu ( $id,  $permissoes, $funcao )
             	            Gerenciar Bancos</span></li>";
 						echo "<li><span onclick=\"top.location.href='../instituicao/instituicao.gerenciamento.php';\">
                     	    Gerenciar Instituições</span></li>";
-						echo "<li><span onclick=\"top.location.href='../bolsista/bolsista.gerenciamento.php';\">
-                          	Gerenciar Modalidades de Bolsa</span></li>";
+						//echo "<li><span onclick=\"top.location.href='../bolsista/bolsista.gerenciamento.php';\">
+                          //	Gerenciar Modalidades de Bolsa</span></li>";
 						echo "<li><span onclick=\"top.location.href='../origens_recursos/origem.gerenciamento.php';\">
                            	Gerenciar Origens de Recursos</span></li>";
 						echo "<li><span onclick=\"top.location.href='../supervisor/supervisor.gerenciamento.php';\">
                            	Gerenciar Supervisores</span></li>";					
 						echo "<li><span onclick=\"top.location.href='../usuario/usuario.gerenciamento.php';\">
 							Gerenciar Usuários</span></li>";
+						echo "<li><span onclick=\"top.location.href='../dados_embrapa/dados_embrapa.gerenciamento.php';\">
+							Gerenciar dados da Embrapa</span></li>";
 						echo"
 					</ul>
 				</li> 
@@ -94,8 +96,8 @@ function show_menu ( $id,  $permissoes, $funcao )
 			<ul id='nav2'> 
 				<li ><span>Contas</span>		
 					<ul>";					
-						echo "<li><span onclick=\"top.location.href='../conta/conta.abertura.php';\">
-							Abertura de Contas</span></li>";					
+						//echo "<li><span onclick=\"top.location.href='../conta/conta.abertura.php';\">
+							//Abertura de Contas</span></li>";					
 						echo "<li><span onclick=\"top.location.href='../conta/conta.finalizacao.php';\">
 							Finalização de Contas</span></li>";	
 					echo"
@@ -275,14 +277,16 @@ function show_menu_root ( $id,  $permissoes, $funcao )
                             Gerenciar Bancos</span></li>";
 						echo "<li><span onclick=\"top.location.href='instituicao/instituicao.gerenciamento.php';\">
                             Gerenciar Instituições</span></li>";
-					    echo "<li><span onclick=\"top.location.href='bolsista/bolsista.gerenciamento.php';\">
-						    Gerenciar Modalidades de Bolsa</span></li>";
+					    //echo "<li><span onclick=\"top.location.href='bolsista/bolsista.gerenciamento.php';\">
+						  //  Gerenciar Modalidades de Bolsa</span></li>";
 						echo "<li><span onclick=\"top.location.href='origens_recursos/origem.gerenciamento.php';\">
                             Gerenciar Origens de Recursos</span></li>";
 						echo "<li><span onclick=\"top.location.href='supervisor/supervisor.gerenciamento.php';\">
                             Gerenciar Supervisores</span></li>";
 						echo "<li><span onclick=\"top.location.href='usuario/usuario.gerenciamento.php';\">
 							Gerenciar Usuários</span></li>";
+						echo "<li><span onclick=\"top.location.href='dados_embrapa/dados_embrapa.gerenciamento.php';\">
+							Gerenciar dados da Embrapa</span></li>";
 					echo"
 					</ul>
 				</li> 
@@ -295,8 +299,8 @@ function show_menu_root ( $id,  $permissoes, $funcao )
 			<ul id='nav2'> 
 				<li ><span>Contas</span>		
 					<ul>";								
-						echo "<li><span onclick=\"top.location.href='conta/conta.abertura.php';\">
-							Abertura de Contas</span></li>";					
+						//echo "<li><span onclick=\"top.location.href='conta/conta.abertura.php';\">
+						//	Abertura de Contas</span></li>";					
 						echo "<li><span onclick=\"top.location.href='conta/conta.finalizacao.php';\">
 							Finalização de Contas</span></li>";	
 					echo"

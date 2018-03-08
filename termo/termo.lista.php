@@ -136,7 +136,7 @@ if($submit){
 					<option value='1'>Aditivo</option>
 					<option value='2'>Bolsista</option>
 					<option value='3'>Cadastro Biblioteca</option>        										
-					<option value='5'>Certificado</option>        								
+					<!-- <option value='5'>Certificado</option> -->        								
 					<option value='6'>Checklist Contratação de Bolsista</option>        								
 					<option value='7'>Checklist Contratação de Estagiário</option>        								
 					<option value='19'>Checklist Renova&ccedil;&atilde;o de Estagiário</option>        								
@@ -148,8 +148,8 @@ if($submit){
         			<option value='18'>Compromisso PIBIC</option>
 					<option value='13'>Crachá</option>        								
 					<option value='14'>Distrato</option>        								
-					<option value='15'>Índice da Pasta</option>
-					<option value='17'>Índice da Pasta (Bolsista)</option>
+					<!-- <option value='15'>Índice da Pasta</option> -->
+					<!-- <option value='17'>Índice da Pasta (Bolsista)</option> -->
 					<option value='16'>Seguro de Vida</option>
 				</select><span id='setermo' class="sErro">&nbsp;*</span>
 			</td>        
