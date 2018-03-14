@@ -306,13 +306,13 @@ function rtf($arq_entrada, $arq_saida, $tipo_termo, $id, $num_cracha = 0){
     
     $matriz_dados[88][0] = '#dia_ta_inicio#';
 	$matriz_dados[88][1] = $dia_TA; 
-	$matriz_dados[88][2] = 'dta';
+	$matriz_dados[88][2] = 'p';
 	$matriz_dados[89][0] = '#mes_ta_inicio#';
 	$matriz_dados[89][1] = mes_extenso((int)$mes_TA);
-	$matriz_dados[89][2] = 'mta';
+	$matriz_dados[89][2] = 'm';
 	$matriz_dados[90][0] = '#ano_ta_inicio#';
 	$matriz_dados[90][1] = $ano_TA;
-	$matriz_dados[90][2] = 'ata'; 
+	$matriz_dados[90][2] = 'p'; 
 	
 	$data_TA_inicio = explode('/', formata($termo_aditivo['data_fim'],'redata'));
     $dia_TA = $data_TA_fim[0];
@@ -330,6 +330,34 @@ function rtf($arq_entrada, $arq_saida, $tipo_termo, $id, $num_cracha = 0){
 	$matriz_dados[94][1] = $estagiario['instituicao'];
 	$matriz_dados[95][0] = "#ra#";
 	$matriz_dados[95][1] = $estagiario['ra'];
+
+	$qryRepresentante = "SELECT * FROM dados_embrapa WHERE id = '1'";
+	$qry = sql_executa($qryRepresentante);
+	$resultRepresentante = sql_fetch_array($qry);
+
+	$matriz_dados[96][0] = '#nome_representante#';
+	$matriz_dados[96][1] = $resultRepresentante['dado1'];
+
+	$qryTestemunha = "SELECT * FROM dados_embrapa WHERE id = '2'";
+	$qry = sql_executa($qryTestemunha);
+	$resultTestemunha = sql_fetch_array($qry);
+
+	$matriz_dados[97][0] = '#nome_testemunha#';
+	$matriz_dados[97][1] = $resultTestemunha['dado1'];
+	$matriz_dados[98][0] = '#cpf_testemunha#';
+	$matriz_dados[98][1] = $resultTestemunha['dado2'];
+
+	$qrySeguro = "SELECT * FROM dados_embrapa WHERE id = '3'";
+	$qry = sql_executa($qrySeguro);
+	$resultSeguro = sql_fetch_array($qry);
+
+	$matriz_dados[99][0] = '#nome_seguradora#';
+	$matriz_dados[99][1] = $resultSeguro['dado1'];
+	$matriz_dados[100][0] = '#numero_apolice#';
+	$matriz_dados[100][1] = $resultSeguro['dado2'];
+
+
+
 	
 	
     $novotxt = gera_termo($corpo,$matriz_dados);

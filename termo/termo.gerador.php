@@ -109,6 +109,10 @@ switch($termo){
 		$arq_entrada = "../termos_rtf/termo_checklist_renovacao_estagiario.rtf";
 		$arq_saida = "../termos_gerados/termo_checklist_renovacao_estagiario";
 		break;
+	case 20:
+		$arq_entrada = "../termos_rtf/termo_seguranca_informacao.rtf";
+		$arq_saida = "../termos_gerados/termo_seguranca_informacao";
+		break;
 	default:
 		$arq_entrada = "../termos_rtf/termo_compromisso_obrigatorio.rtf";
 		$arq_saida = "../termos_gerados/termo_compromisso_obrigatorio";

@@ -151,6 +151,7 @@ if($submit){
 					<!-- <option value='15'>Índice da Pasta</option> -->
 					<!-- <option value='17'>Índice da Pasta (Bolsista)</option> -->
 					<option value='16'>Seguro de Vida</option>
+					<option value="20">Segurança da Informação</option>
 				</select><span id='setermo' class="sErro">&nbsp;*</span>
 			</td>        
       </tr>

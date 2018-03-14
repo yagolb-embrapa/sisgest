@@ -23,6 +23,13 @@ include("../functions/functions.forms.php");
 		<?php
 
 $id_dado = $_GET['id_dado'];
+$qryStr = "SELECT * FROM dados_embrapa WHERE id = '".$id_dado."'";
+$qry = sql_executa($qryStr);
+$result = sql_fetch_array($qry);
+$nome = $result['nome'];
+$dado1 = $result['dado1'];
+$dado2 = $result['dado2'];
+$dado3 = $result['dado3'];
 			
 //Se clicou
 $submit = $_POST['submit'];
@@ -41,14 +48,6 @@ if($submit){
 		}
 	}
 
-	//$q_repetido = "SELECT * FROM emails WHERE id_setor = '{$id_setor}'";
-//
-    //for($i = 0; $i < $qtdeEmails; $i++)
-        //$q_repetido .= " AND email <> '{$_POST["email{$i}"]}'";
-//
-	//$r_repetido = sql_executa($q_repetido);
-	//if(sql_num_rows($r_repetido)>0) $erros[] = "setor";	
-				
 	// 3 - Mostra mensagem de erro ou cria query de insercao 
 	if(count($erros)>0){
 		//essa string é usada pelo javascript no final da pagina para marcar os campos com o asterisco vermelho 
@@ -72,23 +71,30 @@ if($submit){
 		
     //Coloca um sinal vermelho ao lado dos campos não-preenchidos ou preenchidos de forma incorreta
 	}else{	
-        for($i = 0; $i < $qtdeEmails; $i++) {
-            $query = "  UPDATE  emails
-                        SET     email = '{$_POST['email'.$i]}',
-                        id_setor = {$id_setor}
-                        WHERE   id = {$_POST['id'.$i]};";			
-            $result = sql_executa($query);
+        $qryStr = "UPDATE dados_embrapa SET dado1 = '".$dado1."', dado2 = '".$dado2."'";
+        if($id_dado == 1) {
+            $qryStr .= ", dado3 = '".$dado3."'";
         }
+        $qryStr .= " WHERE id = '".$id_dado."'";
+        $qry = sql_executa($qryStr);
+
 		//mensagem de sucesso		
-		if($result){
+		if($qry){
 			echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>						
 				<tr bgcolor='#EFFFF4'>
-					<td align='center'><span align='center' style='color:#296F3E;'>Email editado com sucesso!</span></td>
+					<td align='center'><span align='center' style='color:#296F3E;'>".$nome." editado com sucesso!</span></td>
 				</tr>
 			</table>		
 			<div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
 						
-		}
+		} else {
+            echo "<table width='100%' style='border:1px solid black;' bgcolor='' cellspacing='0' cellpadding='5' height='50px'>                     
+                <tr bgcolor='#EFFFF4'>
+                    <td align='center'><span align='center' style='color:#296F3E;'>Não foi possível editar os dados. Tente novamente!</span></td>
+                </tr>
+            </table>        
+            <div align='center' style='margin: 0 0 25px 0; padding: 2px 2px 2px 2px;'></div>";
+        }
 	}
 }else{
 	if($id_setor){
@@ -115,7 +121,11 @@ if($submit){
 	<div id="aba1" class='conteudoAba' style='display:block;'>
 		<div id="erro"></div>  	 	
   	  	<table width="100%" class='formulario'>
-  	  	<tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td></tr>  	  		  
+  	  	<tr><td colspan='2'><div align="center" style="margin: 0 0 25px 0; padding: 2px 2px 2px 2px;"></div></td></tr>  
+        <tr class='specalt'>
+            <td width="33%"><span>Tipo</span></td>
+            <td width="67%"><span><?php echo $nome; ?></span></td>        
+        </tr> 	  		  
         <?php
         switch ($id_dado) {
         	case 1:
@@ -123,21 +133,21 @@ if($submit){
         		<tr class='specalt'>
                 	<td width='25%'><span>Nome</span></td>
                     <td width='75%'>
-                    	<input name='dado1' id='dado1' type='text' size='40' maxlength='50' <?php echo "value='".$dados['dado1']."'"; ?>>
+                    	<input name='dado1' id='dado1' type='text' size='40' maxlength='50' <?php echo "value='".$dado1."'"; ?>>
                     		<span id='sdado1' class='sErro'>&nbsp;*</span>
                     </td>
                 </tr>
                 <tr class='specalt'>
                 	<td width='25%'><span>CPF</span></td>
                     <td width='75%'>
-                    	<input name='dado2' id='dado2' type='text' size='20' maxlength='50' <?php echo "value='".$dados['dado2']."'"; ?>>
+                    	<input name='dado2' id='dado2' type='text' size='20' maxlength='14' onKeyPress="mascara(this, mcpf);" <?php echo "value='".$dado2."'"; ?>>
                     		<span id='sdado2' class='sErro'>&nbsp;*</span>
                     </td>
                 </tr>
                 <tr class='specalt'>
                 	<td width='25%'><span>RG</span></td>
                     <td width='75%'>
-                    	<input name='dado3' id='dado3' type='text' size='20' maxlength='50' <?php echo "value='".$dados['dado3']."'"; ?>>
+                    	<input name='dado3' id='dado3' type='text' size='20' maxlength='50' <?php echo "value='".$dado3."'"; ?>>
                     		<span id='sdado3' class='sErro'>&nbsp;*</span>
                     </td>
                 </tr>
@@ -148,14 +158,14 @@ if($submit){
         		<tr class='specalt'>
                 	<td width='25%'><span>Nome</span></td>
                     <td width='75%'>
-                    	<input name='dado1' id='dado1' type='text' size='40' maxlength='50' <?php echo "value='".$dados['dado1']."'"; ?>>
+                    	<input name='dado1' id='dado1' type='text' size='40' maxlength='50' <?php echo "value='".$dado1."'"; ?>>
                     		<span id='sdado1' class='sErro'>&nbsp;*</span>
                     </td>
                 </tr>
                 <tr class='specalt'>
                 	<td width='25%'><span>CPF</span></td>
                     <td width='75%'>
-                    	<input name='dado2' id='dado2' type='text' size='20' maxlength='50' <?php echo "value='".$dados['dado2']."'"; ?>>
+                    	<input name='dado2' id='dado2' type='text' size='20' maxlength='14' onKeyPress="mascara(this, mcpf);" <?php echo "value='".$dado2."'"; ?>>
                     		<span id='sdado2' class='sErro'>&nbsp;*</span>
                     </td>
                 </tr>
@@ -166,14 +176,14 @@ if($submit){
         		<tr class='specalt'>
                 	<td width='25%'><span>Nome</span></td>
                     <td width='75%'>
-                    	<input name='dado1' id='dado1' type='text' size='40' maxlength='50' <?php echo "value='".$dados['dado1']."'"; ?>>
+                    	<input name='dado1' id='dado1' type='text' size='40' maxlength='50' <?php echo "value='".$dado1."'"; ?>>
                     		<span id='sdado1' class='sErro'>&nbsp;*</span>
                     </td>
                 </tr>
                 <tr class='specalt'>
                 	<td width='25%'><span>Apólice nº</span></td>
                     <td width='75%'>
-                    	<input name='dado2' id='dado2' type='text' size='20' maxlength='50' <?php echo "value='".$dados['dado2']."'"; ?>>
+                    	<input name='dado2' id='dado2' type='text' size='20' maxlength='50' <?php echo "value='".$dado2."'"; ?>>
                     		<span id='sdado2' class='sErro'>&nbsp;*</span>
                     </td>
                 </tr>
@@ -182,16 +192,8 @@ if($submit){
         	default:
         		break;
         }
-            for($i = 0; $i < $qtdeEmails; $i++) {
-                echo "
-                    <tr class='specalt'>
-                    <td width='25%'><span>Email (*)</span></td>
-                    <td width='75%'><input name='email{$i}' id='email' type='text' size='40' maxlength='50' value='{$emails[$i]['email']}'><span id='semail' class='sErro'>&nbsp;*</span></td>        
-                    <td><input type='hidden' name='id{$i}' value='{$emails[$i]['id']}'></td>
-                    </tr>";
-            }
+
         ?>
-        <td><input type='hidden' name='qtdeEmails' value='<?= $qtdeEmails; ?>'></td>
        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
        </table>
        </div>  
