@@ -113,6 +113,10 @@ switch($termo){
 		$arq_entrada = "../termos_rtf/termo_seguranca_informacao.rtf";
 		$arq_saida = "../termos_gerados/termo_seguranca_informacao";
 		break;
+	case 21:
+		$arq_entrada = "../termos_rtf/termo_compromisso_pos_graduacao.rtf";
+		$arq_saida = "../termos_gerados/termo_compromisso_pos_graduacao";
+		break;
 	default:
 		$arq_entrada = "../termos_rtf/termo_compromisso_obrigatorio.rtf";
 		$arq_saida = "../termos_gerados/termo_compromisso_obrigatorio";

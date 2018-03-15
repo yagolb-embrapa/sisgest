@@ -357,6 +357,12 @@ function rtf($arq_entrada, $arq_saida, $tipo_termo, $id, $num_cracha = 0){
 	$matriz_dados[100][1] = $resultSeguro['dado2'];
 
 
+	$qryChefia = "SELECT * FROM chefias WHERE id_chefia = '".$estagiario['id_chefia_associada']."'";
+	$qry = sql_executa($qryChefia);
+	$resultChefia = sql_fetch_array($qry);
+	$matriz_dados[100][0] = '#chefia_associada#';
+	$matriz_dados[100][1] = $resultChefia['nome_seguradora'];
+
 
 	
 	
