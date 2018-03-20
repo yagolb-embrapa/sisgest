@@ -140,19 +140,21 @@ if($submit){
 					<option value='6'>Checklist Contratação de Bolsista</option>        								
 					<option value='7'>Checklist Contratação de Estagiário</option>        								
 					<option value='19'>Checklist Renova&ccedil;&atilde;o de Estagiário</option>        								
-					<option value='8'>Checklist de Desligamento</option>        								
+					<option value='8'>Checklist de Desligamento de Bolsista</option>
+					<option value='23'>Checklist de Desligamento de Estagiário</option>        								
 					<option value='9'>Código de Conduta</option>        								
 					<option value='10'>Compromisso Não-Obrigatório</option>
         			<option value='11'>Compromisso Obrigatório</option>
-        			<option value='12'>Confidencialidade</option>
         			<option value='18'>Compromisso PIBIC</option>
+        			<option value="21">Compromisso Pós-Graduação</option>
+        			<option value="22">Compromisso Bolsista Outra Modalidade</option>
+        			<option value='12'>Confidencialidade</option>
 					<option value='13'>Crachá</option>        								
 					<option value='14'>Distrato</option>        								
 					<!-- <option value='15'>Índice da Pasta</option> -->
 					<!-- <option value='17'>Índice da Pasta (Bolsista)</option> -->
 					<option value='16'>Seguro de Vida</option>
 					<option value="20">Segurança da Informação</option>
-					<option value="21">Compromisso Pós-Graduação</option>
 				</select><span id='setermo' class="sErro">&nbsp;*</span>
 			</td>        
       </tr>

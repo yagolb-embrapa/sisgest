@@ -360,8 +360,20 @@ function rtf($arq_entrada, $arq_saida, $tipo_termo, $id, $num_cracha = 0){
 	$qryChefia = "SELECT * FROM chefias WHERE id_chefia = '".$estagiario['id_chefia_associada']."'";
 	$qry = sql_executa($qryChefia);
 	$resultChefia = sql_fetch_array($qry);
-	$matriz_dados[100][0] = '#chefia_associada#';
-	$matriz_dados[100][1] = $resultChefia['nome_seguradora'];
+	$matriz_dados[101][0] = '#chefia_associada#';
+	$matriz_dados[101][1] = $resultChefia['nome_seguradora'];
+
+	$matriz_dados[102][0] = '#rg_representante#';
+	$matriz_dados[102][1] = $resultRepresentante['dado3'];
+	$matriz_dados[103][0] = '#cpf_representante#';
+	$matriz_dados[103][1] = $resultRepresentante['dado2'];
+
+	$qryRecurso = "SELECT * FROM origens_recursos WHERE id = '".$estagiario['id_origem_recursos']."'";
+	$qry = sql_executa($qryRecurso);
+	$resultRecurso = sql_fetch_array($qry);
+
+	$matriz_dados[104][0] = '#origem_recursos#';
+	$matriz_dados[104][1] = $resultRecurso['origem'];
 
 
 	

@@ -60,8 +60,8 @@ switch($termo){
 		$arq_saida = "../termos_gerados/termo_checklist_estagiario";
 		break;
     case 8:
-		$arq_entrada = "../termos_rtf/termo_checklist_desligamento.rtf";
-		$arq_saida = "../termos_gerados/termo_checklist_desligamento";
+		$arq_entrada = "../termos_rtf/termo_checklist_desligamento_bolsista.rtf";
+		$arq_saida = "../termos_gerados/termo_checklist_desligamento_bolsista";
 		break;
 	case 9:
 		$arq_entrada = "../termos_rtf/termo_codigo_conduta.rtf";
@@ -116,6 +116,14 @@ switch($termo){
 	case 21:
 		$arq_entrada = "../termos_rtf/termo_compromisso_pos_graduacao.rtf";
 		$arq_saida = "../termos_gerados/termo_compromisso_pos_graduacao";
+		break;
+	case 22:
+		$arq_entrada = "../termos_rtf/termo_compromisso_bolsista_outra_modalidade.rtf";
+		$arq_saida = "../termos_gerados/termo_compromisso_bolsista_outra_modalidade";
+		break;
+	case 23:
+		$arq_entrada = "../termos_rtf/termo_checklist_desligamento_estagiario.rtf";
+		$arq_saida = "../termos_gerados/termo_checklist_desligamento_estagiario";
 		break;
 	default:
 		$arq_entrada = "../termos_rtf/termo_compromisso_obrigatorio.rtf";
